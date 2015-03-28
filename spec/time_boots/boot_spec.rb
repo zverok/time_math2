@@ -148,6 +148,27 @@ describe TimeBoots::Boot do
     # * monthes decr/incr, including leap ears
     # * timezones (DST edge 2015-03-28->29, for ex.)
 
+    describe 'Edge case: DST' do
+      # form with guaranteed DST:
+      #  local(sec, min, hour, day, month, year, wday, yday, isdst, tz)
+      #
+      # FIXME: seems in Ruby 2.2.0 it have changed.
+      #
+      # Nevertheless, it's Kieve time before that midnight we are changing
+      # our time to daylight saving
+      let(:spring_before){
+        Time.local(20, 40, 11, 28, 3, 2015, 6, 87, true, "+02:00")
+      }
+      let(:spring_after ){
+        Time.local(20, 40, 11, 29, 3, 2015, 7, 88, true, "+02:00")
+      }
+
+      it "should correctly shift step over the DST border" do
+        expect(described_class.day.advance(spring_before)).to eq spring_after
+        expect(described_class.day.decrease(spring_after)).to eq spring_before
+      end
+    end
+
     describe '#beginning?' do
       let(:fixture){load_fixture(:beginning)}
 

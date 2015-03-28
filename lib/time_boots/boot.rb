@@ -126,9 +126,39 @@ module TimeBoots
     def initialize
       super(:day)
     end
+
+    protected
+
+    def _advance(tm, steps)
+      res = super(tm, steps)
+
+      if res.dst? && !tm.dst?
+        hour.decrease(res)
+      elsif !res.dst? && tm.dst?
+        hour.advance(res)
+      else
+        res
+      end
+    end
+
+    def _decrease(tm, steps)
+      res = super(tm, steps)
+
+      if res.dst? && !tm.dst?
+        hour.decrease(res)
+      elsif !res.dst? && tm.dst?
+        hour.advance(res)
+      else
+        res
+      end
+    end
+
+    def hour
+      Boot.hour
+    end
   end
 
-  class WeekBoot < Boot
+  class WeekBoot < SimpleBoot
     def initialize
       super(:week)
     end
@@ -139,7 +169,19 @@ module TimeBoots
       day.decrease(f, extra_days)
     end
 
+    def span(sz)
+      day.span(sz * 7)
+    end
+
     protected
+
+    def _advance(tm, steps)
+      day.advance(tm, steps * 7)
+    end
+
+    def _decrease(tm, steps)
+      day.decrease(tm, steps * 7)
+    end
     
     def day
       Boot.day
