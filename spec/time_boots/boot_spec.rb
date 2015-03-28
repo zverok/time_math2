@@ -85,16 +85,6 @@ describe TimeBoots::Boot do
           end
         end
       end
-
-      #describe 'month edge cases' do
-      #end
-
-      #describe 'year edge cases' do
-      #end
-
-      # DST edge cases: 2015-03-28->29
-
-      # describe negative
     end
 
     describe '#decrease' do
@@ -153,6 +143,10 @@ describe TimeBoots::Boot do
         end
       end
     end
+
+    # TODO: edge cases:
+    # * monthes decr/incr, including leap ears
+    # * timezones (DST edge 2015-03-28->29, for ex.)
 
     describe '#beginning?' do
       let(:fixture){load_fixture(:beginning)}

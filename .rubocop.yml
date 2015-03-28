@@ -1,0 +1,29 @@
+AllCops:
+  Include:
+    - 'lib/**/*'
+  Exclude:
+    - 'spec/*'
+    - 'spec/**/*'
+    - 'vendor/**/*'
+
+
+# I'm big fan of and/or for flow control
+Style/AndOr:
+  Enabled: false
+
+# I'm working on it!
+Style/Documentation:
+  Enabled: false
+
+Style/SpaceInsideBlockBraces:
+  EnforcedStyle: no_space
+  SpaceBeforeBlockParameters: false
+
+Style/SpaceBeforeBlockBraces:
+  EnforcedStyle: no_space
+
+Style/TrailingWhitespace:
+  Enabled: false
+
+Style/SingleLineBlockParams:
+  Enabled: false

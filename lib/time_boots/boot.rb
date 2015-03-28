@@ -8,7 +8,7 @@ module TimeBoots
       
       def get(step)
         BOOTS[step] or
-          fail(ArgumentError, "Unsupported ste: #{step}")
+          fail(ArgumentError, "Unsupported step: #{step}")
       end
     end
     
@@ -19,15 +19,20 @@ module TimeBoots
     attr_reader :step
 
     def floor(tm)
-      Time.new(*[tm.year, tm.month, tm.day, tm.hour, tm.min, tm.sec].first(step_idx+1))
+      components = [tm.year,
+                    tm.month,
+                    tm.day,
+                    tm.hour,
+                    tm.min,
+                    tm.sec].first(step_idx + 1)
+        
+      Time.new(*components)
     end
 
     def ceil(tm)
       f = floor(tm)
 
-      f == tm ?
-        f :
-        advance(f)
+      f == tm ? f : advance(f)
     end
 
     def advance(tm, steps = 1)
@@ -38,7 +43,7 @@ module TimeBoots
       elsif respond_to?(:succ)
         steps.times.inject(tm){|t| succ(t)}
       else
-        fail(NotImplementedError, "No advancing method")
+        fail(NotImplementedError, 'No advancing method')
       end
     end
 
@@ -50,7 +55,7 @@ module TimeBoots
       elsif respond_to?(:prev)
         steps.times.inject(tm){|t| prev(t)}
       else
-        fail(NotImplementedError, "No descreasing method")
+        fail(NotImplementedError, 'No descreasing method')
       end
     end
 
@@ -65,6 +70,19 @@ module TimeBoots
     def step_idx
       NATURAL_STEPS.index(step) or
         fail(NotImplementedError, "Can not be used for step #{step}")
+    end
+
+    def generate(tm, replacements = {})
+      hash_to_tm(tm_to_hash(tm).merge(replacements))
+    end
+
+    def tm_to_hash(tm)
+      Hash[*NATURAL_STEPS.map{|s| [s, tm.send(s)]}.flatten(1)]
+    end
+
+    def hash_to_tm(hash)
+      components = NATURAL_STEPS.map{|s| hash[s] || 0}
+      Time.new(*components)
     end
   end
 
@@ -116,9 +134,15 @@ module TimeBoots
     end
 
     def floor(tm)
-      d = Boot.get(:day) # FIXME: ugly
-      
-      d.advance(d.floor(tm), -(tm.wday==0 ? 6 : tm.wday-1))
+      f = day.floor(tm)
+      extra_days = tm.wday == 0 ? 6 : tm.wday - 1
+      day.decrease(f, extra_days)
+    end
+
+    protected
+    
+    def day
+      Boot.day
     end
   end
 
@@ -130,29 +154,23 @@ module TimeBoots
     protected
 
     def succ(tm)
-      if tm.month == 12
-        Time.new(tm.year+1, 1, tm.day, tm.hour, tm.min, tm.sec) 
-      else
-        t = Time.new(tm.year, tm.month+1, tm.day, tm.hour, tm.min, tm.sec)
+      return generate(tm, year: tm.year + 1, month: 1) if tm.month == 12
 
-        # fix for too far advance: Time.new(2013,2,31) #=> 2013-03-02 00:00:00 +0200
-        t.month == tm.month + 2 ?
-          day.decrease(t, t.day.days) :
-          t
-      end
+      t = generate(tm, month: tm.month + 1)
+      fix_month(t, t.month + 1)
     end
 
     def prev(tm)
-      if tm.month == 1
-        Time.new(tm.year-1, 12, tm.day, tm.hour, tm.min, tm.sec) 
-      else
-        t = Time.new(tm.year, tm.month - 1, tm.day, tm.hour, tm.min, tm.sec) 
+      return generate(tm, year: tm.year - 1, month: 12) if tm.month == 1
 
-        # fix for insufficient decrease: Time.new(2013,2,31) #=> 2013-03-02 00:00:00 +0200
-        t.month == tm.month ?
-          day.decrease(t, t.day) :
-          t
-      end
+      t = generate(tm, month: tm.month - 1)
+      fix_month(t, t.month - 1)
+    end
+
+    # fix for too far advance/insufficient decrease:
+    #  Time.new(2013,2,31) #=> 2013-03-02 00:00:00 +0200
+    def fix_month(t, expected)
+      t.month == expected ? day.decrease(t, t.day) : t
     end
 
     def day
@@ -168,11 +186,11 @@ module TimeBoots
     protected
     
     def _advance(tm, steps)
-      Time.new(tm.year+steps, tm.month, tm.day, tm.hour, tm.min, tm.sec) 
+      generate(tm, year: tm.year + steps)
     end
 
     def _decrease(tm, steps)
-      Time.new(tm.year-steps, tm.month, tm.day, tm.hour, tm.min, tm.sec) 
+      generate(tm, year: tm.year - steps)
     end
   end
 
