@@ -1,17 +1,18 @@
 # encoding: utf-8
 module TimeBoots
   class Boot
-    def self.get(step)
-      TimeBoots::STEPS.include?(step) or
-        fail("Unsupported step: #{step}")
-
-      BOOTS[step].new
+    class << self
+      def steps
+        BOOTS.keys
+      end
+      
+      def get(step)
+        BOOTS[step] or
+          fail(ArgumentError, "Unsupported ste: #{step}")
+      end
     end
     
     def initialize(step)
-      TimeBoots::STEPS.include?(step) or
-        fail("Unsupported step: #{step}")
-
       @step = step
     end
 
@@ -155,7 +156,7 @@ module TimeBoots
     end
 
     def day
-      Boot.get(:day)
+      Boot.day
     end
   end
 
@@ -176,14 +177,20 @@ module TimeBoots
   end
 
   class Boot
-      BOOTS = {
-      sec: SecBoot,
-      min: MinBoot,
-      hour: HourBoot,
-      day: DayBoot,
-      week: WeekBoot,
-      month: MonthBoot,
-      year: YearBoot
+    BOOTS = {
+      sec: SecBoot.new,
+      min: MinBoot.new,
+      hour: HourBoot.new,
+      day: DayBoot.new,
+      week: WeekBoot.new,
+      month: MonthBoot.new,
+      year: YearBoot.new
     }
+
+    class << self
+      BOOTS.keys.each do |step|
+        define_method(step){BOOTS[step]}
+      end
+    end
   end
 end
