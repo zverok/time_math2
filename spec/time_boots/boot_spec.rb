@@ -42,8 +42,49 @@ describe TimeBoots::Boot do
         end
       end
 
-      #context 'several steps' do
-      #end
+      context 'several steps' do
+        let(:tm){t('2015-03-27 11:40:20')}
+        
+        [:sec, :min, :hour, :day, :month, :year].each do |step|
+          [3, 100, 1000].each do |amount|
+            context "when advanced #{amount} #{step}s" do
+              let(:boot){described_class.get(step)}
+              subject{boot.advance(tm, amount)}
+              let(:correct){amount.times.inject(tm){|t| boot.advance(t)}}
+
+              it{should == correct}
+            end
+          end
+        end
+      end
+
+      context 'negative advance' do
+        let(:tm){t('2015-03-27 11:40:20')}
+
+        [:sec, :min, :hour, :day, :month, :year].each do |step|
+          context "when step=#{step}" do
+            let(:boot){described_class.get(step)}
+
+            it "should treat negative advance as decrease" do
+              expect(boot.advance(tm, -13)).to eq(boot.decrease(tm, 13))
+            end
+          end
+        end
+      end
+
+      context 'zero advance' do
+        let(:tm){t('2015-03-27 11:40:20')}
+
+        [:sec, :min, :hour, :day, :month, :year].each do |step|
+          context "when step=#{step}" do
+            let(:boot){described_class.get(step)}
+
+            it "should do nothing on zero advance" do
+              expect(boot.advance(tm, 0)).to eq tm
+            end
+          end
+        end
+      end
 
       #describe 'month edge cases' do
       #end
@@ -68,7 +109,49 @@ describe TimeBoots::Boot do
         end
       end
 
-      # describe negative
+      context 'several steps' do
+        let(:tm){t('2015-03-27 11:40:20')}
+        
+        [:sec, :min, :hour, :day, :month, :year].each do |step|
+          [3, 100, 1000].each do |amount|
+            context "when decreased #{amount} #{step}s" do
+              let(:boot){described_class.get(step)}
+              subject{boot.decrease(tm, amount)}
+              let(:correct){amount.times.inject(tm){|t| boot.decrease(t)}}
+
+              it{should == correct}
+            end
+          end
+        end
+      end
+
+      context 'negative decrease' do
+        let(:tm){t('2015-03-27 11:40:20')}
+
+        [:sec, :min, :hour, :day, :month, :year].each do |step|
+          context "when step=#{step}" do
+            let(:boot){described_class.get(step)}
+
+            it "should treat negative decrease as advance" do
+              expect(boot.decrease(tm, -13)).to eq(boot.advance(tm, 13))
+            end
+          end
+        end
+      end
+
+      context 'zero decrease' do
+        let(:tm){t('2015-03-27 11:40:20')}
+
+        [:sec, :min, :hour, :day, :month, :year].each do |step|
+          context "when step=#{step}" do
+            let(:boot){described_class.get(step)}
+
+            it "should do nothing on zero decrease" do
+              expect(boot.decrease(tm, 0)).to eq tm
+            end
+          end
+        end
+      end
     end
 
     describe '#beginning?' do

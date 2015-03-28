@@ -29,53 +29,81 @@ module TimeBoots
         advance(f)
     end
 
-    def span(sz = 1)
-      sz * MULTIPLIERS[step_idx..-1].inject(:*)
-    end
-
     def advance(tm, steps = 1)
-      tm + span(steps)
+      return decrease(tm, -steps) if steps < 0
+      
+      if respond_to?(:_advance)
+        _advance(tm, steps)
+      elsif respond_to?(:succ)
+        steps.times.inject(tm){|t| succ(t)}
+      else
+        fail(NotImplementedError, "No advancing method")
+      end
     end
 
     def decrease(tm, steps = 1)
-      tm - span(steps)
+      return advance(tm, -steps) if steps < 0
+      
+      if respond_to?(:_decrease)
+        _decrease(tm, steps)
+      elsif respond_to?(:prev)
+        steps.times.inject(tm){|t| prev(t)}
+      else
+        fail(NotImplementedError, "No descreasing method")
+      end
     end
 
     def beginning?(tm)
       floor(tm) == tm
     end
 
-    private
-
+    protected
+    
     NATURAL_STEPS = [:year, :month, :day, :hour, :min, :sec]
-    MULTIPLIERS = [12, 30, 24, 60, 60, 1]
 
     def step_idx
       NATURAL_STEPS.index(step) or
         fail(NotImplementedError, "Can not be used for step #{step}")
     end
-
   end
 
-  class SecBoot < Boot
+  class SimpleBoot < Boot
+    def span(sz = 1)
+      sz * MULTIPLIERS[step_idx..-1].inject(:*)
+    end
+
+    protected
+
+    def _advance(tm, steps)
+      tm + span(steps)
+    end
+
+    def _decrease(tm, steps)
+      tm - span(steps)
+    end
+
+    MULTIPLIERS = [12, 30, 24, 60, 60, 1]
+  end
+
+  class SecBoot < SimpleBoot
     def initialize
       super(:sec)
     end
   end
 
-  class MinBoot < Boot
+  class MinBoot < SimpleBoot
     def initialize
       super(:min)
     end
   end
 
-  class HourBoot < Boot
+  class HourBoot < SimpleBoot
     def initialize
       super(:hour)
     end
   end
 
-  class DayBoot < Boot
+  class DayBoot < SimpleBoot
     def initialize
       super(:day)
     end
@@ -98,15 +126,7 @@ module TimeBoots
       super(:month)
     end
 
-    def advance(tm, steps = 1)
-      steps.times.inject(tm){|t| succ(t)}
-    end
-
-    def decrease(tm, steps = 1)
-      steps.times.inject(tm){|t| prev(t)}
-    end
-
-    private
+    protected
 
     def succ(tm)
       if tm.month == 12
@@ -144,11 +164,13 @@ module TimeBoots
       super(:year)
     end
 
-    def advance(tm, steps = 1)
+    protected
+    
+    def _advance(tm, steps)
       Time.new(tm.year+steps, tm.month, tm.day, tm.hour, tm.min, tm.sec) 
     end
 
-    def decrease(tm, steps = 1)
+    def _decrease(tm, steps)
       Time.new(tm.year-steps, tm.month, tm.day, tm.hour, tm.min, tm.sec) 
     end
   end
