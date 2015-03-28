@@ -183,8 +183,18 @@ describe TimeBoots::Boot do
       end
     end
 
-    #describe '#measure' do
-    #end
+    describe '#measure' do
+      let(:fixture){load_fixture(:measure)}
+
+      it 'should measure integer steps between from and to' do
+        fixture.each do |data|
+          boot = described_class.get(data[:step])
+          from = t(data[:from])
+          to = t(data[:to])
+          expect(boot.measure(from, to)).to eq data[:val]
+        end
+      end
+    end
 
     #describe '#measure_rem' end
     #end

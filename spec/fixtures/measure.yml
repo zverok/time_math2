@@ -1,0 +1,73 @@
+#sec:
+  #from: 
+  #to:
+  #val:
+#min:
+  #from:
+  #to:
+  #val:
+
+# hour examples
+- :step: :hour
+  :from: '2015-03-10 11:40'
+  :to: '2015-03-10 11:50'
+  :val: 0
+- :step: :hour
+  :from: '2015-03-10 11:40'
+  :to: '2015-03-10 15:50'
+  :val: 4
+- :step: :hour
+  :from: '2015-03-10 11:40'
+  :to: '2015-03-10 15:20'
+  :val: 3
+
+# day examples
+- :step: :day
+  :from: '2015-03-10 11:40'
+  :to: '2015-03-20 15:50'
+  :val: 10
+
+# week examples
+
+
+# month examples
+- :step: :month
+  :from: '2015-03-10 11:40'
+  :to: '2015-03-20 15:50'
+  :val: 0
+- :step: :month
+  :from: '2015-03-10 11:40'
+  :to: '2015-04-20 15:50'
+  :val: 1
+# february
+- :step: :month 
+  :from: '2015-02-28 11:40'
+  :to: '2015-03-28 15:50'
+  :val: 1
+# several years
+- :step: :month 
+  :from: '2013-02-28 11:40'
+  :to: '2015-03-28 15:50'
+  :val: 25
+
+# year example
+- :step: :year
+  :from: '2015-03-10 11:40'
+  :to: '2015-03-20 15:50'
+  :val: 0
+- :step: :year
+  :from: '2012-03-10 11:40'
+  :to: '2015-03-20 15:50'
+  :val: 3
+- :step: :year
+  :from: '2012-03-10 11:40'
+  :to: '2015-02-20 15:50'
+  :val: 2
+- :step: :year
+  :from: '2012-03-10 11:40'
+  :to: '2015-03-09 15:50'
+  :val: 2
+- :step: :year
+  :from: '2012-03-10 11:40'
+  :to: '2015-03-10 10:50'
+  :val: 2

@@ -91,6 +91,10 @@ module TimeBoots
       sz * MULTIPLIERS[step_idx..-1].inject(:*)
     end
 
+    def measure(from, to)
+      ((to - from) / span).to_i
+    end
+
     protected
 
     def _advance(tm, steps)
@@ -193,6 +197,13 @@ module TimeBoots
       super(:month)
     end
 
+    def measure(from, to)
+      ydiff = to.year - from.year
+      mdiff = to.month - from.month
+
+      to.day >= from.day ? (ydiff * 12 + mdiff) : (ydiff * 12 + mdiff - 1)
+    end
+
     protected
 
     def succ(tm)
@@ -223,6 +234,14 @@ module TimeBoots
   class YearBoot < Boot
     def initialize
       super(:year)
+    end
+
+    def measure(from, to)
+      if generate(from, year: to.year) < to
+        to.year - from.year
+      else
+        to.year - from.year - 1
+      end
     end
 
     protected
