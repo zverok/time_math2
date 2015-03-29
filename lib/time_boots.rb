@@ -10,3 +10,4 @@ module TimeBoots
 end
 
 require_relative './time_boots/boot'
+require_relative './time_boots/lace'
