@@ -37,7 +37,24 @@ describe TimeBoots::Lace do
   end
 
   describe '#pull' do
+    let(:fixture){load_fixture(:lace_pull)}
+    let(:from){t(fixture[:from])}
+    let(:to){t(fixture[:to])}
+
+    let(:lace){described_class.new(fixture[:step], from, to)}
+
+    let(:expected){fixture[:sequence].map(&method(:t))}
+
+    subject{lace.pull}
+
+    it{should == expected}
+    
     context 'when pulling beginnings' do
+      let(:expected){fixture[:sequence_beg].map(&method(:t))}
+
+      subject{lace.pull(beginnings: true)}
+
+      it{should == expected}
     end
   end
 
