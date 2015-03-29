@@ -20,9 +20,7 @@ module TimeBoots
       dup.tap(&:expand!)
     end
 
-    def pull(options = {})
-      beginnings = options.delete(:beginnings)
-      
+    def pull(beginnings = false)
       seq = []
 
       iter = from
@@ -33,6 +31,11 @@ module TimeBoots
       end
       
       seq
+    end
+
+    def pull_pairs(beginnings = false)
+      seq = pull(beginnings)
+      seq.zip(seq[1..-1] + [to])
     end
 
     private
