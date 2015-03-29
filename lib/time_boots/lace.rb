@@ -21,12 +21,7 @@ module TimeBoots
     end
 
     def pull(options = {})
-      beginnings = options.delete(:beginnings) ||
-        options.delete(:beginning) ||
-        options.delete(:begs) ||
-        options.delete(:beg)
-
-      options.empty? or fail("Unknown options: #{options}")
+      beginnings = options.delete(:beginnings)
       
       seq = []
 
@@ -34,17 +29,17 @@ module TimeBoots
       while iter < to
         seq << iter
 
-        iter = if beginnings
-          boot.floor(boot.advance(iter))
-        else
-          boot.advance(iter)
-        end
+        iter = cond_floor(boot.advance(iter), beginnings)
       end
       
       seq
     end
 
     private
+
+    def cond_floor(tm, should_floor)
+      should_floor ? boot.floor(tm) : tm
+    end
     
     attr_reader :boot
   end
