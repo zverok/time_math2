@@ -36,6 +36,13 @@ describe TimeBoots::Lace do
     end
   end
 
+  describe 'creating expanded' do
+    subject{described_class.new(:month, from, to, expand: true)}
+
+    its(:from){should == TimeBoots::Boot.month.floor(from)}
+    its(:to){should == TimeBoots::Boot.month.ceil(to)}
+  end
+
   describe '#pull' do
     let(:fixture){load_fixture(:lace_pull)}
     let(:from){t(fixture[:from])}

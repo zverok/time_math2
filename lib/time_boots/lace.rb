@@ -5,6 +5,8 @@ module TimeBoots
       @boot = Boot.get(step)
       @from, @to = from, to
       @options = options.dup
+
+      expand! if options[:expand]
     end
 
     attr_reader :from, :to
