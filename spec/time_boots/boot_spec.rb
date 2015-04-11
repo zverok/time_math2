@@ -28,6 +28,28 @@ describe TimeBoots::Boot do
     end
 
     describe '#round' do
+      let(:ceiled){t('2015-03-01 12:32')}
+      let(:floored){t('2015-03-01 12:22')}
+      let(:edge){t('2015-03-01 12:30')}
+
+      let(:boot){described_class.get(:hour)}
+
+      it 'should smart round to ceil or floor' do
+        expect(boot.round(ceiled)).to eq boot.ceil(ceiled)
+        expect(boot.round(floored)).to eq boot.floor(floored)
+        expect(boot.round(edge)).to eq boot.ceil(edge)
+      end
+    end
+
+    describe '#round?' do
+      let(:boot){described_class.get(:hour)}
+      let(:round){t('2015-03-01 12:00')}
+      let(:not_round){t('2015-03-01 12:01')}
+
+      it 'should check if tm is round' do
+        expect(boot.round?(round)).to eq true
+        expect(boot.round?(not_round)).to eq false
+      end
     end
 
     describe '#advance' do
