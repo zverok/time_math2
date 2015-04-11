@@ -194,6 +194,29 @@ describe TimeBoots::Boot do
       end
     end
 
+    describe '#range' do
+      let(:from){Time.now}
+      
+      described_class.steps.each do |step|
+        context "with step=#{step}" do
+          let(:boot){described_class.get(step)}
+          
+          context 'when single step' do
+            subject{boot.range(from)}
+            it{should == (from...boot.advance(from))}
+          end
+          
+          context 'when several steps' do
+            subject{boot.range(from, 5)}
+            it{should == (from...boot.advance(from, 5))}
+          end
+        end
+      end
+    end
+
+    describe '#range_back' do
+    end
+
     describe '#measure' do
       let(:fixture){load_fixture(:measure)}
 

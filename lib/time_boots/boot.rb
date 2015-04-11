@@ -41,6 +41,10 @@ module TimeBoots
       (tm - f).abs < (tm - c).abs ? f : c
     end
 
+    def range(tm, steps=1)
+      (tm...advance(tm, steps))
+    end
+
     def advance(tm, steps = 1)
       return decrease(tm, -steps) if steps < 0
       
