@@ -45,6 +45,10 @@ module TimeBoots
       (tm...advance(tm, steps))
     end
 
+    def range_back(tm, steps=1)
+      (decrease(tm, steps)...tm)
+    end
+
     def advance(tm, steps = 1)
       return decrease(tm, -steps) if steps < 0
       
