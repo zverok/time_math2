@@ -215,6 +215,23 @@ describe TimeBoots::Boot do
     end
 
     describe '#range_back' do
+      let(:from){Time.now}
+      
+      described_class.steps.each do |step|
+        context "with step=#{step}" do
+          let(:boot){described_class.get(step)}
+          
+          context 'when single step' do
+            subject{boot.range_back(from)}
+            it{should == (boot.decrease(from)...from)}
+          end
+          
+          context 'when several steps' do
+            subject{boot.range_back(from, 5)}
+            it{should == (boot.decrease(from, 5)...from)}
+          end
+        end
+      end
     end
 
     describe '#measure' do
