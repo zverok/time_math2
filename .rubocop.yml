@@ -15,6 +15,7 @@ Style/AndOr:
 Style/Documentation:
   Enabled: false
 
+# Everything else is just my personal style
 Style/SpaceInsideBlockBraces:
   EnforcedStyle: no_space
   SpaceBeforeBlockParameters: false
