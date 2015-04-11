@@ -41,17 +41,6 @@ describe TimeBoots::Boot do
       end
     end
 
-    describe '#round?' do
-      let(:boot){described_class.get(:hour)}
-      let(:round){t('2015-03-01 12:00')}
-      let(:not_round){t('2015-03-01 12:01')}
-
-      it 'should check if tm is round' do
-        expect(boot.round?(round)).to eq true
-        expect(boot.round?(not_round)).to eq false
-      end
-    end
-
     describe '#advance' do
       context 'one step' do
         let(:fixture){load_fixture(:advance)}
@@ -176,8 +165,8 @@ describe TimeBoots::Boot do
       #
       # FIXME: seems in Ruby 2.2.0 it have changed.
       #
-      # Nevertheless, it's Kieve time before that midnight we are changing
-      # our time to daylight saving
+      # Nevertheless, it's Kiev time before the midnight when
+      # we are changing our time to daylight saving
       let(:spring_before){
         Time.local(20, 40, 11, 28, 3, 2015, 6, 87, true, "+02:00")
       }
@@ -191,15 +180,15 @@ describe TimeBoots::Boot do
       end
     end
 
-    describe '#beginning?' do
-      let(:fixture){load_fixture(:beginning)}
+    describe '#round?' do
+      let(:fixture){load_fixture(:round)}
 
-      it 'should determine, if tm is beginning of step' do
+      it 'should determine, if tm is round to step' do
         fixture.each do |step, vals|
-          expect( described_class.get(step).beginning?(t(vals[:true])) ).to \
+          expect( described_class.get(step).round?(t(vals[:true])) ).to \
             be_truthy
 
-          expect( described_class.get(step).beginning?(t(vals[:false])) ).to \
+          expect( described_class.get(step).round?(t(vals[:false])) ).to \
             be_falsy
         end
       end

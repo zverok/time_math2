@@ -41,10 +41,6 @@ module TimeBoots
       (tm - f).abs < (tm - c).abs ? f : c
     end
 
-    def round?(tm)
-      round(tm) == tm
-    end
-
     def advance(tm, steps = 1)
       return decrease(tm, -steps) if steps < 0
       
@@ -69,7 +65,7 @@ module TimeBoots
       end
     end
 
-    def beginning?(tm)
+    def round?(tm)
       floor(tm) == tm
     end
 
