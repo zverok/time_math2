@@ -41,11 +41,11 @@ module TimeBoots
       (tm - f).abs < (tm - c).abs ? f : c
     end
 
-    def range(tm, steps=1)
+    def range(tm, steps = 1)
       (tm...advance(tm, steps))
     end
 
-    def range_back(tm, steps=1)
+    def range_back(tm, steps = 1)
       (decrease(tm, steps)...tm)
     end
 
@@ -75,6 +75,11 @@ module TimeBoots
 
     def round?(tm)
       floor(tm) == tm
+    end
+
+    def measure_rem(from, to)
+      m = measure(from, to)
+      [m, advance(from, m)]
     end
 
     protected
