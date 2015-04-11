@@ -6,6 +6,9 @@ AllCops:
     - 'spec/**/*'
     - 'vendor/**/*'
 
+# My editor is A BIT DUMB
+Style/TrailingWhitespace:
+  Enabled: false
 
 # I'm big fan of and/or for flow control
 Style/AndOr:
@@ -23,8 +26,6 @@ Style/SpaceInsideBlockBraces:
 Style/SpaceBeforeBlockBraces:
   EnforcedStyle: no_space
 
-Style/TrailingWhitespace:
-  Enabled: false
 
 Style/SingleLineBlockParams:
   Enabled: false
