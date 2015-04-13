@@ -11,3 +11,4 @@ end
 
 require_relative './time_boots/boot'
 require_relative './time_boots/lace'
+require_relative './time_boots/measure'

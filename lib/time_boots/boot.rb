@@ -192,7 +192,7 @@ module TimeBoots
       day.decrease(f, extra_days)
     end
 
-    def span(sz)
+    def span(sz = 1)
       day.span(sz * 7)
     end
 
