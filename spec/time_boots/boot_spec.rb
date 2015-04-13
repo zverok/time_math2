@@ -1,9 +1,5 @@
 # encoding: utf-8
 describe TimeBoots::Boot do
-  
-  describe 'basics' do
-  end
-
   describe 'math' do
     describe '#floor' do
       let(:fixture){load_fixture(:floor)}
