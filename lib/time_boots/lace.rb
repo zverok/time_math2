@@ -40,6 +40,10 @@ module TimeBoots
       seq.zip(seq[1..-1] + [to])
     end
 
+    def pull_ranges(beginnings = false)
+      pull_pairs(beginnings).map{|b, e| (b...e)}
+    end
+
     private
 
     def cond_floor(tm, should_floor)

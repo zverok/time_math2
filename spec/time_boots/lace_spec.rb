@@ -85,5 +85,14 @@ describe TimeBoots::Lace do
 
       it{should == expected}
     end
+
+    describe '#pull_ranges' do
+      subject{lace.pull_ranges}
+      let(:expected){
+        fixture[:sequence].map{|b, e| (t(b)...t(e))}
+      }
+
+      it{should == expected}
+    end
   end
 end
