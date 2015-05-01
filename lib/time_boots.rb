@@ -2,10 +2,40 @@
 require 'time'
 
 module TimeBoots
-  module_function
+  extend self
   
   def steps
     Boot.steps
+  end
+
+  # no fancy meta-programming here: we want YARD to be happy
+
+  def sec
+    Boot.get(:sec)
+  end
+
+  def min
+    Boot.get(:min)
+  end
+
+  def hour
+    Boot.get(:hour)
+  end
+
+  def day
+    Boot.get(:day)
+  end
+
+  def week
+    Boot.get(:week)
+  end
+
+  def month
+    Boot.get(:month)
+  end
+
+  def year
+    Boot.get(:year)
   end
 end
 

@@ -171,8 +171,8 @@ describe TimeBoots::Boot do
       }
 
       it "should correctly shift step over the DST border" do
-        expect(described_class.day.advance(spring_before)).to eq spring_after
-        expect(described_class.day.decrease(spring_after)).to eq spring_before
+        expect(TimeBoots.day.advance(spring_before)).to eq spring_after
+        expect(TimeBoots.day.decrease(spring_after)).to eq spring_before
       end
     end
 

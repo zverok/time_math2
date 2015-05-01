@@ -14,8 +14,8 @@ describe TimeBoots::Lace do
   describe '#expand!' do
     before{subject.expand!}
 
-    its(:from){should == TimeBoots::Boot.month.floor(from)}
-    its(:to){should == TimeBoots::Boot.month.ceil(to)}
+    its(:from){should == TimeBoots.month.floor(from)}
+    its(:to){should == TimeBoots.month.ceil(to)}
   end
 
   describe '#expand' do
@@ -24,8 +24,8 @@ describe TimeBoots::Lace do
     describe 'expanded' do
       subject{expanded}
 
-      its(:from){should == TimeBoots::Boot.month.floor(from)}
-      its(:to){should == TimeBoots::Boot.month.ceil(to)}
+      its(:from){should == TimeBoots.month.floor(from)}
+      its(:to){should == TimeBoots.month.ceil(to)}
     end
 
     describe 'original' do
@@ -39,8 +39,8 @@ describe TimeBoots::Lace do
   describe 'creating expanded' do
     subject{described_class.new(:month, from, to, expand: true)}
 
-    its(:from){should == TimeBoots::Boot.month.floor(from)}
-    its(:to){should == TimeBoots::Boot.month.ceil(to)}
+    its(:from){should == TimeBoots.month.floor(from)}
+    its(:to){should == TimeBoots.month.ceil(to)}
   end
 
   describe '#pull' do

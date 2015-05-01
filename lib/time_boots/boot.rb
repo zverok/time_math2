@@ -105,178 +105,15 @@ module TimeBoots
       components = NATURAL_STEPS.map{|s| hash[s] || 0}
       Time.new(*components)
     end
-  end
 
-  class SimpleBoot < Boot
-    def span(sz = 1)
-      sz * MULTIPLIERS[step_idx..-1].inject(:*)
-    end
+    include TimeBoots # now we can use something like #day inside boots
 
-    def measure(from, to)
-      ((to - from) / span).to_i
-    end
-
-    protected
-
-    def _advance(tm, steps)
-      tm + span(steps)
-    end
-
-    def _decrease(tm, steps)
-      tm - span(steps)
-    end
-
-    MULTIPLIERS = [12, 30, 24, 60, 60, 1]
-  end
-
-  class SecBoot < SimpleBoot
-    def initialize
-      super(:sec)
-    end
-  end
-
-  class MinBoot < SimpleBoot
-    def initialize
-      super(:min)
-    end
-  end
-
-  class HourBoot < SimpleBoot
-    def initialize
-      super(:hour)
-    end
-  end
-
-  class DayBoot < SimpleBoot
-    def initialize
-      super(:day)
-    end
-
-    protected
-
-    def _advance(tm, steps)
-      res = super(tm, steps)
-
-      if res.dst? && !tm.dst?
-        hour.decrease(res)
-      elsif !res.dst? && tm.dst?
-        hour.advance(res)
-      else
-        res
-      end
-    end
-
-    def _decrease(tm, steps)
-      res = super(tm, steps)
-
-      if res.dst? && !tm.dst?
-        hour.decrease(res)
-      elsif !res.dst? && tm.dst?
-        hour.advance(res)
-      else
-        res
-      end
-    end
-
-    def hour
-      Boot.hour
-    end
-  end
-
-  class WeekBoot < SimpleBoot
-    def initialize
-      super(:week)
-    end
-
-    def floor(tm)
-      f = day.floor(tm)
-      extra_days = tm.wday == 0 ? 6 : tm.wday - 1
-      day.decrease(f, extra_days)
-    end
-
-    def span(sz = 1)
-      day.span(sz * 7)
-    end
-
-    protected
-
-    def _advance(tm, steps)
-      day.advance(tm, steps * 7)
-    end
-
-    def _decrease(tm, steps)
-      day.decrease(tm, steps * 7)
-    end
-    
-    def day
-      Boot.day
-    end
-  end
-
-  class MonthBoot < Boot
-    def initialize
-      super(:month)
-    end
-
-    def measure(from, to)
-      ydiff = to.year - from.year
-      mdiff = to.month - from.month
-
-      to.day >= from.day ? (ydiff * 12 + mdiff) : (ydiff * 12 + mdiff - 1)
-    end
-
-    protected
-
-    def succ(tm)
-      return generate(tm, year: tm.year + 1, month: 1) if tm.month == 12
-
-      t = generate(tm, month: tm.month + 1)
-      fix_month(t, t.month + 1)
-    end
-
-    def prev(tm)
-      return generate(tm, year: tm.year - 1, month: 12) if tm.month == 1
-
-      t = generate(tm, month: tm.month - 1)
-      fix_month(t, t.month - 1)
-    end
-
-    # fix for too far advance/insufficient decrease:
-    #  Time.new(2013,2,31) #=> 2013-03-02 00:00:00 +0200
-    def fix_month(t, expected)
-      t.month == expected ? day.decrease(t, t.day) : t
-    end
-
-    def day
-      Boot.day
-    end
-  end
-
-  class YearBoot < Boot
-    def initialize
-      super(:year)
-    end
-
-    def measure(from, to)
-      if generate(from, year: to.year) < to
-        to.year - from.year
-      else
-        to.year - from.year - 1
-      end
-    end
-
-    protected
-    
-    def _advance(tm, steps)
-      generate(tm, year: tm.year + steps)
-    end
-
-    def _decrease(tm, steps)
-      generate(tm, year: tm.year - steps)
-    end
-  end
-
-  class Boot
+    require_relative 'boot/simple'
+    require_relative 'boot/day'
+    require_relative 'boot/week'
+    require_relative 'boot/month'
+    require_relative 'boot/year'
+  
     BOOTS = {
       sec: SecBoot.new,
       min: MinBoot.new,
@@ -286,11 +123,5 @@ module TimeBoots
       month: MonthBoot.new,
       year: YearBoot.new
     }
-
-    class << self
-      BOOTS.keys.each do |step|
-        define_method(step){BOOTS[step]}
-      end
-    end
   end
 end
