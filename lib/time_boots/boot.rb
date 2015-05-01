@@ -116,12 +116,8 @@ module TimeBoots
     require_relative 'boot/year'
   
     BOOTS = {
-      sec: SecBoot.new,
-      min: MinBoot.new,
-      hour: HourBoot.new,
-      day: DayBoot.new,
-      week: WeekBoot.new,
-      month: MonthBoot.new,
+      sec: SecBoot.new, min: MinBoot.new, hour: HourBoot.new,
+      day: DayBoot.new, week: WeekBoot.new, month: MonthBoot.new,
       year: YearBoot.new
     }
 
