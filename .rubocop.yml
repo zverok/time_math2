@@ -1,5 +1,6 @@
 AllCops:
   Include:
+    - 'lib/*'
     - 'lib/**/*'
   Exclude:
     - 'spec/*'
@@ -25,7 +26,6 @@ Style/SpaceInsideBlockBraces:
 
 Style/SpaceBeforeBlockBraces:
   EnforcedStyle: no_space
-
 
 Style/SingleLineBlockParams:
   Enabled: false

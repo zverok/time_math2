@@ -52,9 +52,10 @@ module TimeBoots
     def advance(tm, steps = 1)
       return decrease(tm, -steps) if steps < 0
       
-      if respond_to?(:_advance)
+      # gotcha: respond_to?(:protected_method) is false in Ruby > 2.0
+      if methods.include?(:_advance)
         _advance(tm, steps)
-      elsif respond_to?(:succ)
+      elsif methods.include?(:succ)
         steps.times.inject(tm){|t| succ(t)}
       else
         fail(NotImplementedError, 'No advancing method')
@@ -63,10 +64,11 @@ module TimeBoots
 
     def decrease(tm, steps = 1)
       return advance(tm, -steps) if steps < 0
-      
-      if respond_to?(:_decrease)
+
+      # gotcha: respond_to?(:protected_method) is false in Ruby > 2.0
+      if methods.include?(:_decrease)
         _decrease(tm, steps)
-      elsif respond_to?(:prev)
+      elsif methods.include?(:prev)
         steps.times.inject(tm){|t| prev(t)}
       else
         fail(NotImplementedError, 'No descreasing method')
