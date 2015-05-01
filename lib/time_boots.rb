@@ -2,7 +2,9 @@
 require 'time'
 
 module TimeBoots
+  # rubocop:disable Style/ModuleFunction
   extend self
+  # rubocop:enable Style/ModuleFunction
   
   def steps
     Boot.steps
@@ -10,6 +12,8 @@ module TimeBoots
 
   # no fancy meta-programming here: we want YARD to be happy
 
+  # Boot shortcuts
+  
   def sec
     Boot.get(:sec)
   end
@@ -36,6 +40,40 @@ module TimeBoots
 
   def year
     Boot.get(:year)
+  end
+
+  # Boot-less method shortcuts
+
+  def floor(step, tm)
+    Boot.get(step).floor(tm)
+  end
+
+  def ceil(step, tm)
+    Boot.get(step).ceil(tm)
+  end
+
+  def round(step, tm)
+    Boot.get(step).round(tm)
+  end
+
+  def round?(step, tm)
+    Boot.get(step).round?(tm)
+  end
+
+  def advance(step, tm, steps = 1)
+    Boot.get(step).advance(step, tm, steps)
+  end
+
+  def decrease(step, tm, steps = 1)
+    Boot.get(step).decrease(step, tm, steps)
+  end
+
+  def range(step, tm, steps = 1)
+    Boot.get(step).range(tm, steps)
+  end
+
+  def range_back(step, tm, steps = 1)
+    Boot.get(step).range_back(tm, steps)
   end
 end
 

@@ -1,17 +1,6 @@
 # encoding: utf-8
 module TimeBoots
   class Boot
-    class << self
-      def steps
-        BOOTS.keys
-      end
-      
-      def get(step)
-        BOOTS[step] or
-          fail(ArgumentError, "Unsupported step: #{step}")
-      end
-    end
-    
     def initialize(step)
       @step = step
     end
@@ -41,12 +30,8 @@ module TimeBoots
       (tm - f).abs < (tm - c).abs ? f : c
     end
 
-    def range(tm, steps = 1)
-      (tm...advance(tm, steps))
-    end
-
-    def range_back(tm, steps = 1)
-      (decrease(tm, steps)...tm)
+    def round?(tm)
+      floor(tm) == tm
     end
 
     def advance(tm, steps = 1)
@@ -75,8 +60,16 @@ module TimeBoots
       end
     end
 
-    def round?(tm)
-      floor(tm) == tm
+    def range(tm, steps = 1)
+      (tm...advance(tm, steps))
+    end
+
+    def range_back(tm, steps = 1)
+      (decrease(tm, steps)...tm)
+    end
+
+    def measure(_from, _to)
+      fail NotImplementedError, 'Should be implemented in subclasses'
     end
 
     def measure_rem(from, to)
@@ -123,5 +116,16 @@ module TimeBoots
       month: MonthBoot.new,
       year: YearBoot.new
     }
+
+    class << self
+      def steps
+        BOOTS.keys
+      end
+      
+      def get(step)
+        BOOTS[step] or
+          fail(ArgumentError, "Unsupported step: #{step}")
+      end
+    end
   end
 end

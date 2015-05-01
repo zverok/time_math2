@@ -1,6 +1,5 @@
 AllCops:
   Include:
-    - 'lib/*'
     - 'lib/**/*'
   Exclude:
     - 'spec/*'

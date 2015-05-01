@@ -14,6 +14,27 @@ describe TimeBoots do
     end
   end
 
-  describe 'including' do
+  describe 'method shortucts' do
+    let(:tm){t('2015-03-27 11:40:20')}
+
+    described_class.steps.each do |step|
+      context "when #{step}" do
+        let(:boot){TimeBoots::Boot.get(step)}
+        
+        it 'should support fast calls' do
+          expect(described_class.floor(step, tm)).to eq(boot.floor(tm))
+          expect(described_class.ceil(step, tm)).to eq(boot.ceil(tm))
+          expect(described_class.round(step, tm)).to eq(boot.round(tm))
+
+          # and so on...
+          [:round?, :range, :range_back, :advance, :decrease].each do |m|
+            expect(described_class).to respond_to(m)
+          end
+        end
+      end
+    end
+  end
+
+  describe 'module including' do
   end
 end
