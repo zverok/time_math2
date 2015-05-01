@@ -6,6 +6,8 @@ module TimeBoots
       @boot = Boot.get(step)
     end
 
+    attr_reader :step, :amount
+
     def before(tm = Time.now)
       @boot.decrease(tm, amount)
     end
@@ -17,6 +19,8 @@ module TimeBoots
     alias_method :ago, :before 
     alias_method :from, :after
 
-    attr_reader :step, :amount
+    def ==(other)
+      step == other.step && amount == other.amount
+    end
   end
 end

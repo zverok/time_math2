@@ -153,7 +153,6 @@ describe TimeBoots::Boot do
 
     # TODO: edge cases:
     # * monthes decr/incr, including leap ears
-    # * timezones (DST edge 2015-03-28->29, for ex.)
 
     describe 'Edge case: DST' do
       # form with guaranteed DST:
@@ -258,6 +257,15 @@ describe TimeBoots::Boot do
           
           expect(measure).to eq data[:val]
           expect(rem).to eq expected_rem
+        end
+      end
+    end
+
+    describe '#span' do
+      described_class.steps.each do |step|
+        context "with step=#{step}" do
+          subject{described_class.get(step).span(5)}
+          it{should == TimeBoots::Span.new(step, 5)}
         end
       end
     end

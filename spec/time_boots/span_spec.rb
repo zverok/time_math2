@@ -23,7 +23,7 @@ describe TimeBoots::Span do
         end
       end
 
-      context 'when positive' do
+      context 'when negative' do
         let(:span){described_class.new(step, -4)}
 
         it 'should advance forvards and backwards' do
@@ -33,6 +33,12 @@ describe TimeBoots::Span do
           expect(span.before(tm)).to eq boot.advance(tm, 4)
           expect(span.ago(tm)).to eq boot.advance(tm, 4)
         end
+      end
+
+      it 'should be comparable for equality' do
+        expect(described_class.new(:year, 5)).to eq described_class.new(:year, 5)
+        expect(described_class.new(:year, 5)).not_to eq described_class.new(:year, 4)
+        expect(described_class.new(:year, 5)).not_to eq described_class.new(:month, 5)
       end
     end
   end

@@ -10,7 +10,7 @@ module TimeBoots
     Boot.steps
   end
 
-  # no fancy meta-programming here: we want YARD to be happy
+  # NB: no fancy meta-programming here: we want YARD to be happy
 
   # Boot shortcuts
   
@@ -74,6 +74,10 @@ module TimeBoots
 
   def range_back(step, tm, steps = 1)
     Boot.get(step).range_back(tm, steps)
+  end
+
+  def span(step, steps = 1)
+    Boot.get(step).span(steps)
   end
 end
 

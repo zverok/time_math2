@@ -77,6 +77,10 @@ module TimeBoots
       [m, advance(from, m)]
     end
 
+    def span(steps)
+      Span.new(step, steps)
+    end
+
     protected
     
     NATURAL_STEPS = [:year, :month, :day, :hour, :min, :sec]

@@ -1,22 +1,22 @@
 # encoding: utf-8
 module TimeBoots
   class SimpleBoot < Boot
-    def span(sz = 1)
+    def to_seconds(sz = 1)
       sz * MULTIPLIERS[step_idx..-1].inject(:*)
     end
 
     def measure(from, to)
-      ((to - from) / span).to_i
+      ((to - from) / to_seconds).to_i
     end
 
     protected
 
     def _advance(tm, steps)
-      tm + span(steps)
+      tm + to_seconds(steps)
     end
 
     def _decrease(tm, steps)
-      tm - span(steps)
+      tm - to_seconds(steps)
     end
 
     MULTIPLIERS = [12, 30, 24, 60, 60, 1]

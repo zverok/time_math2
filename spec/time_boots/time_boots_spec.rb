@@ -27,7 +27,7 @@ describe TimeBoots do
           expect(described_class.round(step, tm)).to eq(boot.round(tm))
 
           # and so on...
-          [:round?, :range, :range_back, :advance, :decrease].each do |m|
+          [:round?, :range, :range_back, :advance, :decrease, :span].each do |m|
             expect(described_class).to respond_to(m)
           end
         end
@@ -36,5 +36,8 @@ describe TimeBoots do
   end
 
   describe 'module including' do
+    let(:klass){Class.new{include TimeBoots}}
+    subject{klass.new}
+    its(:hour){should == TimeBoots.hour}
   end
 end
