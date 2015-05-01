@@ -22,5 +22,9 @@ module TimeBoots
     def ==(other)
       step == other.step && amount == other.amount
     end
+
+    def inspect
+      "#<#{self.class.name}: #{amount} #{step}>"
+    end
   end
 end

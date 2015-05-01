@@ -44,6 +44,10 @@ module TimeBoots
       pull_pairs(beginnings).map{|b, e| (b...e)}
     end
 
+    def inspect
+      "#<#{self.class}(#{from} - #{to})>"
+    end
+
     private
 
     def cond_floor(tm, should_floor)

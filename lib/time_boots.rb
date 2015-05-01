@@ -79,6 +79,14 @@ module TimeBoots
   def span(step, steps = 1)
     Boot.get(step).span(steps)
   end
+
+  def measure(from, to, options = {})
+    Measure.measure(from, to, options)
+  end
+
+  def lace(step, from, to, options = {})
+    Boot.get(step).lace(from, to, options)
+  end
 end
 
 require_relative './time_boots/boot'

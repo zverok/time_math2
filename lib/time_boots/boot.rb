@@ -81,6 +81,10 @@ module TimeBoots
       Span.new(step, steps)
     end
 
+    def lace(from, to, options = {})
+      Lace.new(step, from, to, options)
+    end
+
     protected
     
     NATURAL_STEPS = [:year, :month, :day, :hour, :min, :sec]
