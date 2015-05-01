@@ -253,9 +253,11 @@ describe TimeBoots::Boot do
           to = t(data[:to])
 
           measure, rem = boot.measure_rem(from, to)
+
+          expected_rem = boot.advance(from, measure)
           
           expect(measure).to eq data[:val]
-          expect(rem).to eq t(data[:rem])
+          expect(rem).to eq expected_rem
         end
       end
     end
