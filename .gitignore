@@ -2,4 +2,4 @@
 vendor
 Gemfile.lock
 TODO.md
-
+rubocop
