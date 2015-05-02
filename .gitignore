@@ -4,3 +4,4 @@ Gemfile.lock
 TODO.md
 rubocop
 coverage
+*.gem

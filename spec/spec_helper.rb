@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'simplecov'
 require 'coveralls'
-SimpleCov.start
+Coveralls.wear!
 
 $:.unshift 'lib'
 require 'time_boots'
