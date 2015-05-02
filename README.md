@@ -2,6 +2,7 @@
 
 [![Code Climate](https://codeclimate.com/github/zverok/time_boots/badges/gpa.svg)](https://codeclimate.com/github/zverok/time_boots)
 [![Build Status](https://travis-ci.org/zverok/time_boots.svg?branch=master)](https://travis-ci.org/zverok/time_boots)
+[![Coverage Status](https://coveralls.io/repos/zverok/time_boots/badge.svg?branch=master)](https://coveralls.io/r/zverok/time_boots?branch=master)
 
 **TimeBoots** is a small, no-dependencies library attemting to make time
 steps easier. It provides you with simple, easy-to-remember API, without
