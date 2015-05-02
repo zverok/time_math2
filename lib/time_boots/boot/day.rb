@@ -8,23 +8,17 @@ module TimeBoots
     protected
 
     def _advance(tm, steps)
-      res = super(tm, steps)
-
-      if res.dst? && !tm.dst?
-        hour.decrease(res)
-      elsif !res.dst? && tm.dst?
-        hour.advance(res)
-      else
-        res
-      end
+      fix_dst(super(tm, steps), tm)
     end
 
     def _decrease(tm, steps)
-      res = super(tm, steps)
+      fix_dst(super(tm, steps), tm)
+    end
 
-      if res.dst? && !tm.dst?
+    def fix_dst(res, src)
+      if res.dst? && !src.dst?
         hour.decrease(res)
-      elsif !res.dst? && tm.dst?
+      elsif !res.dst? && src.dst?
         hour.advance(res)
       else
         res
