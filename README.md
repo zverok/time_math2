@@ -1,5 +1,7 @@
 # Time Boots
 
+[![Code Climate](https://codeclimate.com/github/zverok/time_boots/badges/gpa.svg)](https://codeclimate.com/github/zverok/time_boots)
+
 **TimeBoots** is small, no-dependencies library attemting to make time
 steps easier. It provides you with simple, easy remembered API, without
 any monkey patching of core Ruby classes, so it can be used alongside
@@ -13,7 +15,6 @@ What it can?
 
 ```ruby
 TimeBoots.steps
-
 # => [:sec, :min, :hour, :day, :week, :month, :year]
 
 tm = Time.parse('2015-03-05 10:08')
