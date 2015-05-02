@@ -1,5 +1,6 @@
 # Time Boots
 
+[![Dependency Status](https://gemnasium.com/zverok/time_boots.svg)](https://gemnasium.com/zverok/time_boots)
 [![Code Climate](https://codeclimate.com/github/zverok/time_boots/badges/gpa.svg)](https://codeclimate.com/github/zverok/time_boots)
 [![Build Status](https://travis-ci.org/zverok/time_boots.svg?branch=master)](https://travis-ci.org/zverok/time_boots)
 [![Coverage Status](https://coveralls.io/repos/zverok/time_boots/badge.svg?branch=master)](https://coveralls.io/r/zverok/time_boots?branch=master)
@@ -80,9 +81,9 @@ jump.after(tm)
 
 ```ruby
 TimeBoots.hour.range(tm, 5)
- => 2015-03-05 10:08:00 +0200...2015-03-05 15:08:00 +0200 
+# => 2015-03-05 10:08:00 +0200...2015-03-05 15:08:00 +0200 
 TimeBoots.hour.range_back(tm, 5)
- => 2015-03-05 05:08:00 +0200...2015-03-05 10:08:00 +0200 
+# => 2015-03-05 05:08:00 +0200...2015-03-05 10:08:00 +0200 
 ```
 
 ## Measuring time periods
