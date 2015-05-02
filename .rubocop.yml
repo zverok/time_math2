@@ -28,3 +28,6 @@ Style/SpaceBeforeBlockBraces:
 
 Style/SingleLineBlockParams:
   Enabled: false
+
+Style/FormatString:
+  EnforcedStyle: percent
