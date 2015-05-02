@@ -36,28 +36,12 @@ module TimeBoots
 
     def advance(tm, steps = 1)
       return decrease(tm, -steps) if steps < 0
-      
-      # gotcha: respond_to?(:protected_method) is false in Ruby > 2.0
-      if methods.include?(:_advance)
-        _advance(tm, steps)
-      elsif methods.include?(:succ)
-        steps.times.inject(tm){|t| succ(t)}
-      else
-        fail(NotImplementedError, 'No advancing method')
-      end
+      _advance(tm, steps)
     end
 
     def decrease(tm, steps = 1)
       return advance(tm, -steps) if steps < 0
-
-      # gotcha: respond_to?(:protected_method) is false in Ruby > 2.0
-      if methods.include?(:_decrease)
-        _decrease(tm, steps)
-      elsif methods.include?(:prev)
-        steps.times.inject(tm){|t| prev(t)}
-      else
-        fail(NotImplementedError, 'No descreasing method')
-      end
+      _decrease(tm, steps)
     end
 
     def range(tm, steps = 1)
@@ -69,7 +53,7 @@ module TimeBoots
     end
 
     def measure(_from, _to)
-      fail NotImplementedError, 'Should be implemented in subclasses'
+      fail NotImplementedError, '#measure should be implemented in subclasses'
     end
 
     def measure_rem(from, to)

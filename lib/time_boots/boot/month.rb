@@ -28,6 +28,14 @@ module TimeBoots
       fix_month(t, t.month - 1)
     end
 
+    def _advance(tm, steps)
+      steps.times.inject(tm){|t| succ(t)}
+    end
+
+    def _decrease(tm, steps)
+      steps.times.inject(tm){|t| prev(t)}
+    end
+
     # fix for too far advance/insufficient decrease:
     #  Time.new(2013,2,31) #=> 2013-03-02 00:00:00 +0200
     def fix_month(t, expected)
