@@ -83,7 +83,7 @@ module TimeBoots
     end
 
     def tm_to_hash(tm)
-      Hash[*NATURAL_STEPS.map{|s| [s, tm.send(s)]}.flatten(1)]
+      Hash[*NATURAL_STEPS.flat_map{|s| [s, tm.send(s)]}]
     end
 
     def hash_to_tm(hash)

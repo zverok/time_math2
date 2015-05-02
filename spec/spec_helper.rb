@@ -1,4 +1,7 @@
 # encoding: utf-8
+require 'simplecov'
+SimpleCov.start
+
 $:.unshift 'lib'
 require 'time_boots'
 

@@ -29,8 +29,8 @@ Gem::Specification.new do |s|
   end
   s.require_paths = ["lib"]
 
-  s.add_development_dependency 'rubocop'
-  s.add_development_dependency 'bundler'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'rspec-its'
+  s.add_development_dependency 'rubocop', '~> 0.30'
+  s.add_development_dependency 'rspec', '~> 3'
+  s.add_development_dependency 'rspec-its', '~> 1'
+  s.add_development_dependency 'simplecov', '~> 0.9'
 end
