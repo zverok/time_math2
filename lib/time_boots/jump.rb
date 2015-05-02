@@ -1,6 +1,6 @@
 # encoding: utf-8
 module TimeBoots
-  class Span
+  class Jump
     def initialize(step, amount)
       @step, @amount = step, amount
       @boot = Boot.get(step)
@@ -24,7 +24,7 @@ module TimeBoots
     end
 
     def inspect
-      "#<#{self.class.name}: #{amount} #{step}>"
+      '#<%s(%s): %+i>' % [self.class, step, amount]
     end
   end
 end

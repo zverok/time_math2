@@ -77,8 +77,8 @@ module TimeBoots
       [m, advance(from, m)]
     end
 
-    def span(steps)
-      Span.new(step, steps)
+    def jump(steps)
+      Jump.new(step, steps)
     end
 
     def lace(from, to, options = {})

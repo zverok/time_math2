@@ -261,11 +261,11 @@ describe TimeBoots::Boot do
       end
     end
 
-    describe '#span' do
+    describe '#jump' do
       described_class.steps.each do |step|
         context "with step=#{step}" do
-          subject{described_class.get(step).span(5)}
-          it{should == TimeBoots::Span.new(step, 5)}
+          subject{described_class.get(step).jump(5)}
+          it{should == TimeBoots::Jump.new(step, 5)}
         end
       end
     end

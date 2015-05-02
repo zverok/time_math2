@@ -44,7 +44,7 @@ TimeBoots.min.round?(tm)
 # => true
 ```
 
-### Moving in time forwards and backwards:
+### Moving in time forwards and backwards
 
 ```ruby
 TimeBoots.month.advance(tm)
@@ -59,21 +59,23 @@ TimeBoots.month.advance(tm, -4)
 # or
 TimeBoots.month.decrease(tm, 4)
 # => 2014-11-05 10:08:00 +0200
-
-# Or you can use an abstraction:
-span = TimeBoots.month.span(4)
-# => #<TimeBoots::Span: 4 month>
-
-span.before(tm)
-# => 2014-11-05 10:08:00 +0200
-# also span.ago(tm)
-
-span.after(tm)
-# => 2015-07-05 10:08:00 +0300
-# also span.from(tm)
 ```
 
-Creating time ranges:
+Also abstracted as time **jump**, which you can store in variables and
+pass to other methods:
+
+```ruby
+jump = TimeBoots.month.jump(4)
+# => #<TimeBoots::Jump(month): +4>
+
+jump.before(tm)
+# => 2014-11-05 10:08:00 +0200
+
+jump.after(tm)
+# => 2015-07-05 10:08:00 +0300
+```
+
+### Creating time ranges
 
 ```ruby
 TimeBoots.hour.range(tm, 5)
@@ -114,25 +116,23 @@ TimeBoots.measure(birthday, Time.now, max_step: :day)
 # => {:days=>11764, :hours=>8, :minutes=>6, :seconds=>41}
 ```
 
-See TimeBoots#measure for details.
+## Time series generation: "laces"
 
-## Time series generation: laces
-
-I'm a real fan of funny names in gems. So, we have time **boots** for working
+I'm a real fan of funny names in gems. Here we have time **boots** for working
 with time **steps**. So, something continuous will be called **lace**.
 
-I hope, those examples are pretty self-explanatory.
+I hope, next examples are pretty self-explanatory.
 
 ```ruby
 from = Time.parse('2015-03-05 10:08')
 to = Time.parse('2015-03-09 11:07')
 
 lace = TimeBoots.month.lace(from, to)
-# => #<TimeBoots::Lace(2015-03-05 10:08:00 +0200-2015-03-09 11:07:00 +0200)>
+# => #<TimeBoots::Lace(2015-03-05 10:08:00 +0200 - 2015-03-09 11:07:00 +0200)>
 
 # or
 TimeBoots.lace(:month, from, to)
-# => #<TimeBoots::Lace(2015-03-05 10:08:00 +0200-2015-03-09 11:07:00 +0200)>
+# => #<TimeBoots::Lace(2015-03-05 10:08:00 +0200 - 2015-03-09 11:07:00 +0200)>
 
 lace.pull
 # => [2015-03-05 10:08:00 +0200,

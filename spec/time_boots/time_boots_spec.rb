@@ -27,7 +27,7 @@ describe TimeBoots do
           expect(described_class.round(step, tm)).to eq(boot.round(tm))
 
           # and so on...
-          [:round?, :range, :range_back, :advance, :decrease, :span].each do |m|
+          [:round?, :range, :range_back, :advance, :decrease, :jump, :lace, :measure].each do |m|
             expect(described_class).to respond_to(m)
           end
         end
