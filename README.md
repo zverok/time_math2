@@ -1,5 +1,6 @@
 # Time Boots
 
+[![Gem Version](https://badge.fury.io/rb/time_boots.svg)](http://badge.fury.io/rb/time_boots)
 [![Dependency Status](https://gemnasium.com/zverok/time_boots.svg)](https://gemnasium.com/zverok/time_boots)
 [![Code Climate](https://codeclimate.com/github/zverok/time_boots/badges/gpa.svg)](https://codeclimate.com/github/zverok/time_boots)
 [![Build Status](https://travis-ci.org/zverok/time_boots.svg?branch=master)](https://travis-ci.org/zverok/time_boots)
@@ -9,6 +10,18 @@
 steps easier. It provides you with simple, easy-to-remember API, without
 any monkey-patching of core Ruby classes, so it can be used alongside
 Rails or without it, for any purpose.
+
+Install it like always:
+
+```
+gem install time_boots
+```
+
+or add to your Gemfile
+
+```
+gem 'time_boots'
+```
 
 ## Simple time math
 
@@ -212,3 +225,9 @@ And there are some plans for the future:
 * optional `core_ext`, providing methods like `4.months.ago` for the
   (Rails-less) rest of us;
 * your ideas?..
+
+## Alternatives
+
+There's pretty small and useful [AS::Duration](https://github.com/janko-m/as-duration)
+by Janko Marohnić, which is time durations, extracted from ActiveSupport,
+but without any ActiveSupport bloat.
