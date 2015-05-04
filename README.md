@@ -6,7 +6,7 @@
 [![Build Status](https://travis-ci.org/zverok/time_boots.svg?branch=master)](https://travis-ci.org/zverok/time_boots)
 [![Coverage Status](https://coveralls.io/repos/zverok/time_boots/badge.svg?branch=master)](https://coveralls.io/r/zverok/time_boots?branch=master)
 
-**TimeBoots** is a small, no-dependencies library attemting to make time
+**TimeBoots** is a small, no-dependencies library attempting to make time
 steps easier. It provides you with simple, easy-to-remember API, without
 any monkey-patching of core Ruby classes, so it can be used alongside
 Rails or without it, for any purpose.
