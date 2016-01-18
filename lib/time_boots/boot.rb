@@ -71,7 +71,7 @@ module TimeBoots
 
     protected
     
-    NATURAL_STEPS = [:year, :month, :day, :hour, :min, :sec]
+    NATURAL_STEPS = [:year, :month, :day, :hour, :min, :sec].freeze
 
     def step_idx
       NATURAL_STEPS.index(step) or
@@ -103,7 +103,7 @@ module TimeBoots
       sec: SecBoot.new, min: MinBoot.new, hour: HourBoot.new,
       day: DayBoot.new, week: WeekBoot.new, month: MonthBoot.new,
       year: YearBoot.new
-    }
+    }.freeze
 
     class << self
       def steps

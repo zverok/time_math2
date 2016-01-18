@@ -16,8 +16,8 @@ module TimeBoots
       @boot.advance(tm, amount)
     end
 
-    alias_method :ago, :before 
-    alias_method :from, :after
+    alias ago before 
+    alias from after
 
     def ==(other)
       step == other.step && amount == other.amount

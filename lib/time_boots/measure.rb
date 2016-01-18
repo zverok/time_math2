@@ -9,7 +9,7 @@ module TimeBoots
       hour: :hours,
       min: :minutes,
       sec: :seconds
-    }
+    }.freeze
     
     def self.measure(from, to, options = {})
       select_steps(options).reverse.inject({}) do |res, step|

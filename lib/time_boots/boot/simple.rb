@@ -19,7 +19,7 @@ module TimeBoots
       tm - to_seconds(steps)
     end
 
-    MULTIPLIERS = [12, 30, 24, 60, 60, 1]
+    MULTIPLIERS = [12, 30, 24, 60, 60, 1].freeze
   end
 
   class SecBoot < SimpleBoot

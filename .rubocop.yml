@@ -31,3 +31,6 @@ Style/SingleLineBlockParams:
 
 Style/FormatString:
   EnforcedStyle: percent
+
+Style/ParallelAssignment:
+  Enabled: false
