@@ -29,11 +29,11 @@ module TimeBoots
     end
 
     def _advance(tm, steps)
-      steps.times.inject(tm){|t| succ(t)}
+      steps.times.inject(tm) { |t| succ(t) }
     end
 
     def _decrease(tm, steps)
-      steps.times.inject(tm){|t| prev(t)}
+      steps.times.inject(tm) { |t| prev(t) }
     end
 
     # fix for too far advance/insufficient decrease:

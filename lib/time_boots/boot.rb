@@ -14,7 +14,7 @@ module TimeBoots
                     tm.hour,
                     tm.min,
                     tm.sec].first(step_idx + 1)
-        
+
       Time.new(*components)
     end
 
@@ -53,7 +53,7 @@ module TimeBoots
     end
 
     def measure(_from, _to)
-      fail NotImplementedError, '#measure should be implemented in subclasses'
+      raise NotImplementedError, '#measure should be implemented in subclasses'
     end
 
     def measure_rem(from, to)
@@ -70,12 +70,12 @@ module TimeBoots
     end
 
     protected
-    
+
     NATURAL_STEPS = [:year, :month, :day, :hour, :min, :sec].freeze
 
     def step_idx
       NATURAL_STEPS.index(step) or
-        fail(NotImplementedError, "Can not be used for step #{step}")
+        raise NotImplementedError, "Can not be used for step #{step}"
     end
 
     def generate(tm, replacements = {})
@@ -83,11 +83,11 @@ module TimeBoots
     end
 
     def tm_to_hash(tm)
-      Hash[*NATURAL_STEPS.flat_map{|s| [s, tm.send(s)]}]
+      Hash[*NATURAL_STEPS.flat_map { |s| [s, tm.send(s)] }]
     end
 
     def hash_to_tm(hash)
-      components = NATURAL_STEPS.map{|s| hash[s] || 0}
+      components = NATURAL_STEPS.map { |s| hash[s] || 0 }
       Time.new(*components)
     end
 
@@ -98,7 +98,7 @@ module TimeBoots
     require_relative 'boot/week'
     require_relative 'boot/month'
     require_relative 'boot/year'
-  
+
     BOOTS = {
       sec: SecBoot.new, min: MinBoot.new, hour: HourBoot.new,
       day: DayBoot.new, week: WeekBoot.new, month: MonthBoot.new,
@@ -109,10 +109,10 @@ module TimeBoots
       def steps
         BOOTS.keys
       end
-      
+
       def get(step)
         BOOTS[step] or
-          fail(ArgumentError, "Unsupported step: #{step}")
+          raise ArgumentError, "Unsupported step: #{step}"
       end
     end
   end

@@ -16,7 +16,7 @@ module TimeBoots
       @boot.advance(tm, amount)
     end
 
-    alias ago before 
+    alias ago before
     alias from after
 
     def ==(other)

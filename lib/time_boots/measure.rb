@@ -10,7 +10,7 @@ module TimeBoots
       min: :minutes,
       sec: :seconds
     }.freeze
-    
+
     def self.measure(from, to, options = {})
       select_steps(options).reverse.inject({}) do |res, step|
         span, from = Boot.get(step).measure_rem(from, to)

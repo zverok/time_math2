@@ -14,7 +14,7 @@ module TimeBoots
     def expand!
       @from = boot.floor(from)
       @to = boot.ceil(to)
-      
+
       self
     end
 
@@ -31,7 +31,7 @@ module TimeBoots
 
         iter = cond_floor(boot.advance(iter), beginnings)
       end
-      
+
       seq
     end
 
@@ -41,7 +41,7 @@ module TimeBoots
     end
 
     def pull_ranges(beginnings = false)
-      pull_pairs(beginnings).map{|b, e| (b...e)}
+      pull_pairs(beginnings).map { |b, e| (b...e) }
     end
 
     def inspect
@@ -53,7 +53,7 @@ module TimeBoots
     def cond_floor(tm, should_floor)
       should_floor ? boot.floor(tm) : tm
     end
-    
+
     attr_reader :boot
   end
 end

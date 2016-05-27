@@ -14,7 +14,7 @@ module TimeBoots
     end
 
     protected
-    
+
     def _advance(tm, steps)
       generate(tm, year: tm.year + steps)
     end

@@ -5,7 +5,7 @@ module TimeBoots
   # rubocop:disable Style/ModuleFunction
   extend self
   # rubocop:enable Style/ModuleFunction
-  
+
   def steps
     Boot.steps
   end
@@ -13,7 +13,7 @@ module TimeBoots
   # NB: no fancy meta-programming here: we want YARD to be happy
 
   # Boot shortcuts
-  
+
   def sec
     Boot.get(:sec)
   end
