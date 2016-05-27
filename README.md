@@ -46,7 +46,7 @@ TimeBoots.month.floor(tm)
 
 TimeBoots.month.ceil(tm)
 # => 2015-04-01 00:00:00 +0300
-# Note the timezone change: our (Ukraine) DST was in March,
+# Note the UTC offset change: our (Ukraine) DST was in March,
 # and TimeBoots plays perfectly well with it.
 
 TimeBoots.month.round(tm)
@@ -94,9 +94,9 @@ jump.after(tm)
 
 ```ruby
 TimeBoots.hour.range(tm, 5)
-# => 2015-03-05 10:08:00 +0200...2015-03-05 15:08:00 +0200 
+# => 2015-03-05 10:08:00 +0200...2015-03-05 15:08:00 +0200
 TimeBoots.hour.range_back(tm, 5)
-# => 2015-03-05 05:08:00 +0200...2015-03-05 10:08:00 +0200 
+# => 2015-03-05 05:08:00 +0200...2015-03-05 10:08:00 +0200
 ```
 
 ## Measuring time periods
@@ -124,7 +124,7 @@ puts "%{years}y %{months}m %{weeks}w %{days}d %{hours}h %{minutes}m %{seconds}s"
 
 # Option: measure without weeks
 TimeBoots.measure(birthday, Time.now, weeks: false)
-# => {:years=>32, :months=>2, :days=>17, :hours=>7, :minutes=>5, :seconds=>11} 
+# => {:years=>32, :months=>2, :days=>17, :hours=>7, :minutes=>5, :seconds=>11}
 
 # My full age in days, hours, minutes
 TimeBoots.measure(birthday, Time.now, max_step: :day)

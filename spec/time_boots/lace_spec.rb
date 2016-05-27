@@ -1,98 +1,102 @@
 # encoding: utf-8
 describe TimeBoots::Lace do
-  let(:from){t('2014-03-10')}
-  let(:to){t('2014-11-10')}
+  [Time, DateTime].each do |t|
+    describe "with #{t}" do
+      let(:from){t.parse('2014-03-10')}
+      let(:to){t.parse('2014-11-10')}
 
-  let(:lace){described_class.new(:month, from, to)}
-  subject{lace}
-  
-  describe 'creation' do
-    its(:from){should == from}
-    its(:to){should == to}
-  end
-
-  describe '#expand!' do
-    before{subject.expand!}
-
-    its(:from){should == TimeBoots.month.floor(from)}
-    its(:to){should == TimeBoots.month.ceil(to)}
-  end
-
-  describe '#expand' do
-    let(:expanded){lace.expand}
-
-    describe 'expanded' do
-      subject{expanded}
-
-      its(:from){should == TimeBoots.month.floor(from)}
-      its(:to){should == TimeBoots.month.ceil(to)}
-    end
-
-    describe 'original' do
+      let(:lace){described_class.new(:month, from, to)}
       subject{lace}
 
-      its(:from){should == from}
-      its(:to){should == to}
-    end
-  end
+      describe 'creation' do
+        its(:from){should == from}
+        its(:to){should == to}
+      end
 
-  describe 'creating expanded' do
-    subject{described_class.new(:month, from, to, expand: true)}
+      describe '#expand!' do
+        before{subject.expand!}
 
-    its(:from){should == TimeBoots.month.floor(from)}
-    its(:to){should == TimeBoots.month.ceil(to)}
-  end
+        its(:from){should == TimeBoots.month.floor(from)}
+        its(:to){should == TimeBoots.month.ceil(to)}
+      end
 
-  describe '#pull' do
-    let(:fixture){load_fixture(:lace_pull)}
-    let(:from){t(fixture[:from])}
-    let(:to){t(fixture[:to])}
+      describe '#expand' do
+        let(:expanded){lace.expand}
 
-    let(:lace){described_class.new(fixture[:step], from, to)}
+        describe 'expanded' do
+          subject{expanded}
 
-    let(:expected){fixture[:sequence].map(&method(:t))}
+          its(:from){should == TimeBoots.month.floor(from)}
+          its(:to){should == TimeBoots.month.ceil(to)}
+        end
 
-    subject{lace.pull}
+        describe 'original' do
+          subject{lace}
 
-    it{should == expected}
-    
-    context 'when pulling beginnings' do
-      let(:expected){fixture[:sequence_beg].map(&method(:t))}
+          its(:from){should == from}
+          its(:to){should == to}
+        end
+      end
 
-      subject{lace.pull(true)}
+      describe 'creating expanded' do
+        subject{described_class.new(:month, from, to, expand: true)}
 
-      it{should == expected}
-    end
-  end
+        its(:from){should == TimeBoots.month.floor(from)}
+        its(:to){should == TimeBoots.month.ceil(to)}
+      end
 
-  describe '#pull_pairs' do
-    let(:fixture){load_fixture(:lace_pull_pairs)}
-    let(:from){t(fixture[:from])}
-    let(:to){t(fixture[:to])}
+      describe '#pull' do
+        let(:fixture){load_fixture(:lace_pull)}
+        let(:from){t.parse(fixture[:from])}
+        let(:to){t.parse(fixture[:to])}
 
-    let(:lace){described_class.new(fixture[:step], from, to)}
+        let(:lace){described_class.new(fixture[:step], from, to)}
 
-    let(:expected){fixture[:sequence].map{|b,e | [t(b), t(e)]}}
+        let(:expected){fixture[:sequence].map(&t.method(:parse))}
 
-    subject{lace.pull_pairs}
+        subject{lace.pull}
 
-    it{should == expected}
+        it{should == expected}
 
-    context 'when pulling beginnings' do
-      let(:expected){fixture[:sequence_beg].map{|b,e | [t(b), t(e)]}}
+        context 'when pulling beginnings' do
+          let(:expected){fixture[:sequence_beg].map(&t.method(:parse))}
 
-      subject{lace.pull_pairs(true)}
+          subject{lace.pull(true)}
 
-      it{should == expected}
-    end
+          it{should == expected}
+        end
+      end
 
-    describe '#pull_ranges' do
-      subject{lace.pull_ranges}
-      let(:expected){
-        fixture[:sequence].map{|b, e| (t(b)...t(e))}
-      }
+      describe '#pull_pairs' do
+        let(:fixture){load_fixture(:lace_pull_pairs)}
+        let(:from){t.parse(fixture[:from])}
+        let(:to){t.parse(fixture[:to])}
 
-      it{should == expected}
+        let(:lace){described_class.new(fixture[:step], from, to)}
+
+        let(:expected){fixture[:sequence].map{|b,e | [t.parse(b), t.parse(e)]}}
+
+        subject{lace.pull_pairs}
+
+        it{should == expected}
+
+        context 'when pulling beginnings' do
+          let(:expected){fixture[:sequence_beg].map{|b,e | [t.parse(b), t.parse(e)]}}
+
+          subject{lace.pull_pairs(true)}
+
+          it{should == expected}
+        end
+
+        describe '#pull_ranges' do
+          subject{lace.pull_ranges}
+          let(:expected){
+            fixture[:sequence].map{|b, e| (t.parse(b)...t.parse(e))}
+          }
+
+          it{should == expected}
+        end
+      end
     end
   end
 end

@@ -16,6 +16,8 @@ module TimeBoots
     end
 
     def fix_dst(res, src)
+      return res unless res.is_a?(Time)
+
       if res.dst? && !src.dst?
         hour.decrease(res)
       elsif !res.dst? && src.dst?

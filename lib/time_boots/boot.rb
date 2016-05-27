@@ -15,7 +15,7 @@ module TimeBoots
                     tm.min,
                     tm.sec].first(step_idx + 1)
 
-      Time.new(*components)
+      new_from_components(tm, *components)
     end
 
     def ceil(tm)
@@ -72,6 +72,7 @@ module TimeBoots
     protected
 
     NATURAL_STEPS = [:year, :month, :day, :hour, :min, :sec].freeze
+    DEFAULT_STEP_VALUES = [nil, 1, 1, 0, 0, 0].freeze
 
     def step_idx
       NATURAL_STEPS.index(step) or
@@ -79,16 +80,28 @@ module TimeBoots
     end
 
     def generate(tm, replacements = {})
-      hash_to_tm(tm_to_hash(tm).merge(replacements))
+      hash_to_tm(tm, tm_to_hash(tm).merge(replacements))
     end
 
     def tm_to_hash(tm)
       Hash[*NATURAL_STEPS.flat_map { |s| [s, tm.send(s)] }]
     end
 
-    def hash_to_tm(hash)
+    def hash_to_tm(origin, hash)
       components = NATURAL_STEPS.map { |s| hash[s] || 0 }
-      Time.new(*components)
+      new_from_components(origin, *components)
+    end
+
+    def new_from_components(origin, *components)
+      components = DEFAULT_STEP_VALUES.zip(components).map { |d, c| c || d }
+      case origin
+      when Time
+        Time.mktime(*components.reverse, nil, nil, nil, origin.zone)
+      when DateTime
+        DateTime.new(*components, origin.zone)
+      else
+        raise ArgumentError, "Expected Time or DateTime, got #{origin.class}"
+      end
     end
 
     include TimeBoots # now we can use something like #day inside boots

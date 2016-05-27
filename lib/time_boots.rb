@@ -43,7 +43,7 @@ module TimeBoots
   end
 
   # Boot-less method shortcuts
-
+  # :nocov:
   def floor(step, tm)
     Boot.get(step).floor(tm)
   end
@@ -87,6 +87,7 @@ module TimeBoots
   def lace(step, from, to, options = {})
     Boot.get(step).lace(from, to, options)
   end
+  # :nocov:
 end
 
 require_relative './time_boots/boot'
