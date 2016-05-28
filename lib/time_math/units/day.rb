@@ -16,6 +16,7 @@ module TimeMath
         fix_dst(super(tm, steps), tm)
       end
 
+      # :nocov: - somehow Travis env thinks other things about DST
       def fix_dst(res, src)
         return res unless res.is_a?(Time)
 
@@ -27,6 +28,7 @@ module TimeMath
           res
         end
       end
+      # :nocov:
     end
   end
 end
