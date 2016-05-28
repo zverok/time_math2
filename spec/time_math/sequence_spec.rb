@@ -54,6 +54,14 @@ describe TimeMath::Sequence do
         its(:to){should == TimeMath.month.ceil(to)}
       end
 
+      describe 'floors' do
+        it 'works' do
+          expect(described_class.new(:month, from, to, floor: true)).to be_floor
+          expect(described_class.new(:month, from, to)).not_to be_floor
+          expect(described_class.new(:month, from, to).floor).to be_floor
+        end
+      end
+
       describe '#to_a' do
         let(:fixture){load_fixture(:sequence_to_a)}
 
