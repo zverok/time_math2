@@ -293,10 +293,22 @@ describe TimeMath::Units::Base do
       end
 
       describe '#span' do
-        TimeMath::Units.names.each do |unit|
+        TimeMath.units.each do |unit|
           context "with #{unit}" do
             subject{u(unit).span(5)}
             it{should == TimeMath::Span.new(unit, 5)}
+          end
+        end
+      end
+
+      describe '#sequence' do
+        let(:from) { t.parse('2016-05-01 13:30') }
+        let(:to) { t.parse('2016-05-15 15:45') }
+
+        TimeMath.units.each do |unit|
+          context "with #{unit}" do
+            subject { u(unit).sequence(from, to) }
+            it { is_expected.to eq TimeMath::Sequence.new(unit, from, to) }
           end
         end
       end

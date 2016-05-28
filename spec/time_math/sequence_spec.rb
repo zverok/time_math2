@@ -3,8 +3,9 @@ describe TimeMath::Sequence do
     describe "with #{t}" do
       let(:from){t.parse('2014-03-10')}
       let(:to){t.parse('2014-11-10')}
+      let(:options) { {} }
 
-      subject(:sequence){described_class.new(:month, from, to)}
+      subject(:sequence){described_class.new(:month, from, to, options)}
 
       describe 'creation' do
         its(:from){should == from}
@@ -13,6 +14,14 @@ describe TimeMath::Sequence do
 
       describe '#inspect' do
         its(:inspect) { should == "#<TimeMath::Sequence(#{from} - #{to})>" }
+      end
+
+      describe '#==' do
+        it 'should work' do
+          expect(sequence).to eq described_class.new(:month, from, to)
+          expect(sequence).not_to eq described_class.new(:day, from, to)
+          expect(sequence).not_to eq described_class.new(:month, from, to+1)
+        end
       end
 
       describe '#expand!' do
@@ -39,7 +48,7 @@ describe TimeMath::Sequence do
       end
 
       describe 'creating expanded' do
-        subject{described_class.new(:month, from, to, expand: true)}
+        let(:options) { {expand: true} }
 
         its(:from){should == TimeMath.month.floor(from)}
         its(:to){should == TimeMath.month.ceil(to)}
@@ -51,7 +60,7 @@ describe TimeMath::Sequence do
         let(:from){t.parse(fixture[:from])}
         let(:to){t.parse(fixture[:to])}
 
-        let(:sequence){described_class.new(fixture[:step], from, to)}
+        let(:sequence){described_class.new(fixture[:step], from, to, options)}
 
         let(:expected){fixture[:sequence].map(&t.method(:parse))}
 
@@ -60,9 +69,11 @@ describe TimeMath::Sequence do
         it{should == expected}
 
         context 'when floored' do
+          let(:options) { {floor: true} }
+
           let(:expected){fixture[:sequence_floor].map(&t.method(:parse))}
 
-          subject{sequence.to_a(true)}
+          subject{sequence.to_a}
 
           it{should == expected}
         end
@@ -73,7 +84,7 @@ describe TimeMath::Sequence do
         let(:from){t.parse(fixture[:from])}
         let(:to){t.parse(fixture[:to])}
 
-        let(:lace){described_class.new(fixture[:step], from, to)}
+        let(:lace){described_class.new(fixture[:step], from, to, options)}
 
         let(:expected){fixture[:sequence].map{|b,e | [t.parse(b), t.parse(e)]}}
 
@@ -82,9 +93,10 @@ describe TimeMath::Sequence do
         it{should == expected}
 
         context 'when floored' do
+          let(:options) { {floor: true} }
           let(:expected){fixture[:sequence_floor].map{|b,e | [t.parse(b), t.parse(e)]}}
 
-          subject{sequence.pairs(true)}
+          subject{sequence.pairs}
 
           it{should == expected}
         end

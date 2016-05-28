@@ -17,6 +17,15 @@ describe TimeMath do
     end
   end
 
+  describe '#measure' do
+    let(:from){Time.parse('2013-03-01 14:40:53')}
+    let(:to){Time.parse('2015-02-25 10:18:47')}
+
+    it 'should deletage' do
+      expect(described_class.measure(from, to)).to eq TimeMath::Measure.measure(from, to)
+    end
+  end
+
   describe 'module including' do
     let(:klass){Class.new{include TimeMath}}
     subject{klass.new}

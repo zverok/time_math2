@@ -201,6 +201,19 @@ module TimeMath
         TimeMath::Span.new(name, amount)
       end
 
+      # Creates {Sequence} instance for producing all time units between
+      # from and too. See {Sequence} class documentation for available
+      # options and functionality.
+      #
+      # @param from [Time,DateTime] start of sequence;
+      # @param to [Time,DateTime] upper limit of sequence;
+      # @param options [Hash]
+      # @option options [Boolean] :expand round sequence ends on creation
+      #   (from is floored and to is ceiled);
+      # @option options [Boolean] :floor sequence will be rounding'ing all
+      #   the intermediate values.
+      #
+      # @return [Sequence]
       def sequence(from, to, options = {})
         TimeMath::Sequence.new(name, from, to, options)
       end

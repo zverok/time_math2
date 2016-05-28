@@ -96,9 +96,47 @@ TimeMath.day.advance(Time.now, +10) # => 2016-06-07 14:06:57 +0300
 * `<unit>.range(tm, amount)` -- creates range of `tm ... tm + amount <units>`;
 * `<unit>.range_back(tm, amount)` -- creates range of `tm - amount <units> ... tm`.
 
+See also [Units::Base](http://www.rubydoc.info/gems/time_math2/TimeMath/Units/Base).
+
 ### Time span abstraction
 
+`TimeMath::Span` is a simple abstraction of "N units of time", which you
+can store in variable and then apply to some time value:
+
+```ruby
+span = TimeMath.day.span(5)
+# => #<TimeMath::Span(day): +5>
+span.before(Time.now)
+# => 2016-05-23 17:46:13 +0300
+```
+
+See also [Span YARD docs](http://www.rubydoc.info/gems/time_math2/TimeMath/Span).
+
 ### Time sequence abstraction
+
+Time sequence allows you to generate an array of time values between some
+points:
+
+```ruby
+to = Time.now
+# => 2016-05-28 17:47:30 +0300
+from = TimeMath.day.floor(to)
+# => 2016-05-28 00:00:00 +0300
+seq = TimeMath.hour.sequence(from, to)
+# => #<TimeMath::Sequence(2016-05-28 00:00:00 +0300 - 2016-05-28 17:47:30 +0300)>
+p(*seq)
+# 2016-05-28 00:00:00 +0300
+# 2016-05-28 01:00:00 +0300
+# 2016-05-28 02:00:00 +0300
+# 2016-05-28 03:00:00 +0300
+# 2016-05-28 04:00:00 +0300
+# 2016-05-28 05:00:00 +0300
+# 2016-05-28 06:00:00 +0300
+# 2016-05-28 07:00:00 +0300
+# ...and so on
+```
+
+See also [Sequence YARD docs](http://www.rubydoc.info/gems/time_math2/TimeMath/Sequence).
 
 ### Measuring time periods
 
@@ -152,11 +190,12 @@ it just adds a couple of new ones:
 ```ruby
 require 'time_math/core_ext'
 
-Time.now.decrease(:day, 10).floor(:month)
-Time.now.sequence(:month, Time.now.advance(:year, 5))
+Time.now.decrease_by(:day, 10).floor_to(:month)
+Time.now.sequence_to(:month, Time.now.advance_by(:year, 5))
 ```
 
-See [CoreExt]() documentation for full lists of methods added.
+See [CoreExt](http://www.rubydoc.info/gems/time_math2/TimeMath/CoreExt)
+documentation for full lists of methods added.
 
 ### Notes on timezones
 
@@ -246,11 +285,11 @@ lace.pull_ranges.map{|range| dataset.where(timestamp: range).count}
 
 ## Got it, what else?
 
-TimeBoots also play well when included into other classes or modules:
+TimeMath also play well when included into other classes or modules:
 
 ```ruby
 class MyModel
-  include TimeBoots
+  include TimeMath
 
   def next_day
     day.advance # Here!
@@ -258,15 +297,20 @@ class MyModel
 end
 ```
 
-And there are some plans for the future:
-* `TimeBoots.resample`, which would do resampling (take daily data and
-  group it monthly, and so on) easy task;
-* optional `core_ext`, providing methods like `4.months.ago` for the
-  (Rails-less) rest of us;
-* your ideas?..
-
 ## Alternatives
 
 There's pretty small and useful [AS::Duration](https://github.com/janko-m/as-duration)
 by Janko Marohnić, which is time durations, extracted from ActiveSupport,
 but without any ActiveSupport bloat.
+
+## Links
+
+* [API Docs](http://www.rubydoc.info/gems/time_math2)
+
+## Author
+
+[Victor Shepelev](http://zverok.github.io/)
+
+## License
+
+[MIT](https://github.com/zverok/time_math2/blob/master/LICENSE.txt).
