@@ -1,11 +1,11 @@
 require './lib/time_math/version'
 
 Gem::Specification.new do |s|
-  s.name     = 'time_math'
+  s.name     = 'time_math2'
   s.version  = TimeMath::VERSION
   s.authors  = ['Victor Shepelev']
   s.email    = 'zverok.offline@gmail.com'
-  s.homepage = 'https://github.com/zverok/time_boots'
+  s.homepage = 'https://github.com/zverok/time_math2'
 
   s.summary = 'Easy time math'
   s.description = <<-EOF
@@ -35,4 +35,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov', '~> 0.9'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rubygems-tasks'
+  s.add_development_dependency 'yard'
 end

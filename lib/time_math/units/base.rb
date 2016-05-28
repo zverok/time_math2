@@ -30,6 +30,16 @@ module TimeMath
         (tm - f).abs < (tm - c).abs ? f : c
       end
 
+      def prev(tm)
+        f = floor(tm)
+        f == tm ? decrease(f) : f
+      end
+
+      def next(tm)
+        c = ceil(tm)
+        c == tm ? advance(c) : c
+      end
+
       def round?(tm)
         floor(tm) == tm
       end
@@ -53,7 +63,8 @@ module TimeMath
       end
 
       def measure(_from, _to)
-        raise NotImplementedError, '#measure should be implemented in subclasses'
+        raise NotImplementedError,
+              '#measure should be implemented in subclasses'
       end
 
       def measure_rem(from, to)
@@ -65,8 +76,12 @@ module TimeMath
         TimeMath::Span.new(name, steps)
       end
 
-      def lace(from, to, options = {})
-        Lace.new(step, from, to, options)
+      def sequence(from, to, options = {})
+        TimeMath::Sequence.new(name, from, to, options)
+      end
+
+      def inspect
+        "#<#{self.class}>"
       end
 
       protected

@@ -13,11 +13,11 @@ module TimeMath
       year: Units::Year.new
     }.freeze
 
-    def Units.names
+    def self.names
       UNITS.keys
     end
 
-    def Units.get(name)
+    def self.get(name)
       UNITS[name] or
         raise ArgumentError, "Unsupported unit: #{name}"
     end

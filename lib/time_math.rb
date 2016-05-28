@@ -21,5 +21,8 @@ module TimeMath
   Units.names.each do |unit|
     define_method(unit) { Units.get(unit) }
   end
-end
 
+  def measure(from, to, options = {})
+    Measure.measure(from, to, options)
+  end
+end

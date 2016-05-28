@@ -44,6 +44,30 @@ describe TimeMath::Units::Base do
         end
       end
 
+      describe '#prev' do
+        let(:floored){t.parse('2015-03-01 12:22')}
+        let(:decreased){t.parse('2015-03-01')}
+
+        let(:unit){u(:day)}
+
+        it 'smartly calculates previous round' do
+          expect(unit.prev(floored)).to eq unit.floor(floored)
+          expect(unit.prev(decreased)).to eq unit.decrease(unit.floor(floored))
+        end
+      end
+
+      describe '#next' do
+        let(:ceiled){t.parse('2015-03-01 12:22')}
+        let(:advanced){t.parse('2015-03-02')}
+
+        let(:unit){u(:day)}
+
+        it 'smartly calculates next round' do
+          expect(unit.next(ceiled)).to eq unit.ceil(ceiled)
+          expect(unit.next(advanced)).to eq unit.advance(unit.floor(advanced))
+        end
+      end
+
       describe '#advance' do
         context 'one step' do
           fixture = load_fixture(:advance)

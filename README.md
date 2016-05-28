@@ -1,135 +1,174 @@
-# Time Boots
+# Time Math
 
-[![Gem Version](https://badge.fury.io/rb/time_boots.svg)](http://badge.fury.io/rb/time_boots)
-[![Dependency Status](https://gemnasium.com/zverok/time_boots.svg)](https://gemnasium.com/zverok/time_boots)
-[![Code Climate](https://codeclimate.com/github/zverok/time_boots/badges/gpa.svg)](https://codeclimate.com/github/zverok/time_boots)
-[![Build Status](https://travis-ci.org/zverok/time_boots.svg?branch=master)](https://travis-ci.org/zverok/time_boots)
-[![Coverage Status](https://coveralls.io/repos/zverok/time_boots/badge.svg?branch=master)](https://coveralls.io/r/zverok/time_boots?branch=master)
+[![Gem Version](https://badge.fury.io/rb/time_math2.svg)](http://badge.fury.io/rb/time_math2)
+[![Dependency Status](https://gemnasium.com/zverok/time_math2.svg)](https://gemnasium.com/zverok/time_math2)
+[![Code Climate](https://codeclimate.com/github/zverok/time_math2/badges/gpa.svg)](https://codeclimate.com/github/zverok/time_math2)
+[![Build Status](https://travis-ci.org/zverok/time_math2.svg?branch=master)](https://travis-ci.org/zverok/time_math2)
+[![Coverage Status](https://coveralls.io/repos/zverok/time_math2/badge.svg?branch=master)](https://coveralls.io/r/zverok/time_math2?branch=master)
 
-**TimeBoots** is a small, no-dependencies library attempting to make time
-steps easier. It provides you with simple, easy-to-remember API, without
+**TimeMath2** is a small, no-dependencies library attempting to make time
+arithmetics easier. It provides you with simple, easy-to-remember API, without
 any monkey-patching of core Ruby classes, so it can be used alongside
 Rails or without it, for any purpose.
+
+## Features
+
+* No monkey-patching of core classes (opt-in patching of Time and DateTime
+  provided, though);
+* Works with Time and DateTime;
+* Accurately preserves timezone info;
+* Simple arithmetics: floor/ceil/round to any time unit (second, hour, year
+  or whatnot), advance/decrease by any unit;
+* Simple time span abstraction (like "5 years" object you can store and
+  pass to other methods);
+* Easy generation of time sequences (like "each day from _this_ to _that_
+  date");
+* Measuring of time distances between two timestamps in any units.
+
+## Naming
+
+`TimeMath` is the better name I know for the task library does, but
+it is [already taken](https://rubygems.org/gems/time_math). So, with no
+other thoughts I came with the ugly solution.
+
+(BTW, the previous version had some dumb "funny" name for gem and all
+helper classes, and nobody liked it.)
+
+## Reasons
+
+You frequently need to calculate things like "exact midnight of the next
+day", but you don't want to monkey-patch all of your integers, tug in
+5K LOC of ActiveSupport and you like to have things clean and readable.
+
+## Installation
 
 Install it like always:
 
 ```
-gem install time_boots
+$ gem install time_math2
 ```
 
 or add to your Gemfile
 
-```
-gem 'time_boots'
+```ruby
+gem 'time_math2'
 ```
 
-## Simple time math
+and `bundle install` it.
 
-### Floor, ceil and round:
+## Usage
+
+First, you take time unit you want:
 
 ```ruby
-TimeBoots.steps
+TimeMath[:day] # => #<TimeMath::Units::Day>
+# or
+TimeMath.day # => #<TimeMath::Units::Day>
+
+# List of units supported:
+TimeMath.units
 # => [:sec, :min, :hour, :day, :week, :month, :year]
-
-tm = Time.parse('2015-03-05 10:08')
-# => 2015-03-05 10:08:00 +0200
-
-TimeBoots.floor(:hour, tm)
-# => 2015-03-05 10:00:00 +0200
-
-TimeBoots.floor(:month, tm)
-# => 2015-03-01 00:00:00 +0200
-
-# or
-TimeBoots.month.floor(tm)
-# => 2015-03-01 00:00:00 +0200
-
-TimeBoots.month.ceil(tm)
-# => 2015-04-01 00:00:00 +0300
-# Note the UTC offset change: our (Ukraine) DST was in March,
-# and TimeBoots plays perfectly well with it.
-
-TimeBoots.month.round(tm)
-# => 2015-03-01 00:00:00 +0200
-
-TimeBoots.month.round?(tm)
-# => false
-
-TimeBoots.min.round?(tm)
-# => true
 ```
 
-### Moving in time forwards and backwards
+Then you use this unit for any math you want:
 
 ```ruby
-TimeBoots.month.advance(tm)
-# => 2015-04-05 10:08:00 +0300
-
-TimeBoots.month.advance(tm, 4)
-# => 2015-07-05 10:08:00 +0300
-
-TimeBoots.month.advance(tm, -4)
-# => 2014-11-05 10:08:00 +0200
-
-# or
-TimeBoots.month.decrease(tm, 4)
-# => 2014-11-05 10:08:00 +0200
+TimeMath.day.floor(Time.now) # => 2016-05-28 00:00:00 +0300
+TimeMath.day.ceil(Time.now) # => 2016-05-29 00:00:00 +0300
+TimeMath.day.advance(Time.now, +10) # => 2016-06-07 14:06:57 +0300
+# ...and so on
 ```
 
-Also abstracted as time **jump**, which you can store in variables and
-pass to other methods:
+### Full list of simple arithmetic methods
+
+* `<unit>.floor(tm)` -- rounds down to nearest `<unit>`;
+* `<unit>.ceil(tm)` -- rounds up to nearest `<unit>`;
+* `<unit>.round(tm)` -- rounds to nearest `<unit>` (up or down);
+* `<unit>.round?(tm)` -- checks if `tm` is already round to `<unit>`;
+* `<unit>.prev(tm)` -- like `floor`, but always decreases:
+    - `2015-06-27 13:30` would be converted to `2015-06-27 00:00` by both
+      `floor` and `prev`, but
+    - `2015-06-27 00:00` would be left intact on `floor`, but would be
+      decreased to `2015-06-26 00:00` by `prev`;
+* `<unit>.next(tm)` -- like `ceil`, but always increases;
+* `<unit>.advance(tm, amount)` -- increases tm by integer amount of `<unit>`s;
+* `<unit>.decrease(tm, amount)` -- decreases tm by integer amount of `<unit>`s;
+* `<unit>.range(tm, amount)` -- creates range of `tm ... tm + amount <units>`;
+* `<unit>.range_back(tm, amount)` -- creates range of `tm - amount <units> ... tm`.
+
+### Time span abstraction
+
+### Time sequence abstraction
+
+### Measuring time periods
+
+Simple measure: just "how many `<unit>`s from date A to date B:
 
 ```ruby
-jump = TimeBoots.month.jump(4)
-# => #<TimeBoots::Jump(month): +4>
-
-jump.before(tm)
-# => 2014-11-05 10:08:00 +0200
-
-jump.after(tm)
-# => 2015-07-05 10:08:00 +0300
+TimeMath.week.measure(Time.parse('2016-05-01'), Time.parse('2016-06-01'))
+# => 4
 ```
 
-### Creating time ranges
+Measure with remaineder: returns number of `<unit>`s between dates and
+the date when this number would be exact:
 
 ```ruby
-TimeBoots.hour.range(tm, 5)
-# => 2015-03-05 10:08:00 +0200...2015-03-05 15:08:00 +0200
-TimeBoots.hour.range_back(tm, 5)
-# => 2015-03-05 05:08:00 +0200...2015-03-05 10:08:00 +0200
+TimeMath.week.measure_rem(Time.parse('2016-05-01'), Time.parse('2016-06-01'))
+# => [4, 2016-05-29 00:00:00 +0300]
 ```
 
-## Measuring time periods
+(on May 29 there would be exactly 4 weeks since May 1).
+
+Multi-unit measuring:
 
 ```ruby
 # My real birthday, in fact!
 birthday = Time.parse('1983-02-14 13:30')
 
-# How many days have I lived?
-TimeBoots.day.measure(birthday, Time.now)
-# => 11764
-
-# And how many weeks (with reminder)?
-TimeBoots.week.measure_rem(birthday, Time.now)
-# => [1680, 2015-04-27 12:30:00 +0300]
-# the thing is "birthday plus 1680 weeks == reminder"
-
 # My full age
-TimeBoots.measure(birthday, Time.now)
-# => {:years=>32, :months=>2, :weeks=>2, :days=>3, :hours=>6, :minutes=>59, :seconds=>7}
+TimeMath.measure(birthday, Time.now)
+# => {:years=>33, :months=>3, :weeks=>2, :days=>0, :hours=>1, :minutes=>25, :seconds=>52}
 
 # NB: you can use this output with String#format or String%:
-puts "%{years}y %{months}m %{weeks}w %{days}d %{hours}h %{minutes}m %{seconds}s" % TimeBoots.measure(birthday, Time.now)
-# "32y 2m 2w 3d 7h 2m 50s"
+puts "%{years}y %{months}m %{weeks}w %{days}d %{hours}h %{minutes}m %{seconds}s" %
+  TimeMath.measure(birthday, Time.now)
+# 33y 3m 2w 0d 1h 26m 15s
 
 # Option: measure without weeks
-TimeBoots.measure(birthday, Time.now, weeks: false)
-# => {:years=>32, :months=>2, :days=>17, :hours=>7, :minutes=>5, :seconds=>11}
+TimeMath.measure(birthday, Time.now, weeks: false)
+# => {:years=>33, :months=>3, :days=>14, :hours=>1, :minutes=>26, :seconds=>31}
 
 # My full age in days, hours, minutes
-TimeBoots.measure(birthday, Time.now, max_step: :day)
-# => {:days=>11764, :hours=>8, :minutes=>6, :seconds=>41}
+TimeMath.measure(birthday, Time.now, upto: :day)
+# => {:days=>12157, :hours=>2, :minutes=>26, :seconds=>55}
 ```
+
+### Optional `Time` and `DateTime` patches
+
+This core classes extension is optional and should be required explicitly.
+TimeMath doesn't change behavior of any existing methods (like `#+`),
+it just adds a couple of new ones:
+
+```ruby
+require 'time_math/core_ext'
+
+Time.now.decrease(:day, 10).floor(:month)
+Time.now.sequence(:month, Time.now.advance(:year, 5))
+```
+
+See [CoreExt]() documentation for full lists of methods added.
+
+### Notes on timezones
+
+TimeMath tries its best to preserve timezones of original values. Currently,
+it means:
+
+* For `Time` instances, symbolic timezone is preserved; when jumping over
+  DST border, UTC offset will change and everything remains as expected;
+* For `DateTime` Ruby not provides symbolic timezone, only numeric offset;
+  it is preserved by TimeMath (but be careful about jumping around DST,
+  offset would not change).
+
 
 ## Time series generation: "laces"
 

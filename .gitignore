@@ -6,3 +6,5 @@ rubocop
 coverage
 *.gem
 .coveralls.yml
+.yardoc
+doc
