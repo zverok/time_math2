@@ -1,6 +1,9 @@
 # encoding: utf-8
 require 'simplecov'
 require 'coveralls'
+require 'rspec/its'
+require 'yaml'
+
 Coveralls.wear!
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(
@@ -13,20 +16,8 @@ SimpleCov.start do
 end
 
 $:.unshift 'lib'
-require 'time_boots'
-
-require 'rspec/its'
-
-require 'yaml'
+require 'time_math'
 
 def load_fixture(name)
   YAML.load(File.read("spec/fixtures/#{name}.yml"))
-end
-
-def t(str)
-  Time.parse(str)
-end
-
-def dt(str)
-  DateTime.parse(str)
 end

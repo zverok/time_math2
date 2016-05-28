@@ -1,16 +1,16 @@
-require './lib/time_boots/version'
+require './lib/time_math/version'
 
 Gem::Specification.new do |s|
-  s.name     = 'time_boots'
-  s.version  = TimeBoots::VERSION
+  s.name     = 'time_math'
+  s.version  = TimeMath::VERSION
   s.authors  = ['Victor Shepelev']
   s.email    = 'zverok.offline@gmail.com'
   s.homepage = 'https://github.com/zverok/time_boots'
 
-  s.summary = 'Easy time steps math'
+  s.summary = 'Easy time math'
   s.description = <<-EOF
-    TimeBoots is small, no-dependencies library attemting to make time
-    steps easier. It provides you with simple, easy remembered API, without
+    TimeMath is small, no-dependencies library attemting to make work with
+    time units easier. It provides you with simple, easy remembered API, without
     any monkey patching of core Ruby classes, so it can be used alongside
     Rails or without it, for any purpose.
   EOF

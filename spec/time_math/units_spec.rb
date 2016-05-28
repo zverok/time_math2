@@ -1,5 +1,9 @@
 # encoding: utf-8
-describe TimeBoots::Boot do
+describe TimeMath::Units::Base do
+  def u(name)
+    TimeMath::Units.get(name)
+  end
+
   [Time, DateTime].each do |t|
     describe "math with #{t}" do
       describe '#floor' do
@@ -9,7 +13,7 @@ describe TimeBoots::Boot do
 
         fixture[:targets].each do |step, val|
           it "should round down to #{step}" do
-            expect(described_class.get(step).floor(source)).to eq t.parse(val)
+            expect(u(step).floor(source)).to eq t.parse(val)
           end
         end
       end
@@ -21,7 +25,7 @@ describe TimeBoots::Boot do
 
         fixture[:targets].each do |step, val|
           it "should round up to #{step}" do
-            expect(described_class.get(step).ceil(source)).to eq t.parse(val)
+            expect(u(step).ceil(source)).to eq t.parse(val)
           end
         end
       end
@@ -31,12 +35,12 @@ describe TimeBoots::Boot do
         let(:floored){t.parse('2015-03-01 12:22')}
         let(:edge){t.parse('2015-03-01 12:30')}
 
-        let(:boot){described_class.get(:hour)}
+        let(:unit){u(:hour)}
 
         it 'should smart round to ceil or floor' do
-          expect(boot.round(ceiled)).to eq boot.ceil(ceiled)
-          expect(boot.round(floored)).to eq boot.floor(floored)
-          expect(boot.round(edge)).to eq boot.ceil(edge)
+          expect(unit.round(ceiled)).to eq unit.ceil(ceiled)
+          expect(unit.round(floored)).to eq unit.floor(floored)
+          expect(unit.round(edge)).to eq unit.ceil(edge)
         end
       end
 
@@ -47,7 +51,7 @@ describe TimeBoots::Boot do
 
           fixture[:targets].each do |step, val|
             it "should advance one #{step} exactly" do
-              expect(described_class.get(step).advance(source)).to eq t.parse(val)
+              expect(u(step).advance(source)).to eq t.parse(val)
             end
           end
         end
@@ -58,9 +62,9 @@ describe TimeBoots::Boot do
           [:sec, :min, :hour, :day, :month, :year].each do |step|
             [3, 100, 1000].each do |amount|
               context "when advanced #{amount} #{step}s" do
-                let(:boot){described_class.get(step)}
-                subject{boot.advance(tm, amount)}
-                let(:correct){amount.times.inject(tm){|tt| boot.advance(tt)}}
+                let(:unit){u(step)}
+                subject{unit.advance(tm, amount)}
+                let(:correct){amount.times.inject(tm){|tt| unit.advance(tt)}}
 
                 it{should == correct}
               end
@@ -73,10 +77,10 @@ describe TimeBoots::Boot do
 
           [:sec, :min, :hour, :day, :month, :year].each do |step|
             context "when step=#{step}" do
-              let(:boot){described_class.get(step)}
+              let(:unit){u(step)}
 
               it "should treat negative advance as decrease" do
-                expect(boot.advance(tm, -13)).to eq(boot.decrease(tm, 13))
+                expect(unit.advance(tm, -13)).to eq(unit.decrease(tm, 13))
               end
             end
           end
@@ -87,10 +91,10 @@ describe TimeBoots::Boot do
 
           [:sec, :min, :hour, :day, :month, :year].each do |step|
             context "when step=#{step}" do
-              let(:boot){described_class.get(step)}
+              let(:unit){u(step)}
 
               it "should do nothing on zero advance" do
-                expect(boot.advance(tm, 0)).to eq tm
+                expect(unit.advance(tm, 0)).to eq tm
               end
             end
           end
@@ -104,7 +108,7 @@ describe TimeBoots::Boot do
 
           fixture[:targets].each do |step, val|
             it "should decrease one #{step} exactly" do
-              expect(described_class.get(step).decrease(source)).to eq t.parse(val)
+              expect(u(step).decrease(source)).to eq t.parse(val)
             end
           end
         end
@@ -115,9 +119,9 @@ describe TimeBoots::Boot do
           [:sec, :min, :hour, :day, :month, :year].each do |step|
             [3, 100, 1000].each do |amount|
               context "when decreased #{amount} #{step}s" do
-                let(:boot){described_class.get(step)}
-                subject{boot.decrease(tm, amount)}
-                let(:correct){amount.times.inject(tm){|tt| boot.decrease(tt)}}
+                let(:unit){u(step)}
+                subject{unit.decrease(tm, amount)}
+                let(:correct){amount.times.inject(tm){|tt| unit.decrease(tt)}}
 
                 it{should == correct}
               end
@@ -130,10 +134,10 @@ describe TimeBoots::Boot do
 
           [:sec, :min, :hour, :day, :month, :year].each do |step|
             context "when step=#{step}" do
-              let(:boot){described_class.get(step)}
+              let(:unit){u(step)}
 
               it "should treat negative decrease as advance" do
-                expect(boot.decrease(tm, -13)).to eq(boot.advance(tm, 13))
+                expect(unit.decrease(tm, -13)).to eq(unit.advance(tm, 13))
               end
             end
           end
@@ -144,10 +148,10 @@ describe TimeBoots::Boot do
 
           [:sec, :min, :hour, :day, :month, :year].each do |step|
             context "when step=#{step}" do
-              let(:boot){described_class.get(step)}
+              let(:unit){u(step)}
 
               it "should do nothing on zero decrease" do
-                expect(boot.decrease(tm, 0)).to eq tm
+                expect(unit.decrease(tm, 0)).to eq tm
               end
             end
           end
@@ -159,9 +163,7 @@ describe TimeBoots::Boot do
 
       describe 'Edge case: DST' do
         # form with guaranteed DST:
-        #  local(sec, min, hour, day, month, year, wday, yday, isdst, tz)
-        #
-        # FIXME: seems in Ruby 2.2.0 it have changed.
+        #  mktime(sec, min, hour, day, month, year, wday, yday, isdst, tz)
         #
         # Nevertheless, it's Kiev time before the midnight when
         # we are changing our time to daylight saving
@@ -173,8 +175,8 @@ describe TimeBoots::Boot do
         }
 
         it "should correctly shift step over the DST border" do
-          expect(TimeBoots.day.advance(spring_before)).to eq spring_after
-          expect(TimeBoots.day.decrease(spring_after)).to eq spring_before
+          expect(TimeMath.day.advance(spring_before)).to eq spring_after
+          expect(TimeMath.day.decrease(spring_after)).to eq spring_before
         end
       end
 
@@ -183,11 +185,9 @@ describe TimeBoots::Boot do
 
         it 'should determine, if tm is round to step' do
           fixture.each do |step, vals|
-            expect( described_class.get(step).round?(t.parse(vals[:true])) ).to \
-              be_truthy
+            expect( u(step).round?(t.parse(vals[:true])) ).to be_truthy
 
-            expect( described_class.get(step).round?(t.parse(vals[:false])) ).to \
-              be_falsy
+            expect( u(step).round?(t.parse(vals[:false])) ).to be_falsy
           end
         end
       end
@@ -195,18 +195,18 @@ describe TimeBoots::Boot do
       describe '#range' do
         let(:from){Time.now}
 
-        described_class.steps.each do |step|
+        TimeMath::Units.names.each do |step|
           context "with step=#{step}" do
-            let(:boot){described_class.get(step)}
+            let(:unit){u(step)}
 
             context 'when single step' do
-              subject{boot.range(from)}
-              it{should == (from...boot.advance(from))}
+              subject{unit.range(from)}
+              it{should == (from...unit.advance(from))}
             end
 
             context 'when several steps' do
-              subject{boot.range(from, 5)}
-              it{should == (from...boot.advance(from, 5))}
+              subject{unit.range(from, 5)}
+              it{should == (from...unit.advance(from, 5))}
             end
           end
         end
@@ -215,18 +215,18 @@ describe TimeBoots::Boot do
       describe '#range_back' do
         let(:from){Time.now}
 
-        described_class.steps.each do |step|
+        TimeMath::Units.names.each do |step|
           context "with step=#{step}" do
-            let(:boot){described_class.get(step)}
+            let(:unit){u(step)}
 
             context 'when single step' do
-              subject{boot.range_back(from)}
-              it{should == (boot.decrease(from)...from)}
+              subject{unit.range_back(from)}
+              it{should == (unit.decrease(from)...from)}
             end
 
             context 'when several steps' do
-              subject{boot.range_back(from, 5)}
-              it{should == (boot.decrease(from, 5)...from)}
+              subject{unit.range_back(from, 5)}
+              it{should == (unit.decrease(from, 5)...from)}
             end
           end
         end
@@ -237,10 +237,10 @@ describe TimeBoots::Boot do
 
         fixture.each do |data|
           context data[:step] do
-            let(:boot){TimeBoots::Boot.get(data[:step])}
+            let(:unit){u(data[:step])}
             let(:from){t.parse(data[:from])}
             let(:to){t.parse(data[:to])}
-            subject{boot.measure(from, to)}
+            subject{unit.measure(from, to)}
 
             it { is_expected.to eq data[:val] }
           end
@@ -252,14 +252,14 @@ describe TimeBoots::Boot do
 
         fixture.each do |data|
           context data[:step] do
-            let(:boot){TimeBoots::Boot.get(data[:step])}
+            let(:unit){u(data[:step])}
             let(:from){t.parse(data[:from])}
             let(:to){t.parse(data[:to])}
 
             it 'should measure integer steps between from and to and return reminder' do
-              measure, rem = boot.measure_rem(from, to)
+              measure, rem = unit.measure_rem(from, to)
 
-              expected_rem = boot.advance(from, measure)
+              expected_rem = unit.advance(from, measure)
 
               expect(measure).to eq data[:val]
               expect(rem).to eq expected_rem
@@ -268,11 +268,11 @@ describe TimeBoots::Boot do
         end
       end
 
-      describe '#jump' do
-        described_class.steps.each do |step|
-          context "with step=#{step}" do
-            subject{described_class.get(step).jump(5)}
-            it{should == TimeBoots::Jump.new(step, 5)}
+      describe '#span' do
+        TimeMath::Units.names.each do |unit|
+          context "with #{unit}" do
+            subject{u(unit).span(5)}
+            it{should == TimeMath::Span.new(unit, 5)}
           end
         end
       end

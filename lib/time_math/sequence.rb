@@ -1,8 +1,7 @@
-# encoding: utf-8
-module TimeBoots
-  class Lace
-    def initialize(step, from, to, options = {})
-      @boot = Boot.get(step)
+module TimeMath
+  class Sequence
+    def initialize(unit, from, to, options = {})
+      @unit = Units.get(unit)
       @from, @to = from, to
       @options = options.dup
 
@@ -12,8 +11,8 @@ module TimeBoots
     attr_reader :from, :to
 
     def expand!
-      @from = boot.floor(from)
-      @to = boot.ceil(to)
+      @from = unit.floor(from)
+      @to = unit.ceil(to)
 
       self
     end
@@ -22,26 +21,26 @@ module TimeBoots
       dup.tap(&:expand!)
     end
 
-    def pull(beginnings = false)
+    def to_a(floor = false)
       seq = []
 
       iter = from
       while iter < to
         seq << iter
 
-        iter = cond_floor(boot.advance(iter), beginnings)
+        iter = cond_floor(unit.advance(iter), floor)
       end
 
       seq
     end
 
-    def pull_pairs(beginnings = false)
-      seq = pull(beginnings)
+    def pairs(floor = false)
+      seq = to_a(floor)
       seq.zip(seq[1..-1] + [to])
     end
 
-    def pull_ranges(beginnings = false)
-      pull_pairs(beginnings).map { |b, e| (b...e) }
+    def ranges(floor = false)
+      pairs(floor).map { |b, e| (b...e) }
     end
 
     def inspect
@@ -51,9 +50,9 @@ module TimeBoots
     private
 
     def cond_floor(tm, should_floor)
-      should_floor ? boot.floor(tm) : tm
+      should_floor ? unit.floor(tm) : tm
     end
 
-    attr_reader :boot
+    attr_reader :unit
   end
 end

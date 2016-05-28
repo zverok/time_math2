@@ -1,0 +1,25 @@
+describe TimeMath do
+  subject{described_class}
+
+  describe 'basics' do
+    its(:units){should == [:sec, :min, :hour, :day, :week, :month, :year]}
+  end
+
+  describe '#<unit name>' do
+    described_class.units.each do |u|
+      it { expect(subject.send(u)).to eq(TimeMath::Units.get(u)) }
+    end
+  end
+
+  describe '#[]' do
+    described_class.units.each do |u|
+      it { expect(subject[u]).to eq(TimeMath::Units.get(u)) }
+    end
+  end
+
+  describe 'module including' do
+    let(:klass){Class.new{include TimeMath}}
+    subject{klass.new}
+    its(:hour){should == TimeMath.hour}
+  end
+end

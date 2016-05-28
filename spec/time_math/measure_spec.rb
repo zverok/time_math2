@@ -1,5 +1,4 @@
-# encoding: utf-8
-describe TimeBoots::Measure do
+describe TimeMath::Measure do
   [Time, DateTime].each do |t|
     describe "with #{t}" do
       let(:from){t.parse('2013-03-01 14:40:53')}
@@ -12,8 +11,8 @@ describe TimeBoots::Measure do
 
         it{should == {years: 1, months: 11, weeks: 3, days: 2, hours: 19, minutes: 37, seconds: 54}}
 
-        context ':max_step limit' do
-          let(:options){ {max_step: :day} }
+        context ':upto limit' do
+          let(:options){ {upto: :day} }
 
           it{should == {days: 725, hours: 19, minutes: 37, seconds: 54}}
         end
