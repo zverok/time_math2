@@ -31,8 +31,8 @@ Rails or without it, for any purpose.
 it is [already taken](https://rubygems.org/gems/time_math). So, with no
 other thoughts I came with the ugly solution.
 
-(BTW, the previous version had some dumb "funny" name for gem and all
-helper classes, and nobody liked it.)
+(BTW, the [previous version](https://github.com/zverok/time_math/blob/e997d7ddd52fc5bce3c77dc3c8022adfc9fe7028/README.md)
+had some dumb "funny" name for gem and all helper classes, and nobody liked it.)
 
 ## Reasons
 
