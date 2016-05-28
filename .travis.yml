@@ -6,9 +6,12 @@ rvm:
   - "2.1"
   - "2.2"
   - "2.3.0"
-  #- ruby-head
   - jruby-19mode
   - rbx-2
+matrix:
+  # Doesn't play well with Rubocop
+  allow_failures:
+    - rvm: rbx-2
 install:
   - bundle install --retry=3
 script:
