@@ -7,6 +7,10 @@ AllCops:
     - 'vendor/**/*'
   DisplayCopNames: true
 
+Metrics/LineLength:
+  Max: 100
+  # IgnoreComments: true -- somehow did not recognized?..
+
 # I'm big fan of and/or for flow control
 Style/AndOr:
   Enabled: false

@@ -1,5 +1,6 @@
 module TimeMath
   module Units
+    # @private
     class Day < Simple
       def initialize
         super(:day)

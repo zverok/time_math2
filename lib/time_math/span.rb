@@ -19,7 +19,7 @@ module TimeMath
     # @param amount [Integer] amount of units in span.
     def initialize(unit, amount)
       @unit, @amount = unit, amount
-      @unit_impl = Units.get(unit_name)
+      @unit_impl = Units.get(unit)
     end
 
     # Decreases `tm` by `amount` of `unit`.

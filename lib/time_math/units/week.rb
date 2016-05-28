@@ -1,5 +1,6 @@
 module TimeMath
   module Units
+    # @private
     class Week < Simple
       def initialize
         super(:week)

@@ -1,5 +1,6 @@
 module TimeMath
   module Units
+    # @private
     class Year < Base
       def initialize
         super(:year)

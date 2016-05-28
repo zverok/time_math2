@@ -1,5 +1,6 @@
 module TimeMath
   module Units
+    # @private
     class Simple < Base
       def to_seconds(sz = 1)
         sz * MULTIPLIERS[index..-1].inject(:*)
@@ -33,18 +34,21 @@ module TimeMath
       MULTIPLIERS = [12, 30, 24, 60, 60, 1].freeze
     end
 
+    # @private
     class Sec < Simple
       def initialize
         super(:sec)
       end
     end
 
+    # @private
     class Min < Simple
       def initialize
         super(:min)
       end
     end
 
+    # @private
     class Hour < Simple
       def initialize
         super(:hour)

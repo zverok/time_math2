@@ -1,6 +1,7 @@
 # encoding: utf-8
 module TimeMath
   module Units
+    # @private
     class Month < Base
       def initialize
         super(:month)
