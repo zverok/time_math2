@@ -13,7 +13,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(
 
 SimpleCov.start do
   add_filter 'spec'
-  minimum_coverage_by_file 95
+  # minimum_coverage_by_file 95 -- coveralls & JRuby doesn't play really well together
 end
 
 $:.unshift 'lib'
