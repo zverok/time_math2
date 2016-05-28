@@ -15,6 +15,8 @@ describe TimeMath do
     described_class.units.each do |u|
       it { expect(subject[u]).to eq(TimeMath::Units.get(u)) }
     end
+
+    it { expect { subject[:age] }.to raise_error ArgumentError, /age/ }
   end
 
   describe '#measure' do

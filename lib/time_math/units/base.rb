@@ -157,10 +157,12 @@ module TimeMath
       # @param to [Time,DateTime] end of period.
       #
       # @return [Integer] how many full units are inside the period.
+      # :nocov:
       def measure(from, to) # rubocop:disable Lint/UnusedMethodArgument
         raise NotImplementedError,
               '#measure should be implemented in subclasses'
       end
+      # :nocov:
 
       # Like {#measure} but also returns "remainder": the time where
       # it would be **exactly** returned amount of units between `from`
@@ -253,8 +255,6 @@ module TimeMath
           Time.mktime(*components.reverse, nil, nil, nil, origin.zone)
         when DateTime
           DateTime.new(*components, origin.zone)
-        else
-          raise ArgumentError, "Expected Time or DateTime, got #{origin.class}"
         end
       end
 

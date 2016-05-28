@@ -314,4 +314,9 @@ describe TimeMath::Units::Base do
       end
     end
   end
+
+  context 'graceful fail' do
+    let(:unit) { u(:day) }
+    it { expect { unit.advance('2016-05-01') }.to raise_error ArgumentError, /got String/ }
+  end
 end
