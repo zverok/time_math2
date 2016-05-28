@@ -8,7 +8,7 @@ AllCops:
   DisplayCopNames: true
 
 Metrics/LineLength:
-  Max: 100
+  Enabled: false
   # IgnoreComments: true -- somehow did not recognized?..
 
 # I'm big fan of and/or for flow control

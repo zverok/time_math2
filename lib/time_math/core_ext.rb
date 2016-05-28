@@ -47,8 +47,6 @@ module TimeMath
     end
   end
 
-  Time.include CoreExt
-  if ::Kernel.const_defined?(:DateTime)
-    DateTime.include CoreExt
-  end
+  Time.send :include, CoreExt
+  DateTime.send :include, CoreExt if ::Kernel.const_defined?(:DateTime)
 end
