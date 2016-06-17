@@ -11,11 +11,14 @@ Metrics/LineLength:
   Enabled: false
   # IgnoreComments: true -- somehow did not recognized?..
 
+Metrics/MethodLength:
+  Max: 12
+
 # I'm big fan of and/or for flow control
 Style/AndOr:
   Enabled: false
 
-# I'm working on it!
+# Somehow he didn't recognize that module TimeMath is documented...
 Style/Documentation:
   Enabled: false
 

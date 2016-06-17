@@ -24,7 +24,7 @@ module TimeMath
         case tm
         when Time
           tm + seconds
-        when DateTime
+        when Date
           tm + Rational(seconds, 86_400)
         else
           raise ArgumentError, "Expected Time or DateTime, got #{tm.class}"

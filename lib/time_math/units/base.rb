@@ -26,12 +26,7 @@ module TimeMath
       # @return [Time,DateTime] floored time value; class and timezone info
       #   of origin would be preserved.
       def floor(tm)
-        components = [tm.year,
-                      tm.month,
-                      tm.day,
-                      tm.hour,
-                      tm.min,
-                      tm.sec].first(index + 1)
+        components = to_components(tm).first(index + 1)
 
         new_from_components(tm, *components)
       end
@@ -255,6 +250,21 @@ module TimeMath
           Time.mktime(*components.reverse, nil, nil, nil, origin.zone)
         when DateTime
           DateTime.new(*components, origin.zone)
+        when Date
+          Date.new(*components.first(3))
+        else
+          raise ArgumentError, "Expected Time, Date or DateTime, got #{origin.class}"
+        end
+      end
+
+      def to_components(tm)
+        case tm
+        when Time, DateTime
+          [tm.year, tm.month, tm.day, tm.hour, tm.min, tm.sec]
+        when Date
+          [tm.year, tm.month, tm.day]
+        else
+          raise ArgumentError, "Expected Time, Date or DateTime, got #{tm.class}"
         end
       end
 

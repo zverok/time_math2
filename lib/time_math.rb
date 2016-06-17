@@ -1,10 +1,5 @@
 require 'time'
 
-require_relative './time_math/units'
-require_relative './time_math/sequence'
-require_relative './time_math/measure'
-require_relative './time_math/span'
-
 # TimeMath is a small library for easy time units arithmetics (like "floor
 # the timestamp to the nearest hour", "advance the time value by 3 days"
 # and so on).
@@ -22,6 +17,11 @@ require_relative './time_math/span'
 # {Units::Base} to see what you can get of it.
 #
 module TimeMath
+  require_relative './time_math/units'
+  require_relative './time_math/sequence'
+  require_relative './time_math/measure'
+  require_relative './time_math/span'
+
   # rubocop:disable Style/ModuleFunction
   extend self
   # rubocop:enable Style/ModuleFunction

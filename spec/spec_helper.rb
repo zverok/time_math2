@@ -19,6 +19,36 @@ end
 $:.unshift 'lib'
 require 'time_math'
 
-def load_fixture(name)
-  YAML.load(File.read("spec/fixtures/#{name}.yml"))
+def load_fixture(name, time_class = nil)
+  res = YAML.load(File.read("spec/fixtures/#{name}.yml"))
+  return res if time_class != Date
+
+  if res.is_a?(Hash) && res.keys.include?(:sec)
+    res = limit_units(res, time_class)
+  elsif res.is_a?(Hash) && res.keys.include?(:targets)
+    res[:targets] = limit_units(res[:targets], time_class)
+  elsif res.is_a?(Array) && res.first.is_a?(Hash) && res.first.key?(:unit)
+    res = limit_units(res, time_class)
+  end
+  res
+end
+
+NON_DATE_STEPS = [:hour, :min, :sec]
+
+def limit_units(values, time_class)
+  return values unless time_class == Date
+  case values
+  when Array
+    if values.all?{|v| v.is_a?(Symbol) }
+      values - NON_DATE_STEPS
+    elsif values.all?{|v| v.is_a?(Hash) }
+      values.reject{|v| NON_DATE_STEPS.include?(v[:unit]) }
+    else
+      values
+    end
+  when Hash
+    values.reject { |k, v| NON_DATE_STEPS.include?(k) }
+  else
+    raise ArgumentError, "Can't limit steps for #{values}"
+  end
 end

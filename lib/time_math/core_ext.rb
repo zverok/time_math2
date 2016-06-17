@@ -1,3 +1,5 @@
+require 'time_math'
+
 module TimeMath
   # This module is included into `Time` and `DateTime`. It is optional
   # and only included by explicit `require "time_math/core_ext"`.

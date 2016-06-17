@@ -1,79 +1,79 @@
 # sec examples
-- :step: :sec
+- :unit: :sec
   :from: '2015-03-10 11:40:35'
   :to: '2015-03-10 11:43:03'
   :val: 148
 
 # min examples
-- :step: :min
+- :unit: :min
   :from: '2015-03-10 11:40:35'
   :to: '2015-03-10 11:43:03'
   :val: 2
 
 # hour examples
-- :step: :hour
+- :unit: :hour
   :from: '2015-03-10 11:40'
   :to: '2015-03-10 11:50'
   :val: 0
-- :step: :hour
+- :unit: :hour
   :from: '2015-03-10 11:40'
   :to: '2015-03-10 15:50'
   :val: 4
-- :step: :hour
+- :unit: :hour
   :from: '2015-03-10 11:40'
   :to: '2015-03-10 15:20'
   :val: 3
 
 # day examples
-- :step: :day
+- :unit: :day
   :from: '2015-03-10 11:40'
   :to: '2015-03-20 15:50'
   :val: 10
 
 # week examples
-- :step: :week
+- :unit: :week
   :from: '2015-03-10 11:40'
   :to: '2015-04-14 10:10'
   :val: 4
 
 # month examples
-- :step: :month
+- :unit: :month
   :from: '2015-03-10 11:40'
   :to: '2015-03-20 15:50'
   :val: 0
-- :step: :month
+- :unit: :month
   :from: '2015-03-10 11:40'
   :to: '2015-04-20 15:50'
   :val: 1
 # february
-- :step: :month 
+- :unit: :month
   :from: '2015-02-28 11:40'
   :to: '2015-03-28 15:50'
   :val: 1
 # several years
-- :step: :month 
+- :unit: :month
   :from: '2013-02-28 11:40'
   :to: '2015-03-28 15:50'
   :val: 25
 
 # year example
-- :step: :year
+- :unit: :year
   :from: '2015-03-10 11:40'
   :to: '2015-03-20 15:50'
   :val: 0
-- :step: :year
+- :unit: :year
   :from: '2012-03-10 11:40'
   :to: '2015-03-20 15:50'
   :val: 3
-- :step: :year
+- :unit: :year
   :from: '2012-03-10 11:40'
   :to: '2015-02-20 15:50'
   :val: 2
-- :step: :year
+- :unit: :year
   :from: '2012-03-10 11:40'
   :to: '2015-03-09 15:50'
   :val: 2
-- :step: :year
+- :unit: :year
   :from: '2012-03-10 11:40'
   :to: '2015-03-10 10:50'
   :val: 2
