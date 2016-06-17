@@ -1,4 +1,3 @@
-# encoding: utf-8
 describe TimeMath::Units::Base do
   def u(name)
     TimeMath::Units.get(name)
@@ -293,6 +292,70 @@ describe TimeMath::Units::Base do
         subject{u(unit).span(5)}
         it{should == TimeMath::Span.new(unit, 5)}
       end
+    end
+  end
+
+  describe '#resample' do
+    let(:unit) { TimeMath.day }
+
+    context 'array of time' do
+      let(:data) { [Time.parse('2016-06-01'), Time.parse('2016-06-03'), Time.parse('2016-06-05')] }
+      subject { unit.resample(data) }
+
+      it { is_expected.to eq([
+        Time.parse('2016-06-01'),
+        Time.parse('2016-06-02'),
+        Time.parse('2016-06-03'),
+        Time.parse('2016-06-04'),
+        Time.parse('2016-06-05')
+      ])}
+    end
+
+    context 'hash with time keys' do
+      let(:data) { {
+        Time.parse('2016-06-01') => 1, Time.parse('2016-06-03') => 2, Time.parse('2016-06-05') => 3
+      } }
+
+      context 'no block' do
+        subject { unit.resample(data) }
+
+        it { is_expected.to eq(
+          Time.parse('2016-06-01') => [1],
+          Time.parse('2016-06-02') => [],
+          Time.parse('2016-06-03') => [2],
+          Time.parse('2016-06-04') => [],
+          Time.parse('2016-06-05') => [3]
+        )}
+      end
+
+      context 'block' do
+        subject { unit.resample(data, &:first) }
+
+        it { is_expected.to eq(
+          Time.parse('2016-06-01') => 1,
+          Time.parse('2016-06-02') => nil,
+          Time.parse('2016-06-03') => 2,
+          Time.parse('2016-06-04') => nil,
+          Time.parse('2016-06-05') => 3
+        )}
+      end
+
+      context 'symbol' do
+        subject { unit.resample(data, :first) }
+
+        it { is_expected.to eq(
+          Time.parse('2016-06-01') => 1,
+          Time.parse('2016-06-02') => nil,
+          Time.parse('2016-06-03') => 2,
+          Time.parse('2016-06-04') => nil,
+          Time.parse('2016-06-05') => 3
+        )}
+      end
+    end
+
+    context 'wrong arguments' do
+      let(:data) { [1,2,3] }
+      it { expect { unit.resample(data) }.to raise_error(ArgumentError) }
     end
   end
 

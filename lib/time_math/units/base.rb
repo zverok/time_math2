@@ -215,6 +215,10 @@ module TimeMath
         TimeMath::Sequence.new(name, from, to, options)
       end
 
+      def resample(array_or_hash, symbol = nil, &block)
+        Resampler.call(name, array_or_hash, symbol, &block)
+      end
+
       def inspect
         "#<#{self.class}>"
       end

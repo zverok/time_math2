@@ -14,6 +14,9 @@ Metrics/LineLength:
 Metrics/MethodLength:
   Max: 12
 
+Metrics/ClassLength:
+  Max: 120
+
 # I'm big fan of and/or for flow control
 Style/AndOr:
   Enabled: false
