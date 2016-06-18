@@ -25,10 +25,11 @@ module TimeMath
       # @param tm [Time,DateTime] time value to floor.
       # @return [Time,DateTime] floored time value; class and timezone info
       #   of origin would be preserved.
-      def floor(tm)
+      def floor(tm, span = 1)
         components = to_components(tm).first(index + 1)
+        simple_floor = new_from_components(tm, *components)
 
-        new_from_components(tm, *components)
+        advance(simple_floor, (tm.send(name) / span.to_f).floor * span - tm.send(name))
       end
 
       # Rounds `tm` up to nearest unit (this means, `TimeMath.day.ceil(tm)`
@@ -37,10 +38,10 @@ module TimeMath
       # @param tm [Time,DateTime] time value to ceil.
       # @return [Time,DateTime] ceiled time value; class and timezone info
       #   of origin would be preserved.
-      def ceil(tm)
-        f = floor(tm)
+      def ceil(tm, span = 1)
+        f = floor(tm, span)
 
-        f == tm ? f : advance(f)
+        f == tm ? f : advance(f, span)
       end
 
       # Rounds `tm` up or down to nearest unit (this means, `TimeMath.day.round(tm)`
@@ -50,8 +51,8 @@ module TimeMath
       # @param tm [Time,DateTime] time value to round.
       # @return [Time,DateTime] rounded time value; class and timezone info
       #   of origin would be preserved.
-      def round(tm)
-        f, c = floor(tm), ceil(tm)
+      def round(tm, span = 1)
+        f, c = floor(tm, span), ceil(tm, span)
 
         (tm - f).abs < (tm - c).abs ? f : c
       end

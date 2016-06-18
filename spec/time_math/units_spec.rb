@@ -6,41 +6,92 @@ describe TimeMath::Units::Base do
   [Time, DateTime, Date].each do |t|
     describe "math with #{t}" do
       describe '#floor' do
-        fixture = load_fixture(:floor, t)
+        context 'default' do
+          fixture = load_fixture(:floor, t)
 
-        let(:source){t.parse(fixture[:source])}
+          let(:source){t.parse(fixture[:source])}
 
-        fixture[:targets].each do |step, val|
-          it "should round down to #{step}" do
-            expect(u(step).floor(source)).to eq t.parse(val)
+          fixture[:targets].each do |step, val|
+            it "should round down to #{step}" do
+              expect(u(step).floor(source)).to eq t.parse(val)
+            end
           end
+        end
+
+        context '#floor(3)' do
+          fixture = load_fixture(:floor_3, t)
+
+          let(:source){t.parse(fixture[:source])}
+
+          fixture[:targets].each do |step, val|
+            it "should round down to #{step}" do
+              expect(u(step).floor(source, 3)).to eq t.parse(val)
+            end
+          end
+        end
+
+        context '#floor(1/2)' do
         end
       end
 
+
       describe '#ceil' do
-        fixture = load_fixture(:ceil, t)
+        context 'default' do
+          fixture = load_fixture(:ceil, t)
 
-        let(:source){t.parse(fixture[:source])}
+          let(:source){t.parse(fixture[:source])}
 
-        fixture[:targets].each do |step, val|
-          it "should round up to #{step}" do
-            next if step == :day && t == Date
-            expect(u(step).ceil(source)).to eq t.parse(val)
+          fixture[:targets].each do |step, val|
+            it "should round up to #{step}" do
+              next if step == :day && t == Date
+              expect(u(step).ceil(source)).to eq t.parse(val)
+            end
           end
+        end
+
+        context '#ceil(3)' do
+          fixture = load_fixture(:ceil_3, t)
+
+          let(:source){t.parse(fixture[:source])}
+
+          fixture[:targets].each do |step, val|
+            it "should round up to #{step}" do
+              expect(u(step).ceil(source, 3)).to eq t.parse(val)
+            end
+          end
+        end
+
+        context '#ceil(1/2)' do
         end
       end
 
       describe '#round' do
-        let(:ceiled){t.parse('2015-03-01 12:32')}
-        let(:floored){t.parse('2015-03-01 12:22')}
-        let(:edge){t.parse('2015-03-01 12:30')}
+        context 'default' do
+          let(:ceiled){t.parse('2015-03-01 12:32')}
+          let(:floored){t.parse('2015-03-01 12:22')}
+          let(:edge){t.parse('2015-03-01 12:30')}
 
-        let(:unit){u(:hour)}
+          let(:unit){u(:hour)}
 
-        it 'should smart round to ceil or floor' do
-          expect(unit.round(ceiled)).to eq unit.ceil(ceiled)
-          expect(unit.round(floored)).to eq unit.floor(floored)
-          expect(unit.round(edge)).to eq unit.ceil(edge)
+          it 'should smart round to ceil or floor' do
+            expect(unit.round(ceiled)).to eq unit.ceil(ceiled)
+            expect(unit.round(floored)).to eq unit.floor(floored)
+            expect(unit.round(edge)).to eq unit.ceil(edge)
+          end
+        end
+
+        context '#round(3)' do
+          let(:ceiled){t.parse('2015-03-01 14:32')}
+          let(:floored){t.parse('2015-03-01 12:22')}
+          let(:edge){t.parse('2015-03-01 13:30')}
+
+          let(:unit){u(:hour)}
+
+          it 'should smart round to ceil or floor' do
+            expect(unit.round(ceiled, 3)).to eq unit.ceil(ceiled, 3)
+            expect(unit.round(floored, 3)).to eq unit.floor(floored, 3)
+            expect(unit.round(edge, 3)).to eq unit.ceil(edge, 3)
+          end
         end
       end
 
