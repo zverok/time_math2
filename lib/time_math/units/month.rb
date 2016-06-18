@@ -31,11 +31,11 @@ module TimeMath
       end
 
       def _advance(tm, steps)
-        steps.times.inject(tm) { |t| _succ(t) }
+        steps.to_i.times.inject(tm) { |t| _succ(t) }
       end
 
       def _decrease(tm, steps)
-        steps.times.inject(tm) { |t| _prev(t) }
+        steps.to_i.times.inject(tm) { |t| _prev(t) }
       end
 
       # fix for too far advance/insufficient decrease:

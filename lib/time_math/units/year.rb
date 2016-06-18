@@ -17,11 +17,11 @@ module TimeMath
       protected
 
       def _advance(tm, steps)
-        generate(tm, year: tm.year + steps)
+        generate(tm, year: tm.year + steps.to_i)
       end
 
       def _decrease(tm, steps)
-        generate(tm, year: tm.year - steps)
+        generate(tm, year: tm.year - steps.to_i)
       end
     end
   end

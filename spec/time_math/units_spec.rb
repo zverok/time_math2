@@ -123,6 +123,28 @@ describe TimeMath::Units::Base do
             end
           end
         end
+
+        context 'non-integer advance' do
+          let(:tm) { t.parse('2015-03-27 11:40:20') }
+          let(:r) { Rational(1, 2) }
+
+          if t != Date
+            it { expect(u(:min).advance(tm, r)).to eq t.parse('2015-03-27 11:40:50') }
+            it { expect(u(:hour).advance(tm, r)).to eq t.parse('2015-03-27 12:10:20') }
+            it { expect(u(:day).advance(tm, r)).to eq t.parse('2015-03-27 23:40:20') }
+            it { expect(u(:week).advance(tm, r)).to eq t.parse('2015-03-30 23:40:20') }
+          else
+            xit { expect(u(:week).advance(tm, r)).to eq t.parse('2015-03-30') }
+          end
+
+          it 'behaves when non-integer advance have no clear sense' do
+            expect(u(:month).advance(tm, r)).to eq tm
+            expect(u(:year).advance(tm, r)).to eq tm
+
+            expect(u(:month).advance(tm, 1+r)).to eq u(:month).advance(tm, 1)
+            expect(u(:year).advance(tm, 1+r)).to eq u(:year).advance(tm, 1)
+          end
+        end
       end
 
       describe '#decrease' do
