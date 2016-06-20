@@ -3,19 +3,13 @@ module TimeMath
   class Resampler
     class << self
       def call(name, array_or_hash, symbol = nil, &block)
-        if array_or_hash.is_a?(Array) && array_or_hash.all?(&method(:time?))
+        if array_or_hash.is_a?(Array) && array_or_hash.all?(&Util.method(:timey?))
           ArrayResampler.new(name, array_or_hash).call
-        elsif array_or_hash.is_a?(Hash) && array_or_hash.keys.all?(&method(:time?))
+        elsif array_or_hash.is_a?(Hash) && array_or_hash.keys.all?(&Util.method(:timey?))
           HashResampler.new(name, array_or_hash).call(symbol, &block)
         else
           raise ArgumentError, "Array of timestamps or hash with timestamp keys, #{array_or_hash} got"
         end
-      end
-
-      private
-
-      def time?(val)
-        [Time, DateTime, Date].any? { |cls| val.is_a?(cls) }
       end
     end
 
@@ -26,7 +20,7 @@ module TimeMath
     private
 
     def sequence
-      @sequence ||= @unit.sequence(from, to, expand: true)
+      @sequence ||= @unit.sequence(from...to, expand: true)
     end
 
     def from

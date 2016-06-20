@@ -73,9 +73,9 @@ module TimeMath
     # @option options [Boolean] :floor sequence will be rounding'ing all
     #   the intermediate values.
     #
-    def initialize(unit, from, to, options = {})
+    def initialize(unit, range, options = {})
       @unit = Units.get(unit)
-      @from, @to = from, to
+      @from, @to, @exclude_end = process_range(range)
       @options = options.dup
 
       expand! if options[:expand]
@@ -86,7 +86,12 @@ module TimeMath
 
     def ==(other)
       self.class == other.class && unit == other.unit &&
-        from == other.from && to == other.to
+        from == other.from && to == other.to &&
+        exclude_end? == other.exclude_end?
+    end
+
+    def exclude_end?
+      @exclude_end
     end
 
     # If `:floor` option is set for sequence.
@@ -141,6 +146,7 @@ module TimeMath
 
         iter = cond_floor(unit.advance(iter))
       end
+      seq << to unless exclude_end?
 
       seq
     end
@@ -163,10 +169,17 @@ module TimeMath
     end
 
     def inspect
-      "#<#{self.class}(#{from} - #{to})>"
+      "#<#{self.class}(#{unit.name.inspect}, #{from}#{exclude_end? ? '...' : '..'}#{to})>"
     end
 
     private
+
+    def process_range(range)
+      range.is_a?(Range) && Util.timey?(range.begin) && Util.timey?(range.end) or
+        raise ArgumentError, "Range of time-y values expected, #{range} got"
+
+      [range.begin, range.end, range.exclude_end?]
+    end
 
     def cond_floor(tm)
       @floor ? unit.floor(tm) : tm

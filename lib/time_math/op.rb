@@ -33,7 +33,7 @@ module TimeMath
         tm = @arguments
       end
       res = [*tm].flatten.map(&method(:perform))
-      tm.count == 1 && time?(tm.first) ? res.first : res
+      tm.count == 1 && Util.timey?(tm.first) ? res.first : res
     end
 
     private
@@ -41,10 +41,6 @@ module TimeMath
     def inspect_args
       return ' ' if @arguments.empty?
       '(' + [*@arguments].map(&:inspect).join(', ') + ').'
-    end
-
-    def time?(val)
-      [Time, DateTime, Date].any? { |cls| val.is_a?(cls) }
     end
 
     def perform(tm)

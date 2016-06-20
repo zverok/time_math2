@@ -351,8 +351,8 @@ describe TimeMath::Units::Base do
 
         limit_units(TimeMath.units, t).each do |unit|
           context "with #{unit}" do
-            subject { u(unit).sequence(from, to) }
-            it { is_expected.to eq TimeMath::Sequence.new(unit, from, to) }
+            subject { u(unit).sequence(from...to) }
+            it { is_expected.to eq TimeMath::Sequence.new(unit, from...to) }
           end
         end
       end

@@ -45,7 +45,7 @@ module TimeMath
 
     # Shortcut to {Units::Base#sequence}. See its docs for possible options.
     def sequence_to(unit, other, options = {})
-      TimeMath[unit].sequence(self, other, options)
+      TimeMath[unit].sequence(self...other, options)
     end
   end
 

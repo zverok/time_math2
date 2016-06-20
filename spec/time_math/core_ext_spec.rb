@@ -19,6 +19,6 @@ describe TimeMath::CoreExt do
     expect(tm.range_to(:day, 5)).to eq unit.range(tm, 5)
     expect(tm.range_from(:day, 5)).to eq unit.range_back(tm, 5)
 
-    expect(tm.sequence_to(:day, to)).to eq unit.sequence(tm, to)
+    expect(tm.sequence_to(:day, to)).to eq unit.sequence(tm...to)
   end
 end

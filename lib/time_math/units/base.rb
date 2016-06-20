@@ -209,8 +209,8 @@ module TimeMath
       #   the intermediate values.
       #
       # @return [Sequence]
-      def sequence(from, to, options = {})
-        TimeMath::Sequence.new(name, from, to, options)
+      def sequence(range, options = {})
+        TimeMath::Sequence.new(name, range, options)
       end
 
       def resample(array_or_hash, symbol = nil, &block)
