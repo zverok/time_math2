@@ -19,6 +19,13 @@ describe TimeMath do
     it { expect { subject[:age] }.to raise_error ArgumentError, /age/ }
   end
 
+  describe '#()' do
+    let(:tm) { Time.parse('2013-03-01 14:40:53') }
+
+    it { expect(TimeMath()).to eq TimeMath::Op.new }
+    it { expect(TimeMath(tm)).to eq TimeMath::Op.new(tm) }
+  end
+
   describe '#measure' do
     let(:from){Time.parse('2013-03-01 14:40:53')}
     let(:to){Time.parse('2015-02-25 10:18:47')}

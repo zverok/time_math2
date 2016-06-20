@@ -22,6 +22,7 @@ module TimeMath
   require_relative './time_math/measure'
   require_relative './time_math/span'
   require_relative './time_math/resamplers'
+  require_relative './time_math/op'
 
   # rubocop:disable Style/ModuleFunction
   extend self
@@ -97,4 +98,8 @@ module TimeMath
   def measure(from, to, options = {})
     Measure.measure(from, to, options)
   end
+end
+
+def TimeMath(*arguments) # rubocop:disable Style/MethodName
+  TimeMath::Op.new(*arguments)
 end

@@ -6,7 +6,10 @@ module TimeMath
         super(:week)
       end
 
-      def floor(tm)
+      def floor(tm, span = 1)
+        span == 1 or
+          raise NotImplementedError, 'For now, week only can floor to one'
+
         f = day.floor(tm)
         extra_days = tm.wday == 0 ? 6 : tm.wday - 1
         day.decrease(f, extra_days)

@@ -34,3 +34,6 @@ Style/FormatString:
 
 Style/ParallelAssignment:
   Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false

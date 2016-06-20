@@ -26,10 +26,7 @@ module TimeMath
       # @return [Time,DateTime] floored time value; class and timezone info
       #   of origin would be preserved.
       def floor(tm, span = 1)
-        components = to_components(tm).first(index + 1)
-        simple_floor = new_from_components(tm, *components)
-
-        advance(simple_floor, (tm.send(name) / span.to_f).floor * span - tm.send(name))
+        advance(floor_1(tm), (tm.send(name) / span.to_f).floor * span - tm.send(name))
       end
 
       # Rounds `tm` up to nearest unit (this means, `TimeMath.day.ceil(tm)`
@@ -271,6 +268,11 @@ module TimeMath
         else
           raise ArgumentError, "Expected Time, Date or DateTime, got #{tm.class}"
         end
+      end
+
+      def floor_1(tm)
+        components = to_components(tm).first(index + 1)
+        new_from_components(tm, *components)
       end
 
       include TimeMath # now we can use something like #day inside other units
