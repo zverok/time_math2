@@ -79,7 +79,6 @@ module TimeMath
       @options = options.dup
 
       expand! if options[:expand]
-      @floor = options[:floor]
       @op = Op.new
     end
 
@@ -93,11 +92,6 @@ module TimeMath
 
     def exclude_end?
       @exclude_end
-    end
-
-    # If `:floor` option is set for sequence.
-    def floor?
-      @floor
     end
 
     # Expand sequence ends to nearest round unit.
@@ -115,21 +109,6 @@ module TimeMath
     # @return [Sequence]
     def expand
       dup.tap(&:expand!)
-    end
-
-    # Sets sequence to floor all the intermediate values.
-    #
-    # @return self
-    def floor!
-      @floor = true
-    end
-
-    # Creates new sequence with setting to floor all the intermediate
-    # values.
-    #
-    # @return [Sequence]
-    def floor
-      dup.tap(&:floor!)
     end
 
     Op::OPERATIONS.each do |operation|
@@ -152,7 +131,7 @@ module TimeMath
       while iter < to
         seq << iter
 
-        iter = cond_floor(unit.advance(iter))
+        iter = unit.advance(iter)
       end
       seq << to unless exclude_end?
 
@@ -189,10 +168,6 @@ module TimeMath
         raise ArgumentError, "Range of time-y values expected, #{range} got"
 
       [range.begin, range.end, range.exclude_end?]
-    end
-
-    def cond_floor(tm)
-      @floor ? unit.floor(tm) : tm
     end
   end
 end

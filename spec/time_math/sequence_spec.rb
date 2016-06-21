@@ -93,16 +93,6 @@ describe TimeMath::Sequence do
 
         it{should == expected}
 
-        context 'when floored' do
-          let(:options) { {floor: true} }
-
-          let(:expected){fixture[:sequence_floor].map(&t.method(:parse))}
-
-          subject{sequence.to_a}
-
-          it{should == expected}
-        end
-
         context 'when include end' do
           let(:sequence){described_class.new(fixture[:step], from..to, options)}
           let(:expected){fixture[:sequence_include_end].map(&t.method(:parse))}
@@ -136,15 +126,6 @@ describe TimeMath::Sequence do
         subject{sequence.pairs}
 
         it{should == expected}
-
-        context 'when floored' do
-          let(:options) { {floor: true} }
-          let(:expected){fixture[:sequence_floor].map{|b,e | [t.parse(b), t.parse(e)]}}
-
-          subject{sequence.pairs}
-
-          it{should == expected}
-        end
 
         describe '#ranges' do
           subject{sequence.ranges}

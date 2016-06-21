@@ -87,6 +87,13 @@ describe TimeMath::Op do
       end
     end
 
+    context '#to_proc' do
+      let(:tm1) { Time.parse('2016-05-14 13:40') }
+      let(:tm2) { Time.parse('2016-06-14 13:40') }
+      subject { [tm1, tm2].map(&op) }
+      it { is_expected.to eq [op.call(tm1), op.call(tm2)] }
+    end
+
     context '#inspect' do
       its(:inspect) { is_expected.to eq '#<TimeMath::Op floor(:month).advance(:day, 3).decrease(:min, 20)>' }
 
