@@ -1,5 +1,7 @@
 module TimeMath
   class Op
+    OPERATIONS = [:floor, :ceil, :round, :next, :prev, :advance, :decrease].freeze
+
     attr_reader :operations, :arguments
 
     def initialize(*arguments)
@@ -7,19 +9,22 @@ module TimeMath
       @operations = []
     end
 
-    [:floor, :ceil, :round, :next, :prev, :advance, :decrease].each do |meth|
-      define_method meth do |unit, *args|
+    OPERATIONS.each do |op|
+      define_method op do |unit, *args|
         Units.names.include?(unit) or raise(ArgumentError, "Unknown unit #{unit}")
-        @operations << [meth, unit, args]
+        @operations << [op, unit, args]
         self
       end
     end
 
     def inspect
-      "#<#{self.class}#{inspect_args}" +
-        operations.map { |op, unit, args|
-          "#{op}(#{[unit, *args].map(&:inspect).join(', ')})"
-        }.join('.') + '>'
+      "#<#{self.class}#{inspect_args}" + inspect_operations + '>'
+    end
+
+    def inspect_operations
+      operations.map { |op, unit, args|
+        "#{op}(#{[unit, *args].map(&:inspect).join(', ')})"
+      }.join('.')
     end
 
     def ==(other)
@@ -34,6 +39,10 @@ module TimeMath
       end
       res = [*tm].flatten.map(&method(:perform))
       tm.count == 1 && Util.timey?(tm.first) ? res.first : res
+    end
+
+    def to_proc
+      method(:call).to_proc
     end
 
     private

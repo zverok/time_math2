@@ -80,11 +80,12 @@ module TimeMath
 
       expand! if options[:expand]
       @floor = options[:floor]
+      @op = Op.new
     end
 
-    attr_reader :from, :to, :unit
+    attr_reader :from, :to, :unit, :op
 
-    def ==(other)
+    def ==(other) # rubocop:disable Metrics/AbcSize
       self.class == other.class && unit == other.unit &&
         from == other.from && to == other.to &&
         exclude_end? == other.exclude_end?
@@ -131,6 +132,13 @@ module TimeMath
       dup.tap(&:floor!)
     end
 
+    Op::OPERATIONS.each do |operation|
+      define_method operation do |*arg|
+        @op.send(operation, *arg)
+        self
+      end
+    end
+
     # Creates an array of time unit starts between from and to. They will
     # have same granularity as from (e.g. if unit is day and from is
     # 2016-05-01 13:30, each of return values will be next day at 13:30),
@@ -148,7 +156,7 @@ module TimeMath
       end
       seq << to unless exclude_end?
 
-      seq
+      op.call(seq)
     end
 
     # Creates an array of pairs (time unit start, time unit end) between
@@ -169,7 +177,9 @@ module TimeMath
     end
 
     def inspect
-      "#<#{self.class}(#{unit.name.inspect}, #{from}#{exclude_end? ? '...' : '..'}#{to})>"
+      ops = op.inspect_operations
+      ops = '.' + ops unless ops.empty?
+      "#<#{self.class}(#{unit.name.inspect}, #{from}#{exclude_end? ? '...' : '..'}#{to})#{ops}>"
     end
 
     private
