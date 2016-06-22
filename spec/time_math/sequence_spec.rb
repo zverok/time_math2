@@ -71,12 +71,24 @@ describe TimeMath::Sequence do
       end
 
       describe 'operations' do
-        subject { sequence.advance(:hour, 2).decrease(:sec, 3).floor(:min) }
+        subject(:seq) { sequence.advance(:hour, 2).decrease(:sec, 3).floor(:min) }
 
         it { is_expected.to be_a described_class }
         its(:methods) { is_expected.to include(*TimeMath::Op::OPERATIONS) }
         its(:op) { is_expected.to eq TimeMath::Op.new.advance(:hour, 2).decrease(:sec, 3).floor(:min) }
         its(:inspect) { is_expected.to eq "#<TimeMath::Sequence(:month, #{from}...#{to}).advance(:hour, 2).decrease(:sec, 3).floor(:min)>" }
+
+        context 'bang' do
+          subject!(:ceiled) { seq.ceil!(:hour) }
+          its(:op) { is_expected.to eq TimeMath().advance(:hour, 2).decrease(:sec, 3).floor(:min).ceil(:hour) }
+          it { expect(seq.op).to eq TimeMath().advance(:hour, 2).decrease(:sec, 3).floor(:min).ceil(:hour) }
+        end
+
+        context 'non-bang' do
+          subject!(:ceiled) { seq.ceil(:hour) }
+          its(:op) { is_expected.to eq TimeMath().advance(:hour, 2).decrease(:sec, 3).floor(:min).ceil(:hour) }
+          it { expect(seq.op).to eq TimeMath().advance(:hour, 2).decrease(:sec, 3).floor(:min) }
+        end
       end
 
       describe '#to_a' do

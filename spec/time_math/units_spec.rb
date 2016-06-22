@@ -52,7 +52,6 @@ describe TimeMath::Units::Base do
         end
       end
 
-
       describe '#ceil' do
         context 'default' do
           fixture = load_fixture(:ceil, t)

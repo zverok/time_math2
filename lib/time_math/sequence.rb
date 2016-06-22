@@ -82,6 +82,12 @@ module TimeMath
       @op = Op.new
     end
 
+    def initialize_copy(other)
+      @unit = other.unit
+      @from, @to, @exclude_end = other.from, other.to, other.exclude_end?
+      @op = other.op.dup
+    end
+
     attr_reader :from, :to, :unit, :op
 
     def ==(other) # rubocop:disable Metrics/AbcSize
@@ -108,13 +114,17 @@ module TimeMath
     #
     # @return [Sequence]
     def expand
-      dup.tap(&:expand!)
+      dup.expand!
     end
 
     Op::OPERATIONS.each do |operation|
-      define_method operation do |*arg|
-        @op.send(operation, *arg)
+      define_method "#{operation}!" do |*arg|
+        @op.send("#{operation}!", *arg)
         self
+      end
+
+      define_method operation do |*arg|
+        dup.send("#{operation}!", *arg)
       end
     end
 

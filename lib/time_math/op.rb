@@ -9,11 +9,20 @@ module TimeMath
       @operations = []
     end
 
+    def initialize_copy(other)
+      @arguments = other.arguments.dup
+      @operations = other.operations.dup
+    end
+
     OPERATIONS.each do |op|
-      define_method op do |unit, *args|
+      define_method "#{op}!" do |unit, *args|
         Units.names.include?(unit) or raise(ArgumentError, "Unknown unit #{unit}")
         @operations << [op, unit, args]
         self
+      end
+
+      define_method op do |unit, *args|
+        dup.send("#{op}!", unit, *args)
       end
     end
 

@@ -16,7 +16,20 @@ describe TimeMath::Op do
         [:advance, :day, [3]],
         [:decrease, :min, [20]]
       ])}
+
+      context 'bang' do
+        subject!(:ceiled) { op.ceil!(:hour) }
+        its(:operations) { is_expected.to include( [:ceil, :hour, []] ) }
+        it { expect(op.operations).to include( [:ceil, :hour, []] ) }
+      end
+
+      context 'non-bang' do
+        subject!(:ceiled) { op.ceil(:hour) }
+        its(:operations) { is_expected.to include( [:ceil, :hour, []] ) }
+        it { expect(op.operations).not_to include( [:ceil, :hour, []] ) }
+      end
     end
+
 
     context '#==' do
       let(:tm) { Time.parse('2016-05-14 13:40') }

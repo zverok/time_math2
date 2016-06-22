@@ -62,9 +62,9 @@ module TimeMath
       # @param tm [Time,DateTime] time value to calculate prev on.
       # @return [Time,DateTime] prev time value; class and timezone info
       #   of origin would be preserved.
-      def prev(tm)
-        f = floor(tm)
-        f == tm ? decrease(f) : f
+      def prev(tm, span = 1)
+        f = floor(tm, span)
+        f == tm ? decrease(f, span) : f
       end
 
       # Like {#ceil}, but always return value greater than `tm` (e.g. if
@@ -74,17 +74,17 @@ module TimeMath
       # @param tm [Time,DateTime] time value to calculate next on.
       # @return [Time,DateTime] next time value; class and timezone info
       #   of origin would be preserved.
-      def next(tm)
-        c = ceil(tm)
-        c == tm ? advance(c) : c
+      def next(tm, span = 1)
+        c = ceil(tm, span)
+        c == tm ? advance(c, span) : c
       end
 
       # Checks if `tm` is exactly rounded to unit.
       #
       # @param tm [Time,DateTime] time value to check.
       # @return [Boolean] whether `tm` is exactly round to unit.
-      def round?(tm)
-        floor(tm) == tm
+      def round?(tm, span = 1)
+        floor(tm, span) == tm
       end
 
       # Advances `tm` by given amount of unit.
