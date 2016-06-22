@@ -21,7 +21,6 @@ module TimeMath
   require_relative './time_math/op'
   require_relative './time_math/sequence'
   require_relative './time_math/measure'
-  require_relative './time_math/span'
   require_relative './time_math/resamplers'
   require_relative './time_math/util'
 

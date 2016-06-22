@@ -179,24 +179,6 @@ module TimeMath
         [m, advance(from, m)]
       end
 
-      # Creates {Span} instance representing amount of units.
-      #
-      # Use it like this:
-      #
-      # ```ruby
-      # span = TimeMath.day.span(5) # => #<TimeMath::Span(day): +5>
-      # # now you can save this variable or path it to the methods...
-      # # and then:
-      # span.before(Time.parse('2016-05-01')) # => 2016-04-26 00:00:00 +0300
-      # span.after(Time.parse('2016-05-01')) # => 2016-05-06 00:00:00 +0300
-      # ```
-      #
-      # @param amount [Integer]
-      # @return [Span]
-      def span(amount = 1)
-        TimeMath::Span.new(name, amount)
-      end
-
       # Creates {Sequence} instance for producing all time units between
       # from and too. See {Sequence} class documentation for available
       # options and functionality.

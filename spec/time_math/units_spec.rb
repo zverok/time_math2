@@ -380,15 +380,6 @@ describe TimeMath::Units::Base do
     end
   end
 
-  describe '#span' do
-    TimeMath.units.each do |unit|
-      context "with #{unit}" do
-        subject{u(unit).span(5)}
-        it{should == TimeMath::Span.new(unit, 5)}
-      end
-    end
-  end
-
   describe '#resample' do
     let(:unit) { TimeMath.day }
 
