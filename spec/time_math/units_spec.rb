@@ -31,6 +31,24 @@ describe TimeMath::Units::Base do
         end
 
         context '#floor(1/2)' do
+          fixture = load_fixture(:floor_half, t)
+
+          let(:source){t.parse(fixture[:source])}
+
+          fixture[:targets].each do |step, val|
+            it "should round down to #{step}" do
+              expect(u(step).floor(source, Rational(1, 2))).to eq t.parse(val)
+            end
+          end
+
+          specify do
+            unless t == Date
+              expect(TimeMath.day.floor(t.parse('2016-06-22 11:14'), 1/2r))
+                .to eq t.parse('2016-06-22 00:00')
+              expect(TimeMath.day.floor(t.parse('2016-06-22 12:00'), 1/2r))
+                .to eq t.parse('2016-06-22 12:00')
+            end
+          end
         end
       end
 
@@ -62,6 +80,10 @@ describe TimeMath::Units::Base do
         end
 
         context '#ceil(1/2)' do
+          specify do
+            expect(TimeMath.day.ceil(t.parse('2016-06-22 11:14'), 1/2r))
+              .to eq t.parse('2016-06-22 12:00')
+          end
         end
       end
 
