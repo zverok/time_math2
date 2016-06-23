@@ -17,6 +17,7 @@ require 'time'
 # {Units::Base} to see what you can get of it.
 #
 module TimeMath
+  require_relative './time_math/backports'
   require_relative './time_math/units'
   require_relative './time_math/op'
   require_relative './time_math/sequence'
@@ -71,7 +72,7 @@ module TimeMath
   #   @return [Units::Base]
   #
   Units.names.each do |unit|
-    define_method(unit) { Units.get(unit) }
+    define_singleton_method(unit) { Units.get(unit) }
   end
 
   # Measures distance between two time values in all units at once.

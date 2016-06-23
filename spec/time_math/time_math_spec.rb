@@ -34,10 +34,4 @@ describe TimeMath do
       expect(described_class.measure(from, to)).to eq TimeMath::Measure.measure(from, to)
     end
   end
-
-  describe 'module including' do
-    let(:klass){Class.new{include TimeMath}}
-    subject{klass.new}
-    its(:hour){should == TimeMath.hour}
-  end
 end

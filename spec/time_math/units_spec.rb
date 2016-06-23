@@ -43,9 +43,9 @@ describe TimeMath::Units::Base do
 
           specify do
             unless t == Date
-              expect(TimeMath.day.floor(t.parse('2016-06-22 11:14'), 1/2r))
+              expect(TimeMath.day.floor(t.parse('2016-06-22 11:14'), Rational(1,2)))
                 .to eq t.parse('2016-06-22 00:00')
-              expect(TimeMath.day.floor(t.parse('2016-06-22 12:00'), 1/2r))
+              expect(TimeMath.day.floor(t.parse('2016-06-22 12:00'), Rational(1,2)))
                 .to eq t.parse('2016-06-22 12:00')
             end
           end
@@ -80,7 +80,7 @@ describe TimeMath::Units::Base do
 
         context '#ceil(1/2)' do
           specify do
-            expect(TimeMath.day.ceil(t.parse('2016-06-22 11:14'), 1/2r))
+            expect(TimeMath.day.ceil(t.parse('2016-06-22 11:14'), Rational(1,2)))
               .to eq t.parse('2016-06-22 12:00')
           end
         end

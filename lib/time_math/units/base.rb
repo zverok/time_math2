@@ -266,8 +266,6 @@ module TimeMath
           float_floored > tm ? floored : float_floored
         end
       end
-
-      include TimeMath # now we can use something like #day inside other units
     end
   end
 end
