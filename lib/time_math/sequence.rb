@@ -93,7 +93,8 @@ module TimeMath
     def ==(other) # rubocop:disable Metrics/AbcSize
       self.class == other.class && unit == other.unit &&
         from == other.from && to == other.to &&
-        exclude_end? == other.exclude_end?
+        exclude_end? == other.exclude_end? &&
+        op == other.op
     end
 
     def exclude_end?

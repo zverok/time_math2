@@ -24,9 +24,7 @@ module TimeMath
   require_relative './time_math/resamplers'
   require_relative './time_math/util'
 
-  # rubocop:disable Style/ModuleFunction
-  extend self
-  # rubocop:enable Style/ModuleFunction
+  module_function
 
   # List all unit names known.
   #

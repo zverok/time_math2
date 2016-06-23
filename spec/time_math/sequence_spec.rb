@@ -37,6 +37,7 @@ describe TimeMath::Sequence do
           expect(sequence).not_to eq described_class.new(:day, from...to)
           expect(sequence).not_to eq described_class.new(:month, from...to+1)
           expect(sequence).not_to eq described_class.new(:month, from..to)
+          expect(sequence.advance(:min)).not_to eq sequence
         end
       end
 
