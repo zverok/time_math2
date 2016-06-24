@@ -88,8 +88,8 @@ module TimeMath
   # # => {:years=>33, :months=>3, :weeks=>2, :days=>0, :hours=>1, :minutes=>25, :seconds=>52}
   # ```
   #
-  # @param from [Time,DateTime]
-  # @param to [Time,DateTime]
+  # @param from [Time,Date,DateTime]
+  # @param to [Time,Date,DateTime]
   # @param options [Hash] options
   # @option options [Boolean] :weeks pass `false` to exclude weeks from calculation;
   # @option options [Symbol] :upto pass max unit to use (e.g. if you'll

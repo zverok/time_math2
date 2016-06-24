@@ -43,7 +43,7 @@ module TimeMath
       # # => 2016-06-23 14:30:00 +0300
       # ```
       #
-      # @param tm [Time,DateTime] time value to floor.
+      # @param tm [Time,Date,DateTime] time value to floor.
       # @param span [Numeric] how many units to floor to. For units
       #   less than week supports float/rational values.
       # @return [Time,Date,DateTime] floored time value; class and timezone
@@ -58,10 +58,10 @@ module TimeMath
       # An optional second argument allows to ceil to arbitrary
       # amount of units (see {#floor} for more detailed explanation).
       #
-      # @param tm [Time,DateTime] time value to ceil.
+      # @param tm [Time,Date,DateTime] time value to ceil.
       # @param span [Numeric] how many units to ceil to. For units
       #   less than week supports float/rational values.
-      # @return [Time,DateTime] ceiled time value; class and timezone info
+      # @return [Time,Date,DateTime] ceiled time value; class and timezone info
       #   of origin would be preserved.
       def ceil(tm, span = 1)
         f = floor(tm, span)
@@ -75,10 +75,10 @@ module TimeMath
       # An optional second argument allows to round to arbitrary
       # amount of units (see {#floor} for more detailed explanation).
       #
-      # @param tm [Time,DateTime] time value to round.
+      # @param tm [Time,Date,DateTime] time value to round.
       # @param span [Numeric] how many units to round to. For units
       #   less than week supports float/rational values.
-      # @return [Time,DateTime] rounded time value; class and timezone info
+      # @return [Time,Date,DateTime] rounded time value; class and timezone info
       #   of origin would be preserved.
       def round(tm, span = 1)
         f, c = floor(tm, span), ceil(tm, span)
@@ -92,10 +92,10 @@ module TimeMath
       # An optional second argument allows to floor to arbitrary
       # amount of units (see {#floor} for more detailed explanation).
       #
-      # @param tm [Time,DateTime] time value to calculate prev on.
+      # @param tm [Time,Date,DateTime] time value to calculate prev on.
       # @param span [Numeric] how many units to floor to. For units
       #   less than week supports float/rational values.
-      # @return [Time,DateTime] prev time value; class and timezone info
+      # @return [Time,Date,DateTime] prev time value; class and timezone info
       #   of origin would be preserved.
       def prev(tm, span = 1)
         f = floor(tm, span)
@@ -108,10 +108,10 @@ module TimeMath
       # An optional second argument allows to ceil to arbitrary
       # amount of units (see {#floor} for more detailed explanation).
       #
-      # @param tm [Time,DateTime] time value to calculate next on.
+      # @param tm [Time,Date,DateTime] time value to calculate next on.
       # @param span [Numeric] how many units to ceil to. For units
       #   less than week supports float/rational values.
-      # @return [Time,DateTime] next time value; class and timezone info
+      # @return [Time,Date,DateTime] next time value; class and timezone info
       #   of origin would be preserved.
       def next(tm, span = 1)
         c = ceil(tm, span)
@@ -120,7 +120,7 @@ module TimeMath
 
       # Checks if `tm` is exactly rounded to unit.
       #
-      # @param tm [Time,DateTime] time value to check.
+      # @param tm [Time,Date,DateTime] time value to check.
       # @param span [Numeric] how many units to check round at. For units
       #   less than week supports float/rational values.
       # @return [Boolean] whether `tm` is exactly round to unit.
@@ -130,11 +130,11 @@ module TimeMath
 
       # Advances `tm` by given amount of unit.
       #
-      # @param tm [Time,DateTime] time value to advance;
+      # @param tm [Time,Date,DateTime] time value to advance;
       # @param amount [Numeric] how many units forward to go. For units
       #   less than week supports float/rational values.
       #
-      # @return [Time,DateTime] advanced time value; class and timezone info
+      # @return [Time,Date,DateTime] advanced time value; class and timezone info
       #   of origin would be preserved.
       def advance(tm, amount = 1)
         return decrease(tm, -amount) if amount < 0
@@ -143,11 +143,11 @@ module TimeMath
 
       # Decreases `tm` by given amount of unit.
       #
-      # @param tm [Time,DateTime] time value to decrease;
+      # @param tm [Time,Date,DateTime] time value to decrease;
       # @param amount [Integer] how many units forward to go. For units
       #   less than week supports float/rational values.
       #
-      # @return [Time,DateTime] decrease time value; class and timezone info
+      # @return [Time,Date,DateTime] decrease time value; class and timezone info
       #   of origin would be preserved.
       def decrease(tm, amount = 1)
         return advance(tm, -amount) if amount < 0
@@ -162,7 +162,7 @@ module TimeMath
       # # => 2016-05-28 16:30:00 +0300...2016-06-02 16:30:00 +0300
       # ```
       #
-      # @param tm [Time,DateTime] time value to create range from;
+      # @param tm [Time,Date,DateTime] time value to create range from;
       # @param amount [Integer] how many units should be between range
       #   start and end.
       #
@@ -179,7 +179,7 @@ module TimeMath
       # # => 2016-05-23 16:30:00 +0300...2016-05-28 16:30:00 +0300
       # ```
       #
-      # @param tm [Time,DateTime] time value to create range from;
+      # @param tm [Time,Date,DateTime] time value to create range from;
       # @param amount [Integer] how many units should be between range
       #   start and end.
       #
@@ -190,8 +190,8 @@ module TimeMath
 
       # Measures distance between `from` and `to` in units of this class.
       #
-      # @param from [Time,DateTime] start of period;
-      # @param to [Time,DateTime] end of period.
+      # @param from [Time,Date,DateTime] start of period;
+      # @param to [Time,Date,DateTime] end of period.
       #
       # @return [Integer] how many full units are inside the period.
       # :nocov:
@@ -212,8 +212,8 @@ module TimeMath
       # # => [26, 2016-05-27 16:20:00 +0300]
       # ```
       #
-      # @param from [Time,DateTime] start of period;
-      # @param to [Time,DateTime] end of period.
+      # @param from [Time,Date,DateTime] start of period;
+      # @param to [Time,Date,DateTime] end of period.
       #
       # @return [Array<Integer, Time or DateTime>] how many full units
       #   are inside the period; exact value of `from` + full units.
@@ -226,8 +226,8 @@ module TimeMath
       # from and too. See {Sequence} class documentation for available
       # options and functionality.
       #
-      # @param from [Time,DateTime] start of sequence;
-      # @param to [Time,DateTime] upper limit of sequence;
+      # @param from [Time,Date,DateTime] start of sequence;
+      # @param to [Time,Date,DateTime] upper limit of sequence;
       # @param options [Hash]
       # @option options [Boolean] :expand round sequence ends on creation
       #   (from is floored and to is ceiled);

@@ -8,27 +8,18 @@ module TimeMath
   # ```ruby
   # from = Time.parse('2016-05-01 13:30')
   # to = Time.parse('2016-05-04 18:20')
-  # seq = TimeMath.day.sequence(from, to)
-  # # => #<TimeMath::Sequence(2016-05-01 13:30:00 +0300 - 2016-05-04 18:20:00 +0300)>
+  # seq = TimeMath.day.sequence(from...to)
+  # # => #<TimeMath::Sequence(2016-05-01 13:30:00 +0300...2016-05-04 18:20:00 +0300)>
   # ```
   #
   # Now, you can use it:
+  #
   # ```ruby
   # seq.to_a
   # # => [2016-05-01 13:30:00 +0300, 2016-05-02 13:30:00 +0300, 2016-05-03 13:30:00 +0300, 2016-05-04 13:30:00 +0300]
   # ```
   # -- it's an "each day start between from and to". As you can see,
-  # the period start is the same as in `from`. You can request to floor
-  # them to beginning of day with {#floor} method or `:floor` option:
-  #
-  # ```ruby
-  # seq.floor.to_a
-  # # => [2016-05-01 13:30:00 +0300, 2016-05-02 00:00:00 +0300, 2016-05-03 00:00:00 +0300, 2016-05-04 00:00:00 +0300]
-  # # or:
-  # seq = TimeMath.day.sequence(from, to, floor: true)
-  # seq.to_a
-  # ```
-  # -- it floors all day starts except of `from`, which is preserved.
+  # the period start is the same as in `from`.
   #
   # You can expand from and to to nearest round unit by {#expand} method
   # or `:expand` option:
@@ -37,16 +28,23 @@ module TimeMath
   # seq.expand.to_a
   # # => [2016-05-01 00:00:00 +0300, 2016-05-02 00:00:00 +0300, 2016-05-03 00:00:00 +0300, 2016-05-04 00:00:00 +0300]
   # # or:
-  # seq = TimeMath.day.sequence(from, to, expand: true)
-  # # => #<TimeMath::Sequence(2016-05-01 00:00:00 +0300 - 2016-05-05 00:00:00 +0300)>
+  # seq = TimeMath.day.sequence(from...to, expand: true)
+  # # => #<TimeMath::Sequence(2016-05-01 00:00:00 +0300...2016-05-05 00:00:00 +0300)>
   # seq.to_a
+  # # => [2016-05-01 00:00:00 +0300, 2016-05-02 00:00:00 +0300, 2016-05-03 00:00:00 +0300, 2016-05-04 00:00:00 +0300]
+  # # ^ note that `to` is excluded.
+  # # You can include it by creating sequence from including-end range:
+  # seq = TimeMath.day.sequence(from..to, expand: true)
+  # # => #<TimeMath::Sequence(:day, 2016-05-01 00:00:00 +0300..2016-05-05 00:00:00 +0300)>
+  # seq.to_a
+  # # => [2016-05-01 00:00:00 +0300, 2016-05-02 00:00:00 +0300, 2016-05-03 00:00:00 +0300, 2016-05-04 00:00:00 +0300, 2016-05-05 00:00:00 +0300]
   # ```
   #
   # Besides each period beginning, you can also request pairs of begin/end
   # of a period, either as an array of arrays, or array of ranges:
   #
   # ```ruby
-  # seq = TimeMath.day.sequence(from, to)
+  # seq = TimeMath.day.sequence(from...to)
   # seq.pairs
   # # => [[2016-05-01 13:30:00 +0300, 2016-05-02 13:30:00 +0300], [2016-05-02 13:30:00 +0300, 2016-05-03 13:30:00 +0300], [2016-05-03 13:30:00 +0300, 2016-05-04 13:30:00 +0300], [2016-05-04 13:30:00 +0300, 2016-05-04 18:20:00 +0300]]
   # seq.ranges
@@ -56,22 +54,31 @@ module TimeMath
   # It is pretty convenient for filtering data from databases or APIs,
   # TimeMath creates list of filtering ranges in a blink.
   #
+  # Sequence also supports any item-updating operations in the same fashion
+  # {Op} does:
+  #
+  # ```ruby
+  # seq = TimeMath.day.sequence(from...to, expand: true).advance(:hour, 5).decrease(:min, 20)
+  # # => #<TimeMath::Sequence(:day, 2016-05-01 00:00:00 +0300...2016-05-05 00:00:00 +0300).advance(:hour, 5).decrease(:min, 20)>
+  # seq.to_a
+  # # => [2016-05-01 04:40:00 +0300, 2016-05-02 04:40:00 +0300, 2016-05-03 04:40:00 +0300, 2016-05-04 04:40:00 +0300]
+  # ```
+  #
   class Sequence
     # Creates a sequence. Typically, it is easier to to it with {Units::Base#sequence},
     # like this:
     #
     # ```ruby
-    # TimeMath.day.sequence(from, to)
+    # TimeMath.day.sequence(from...to)
     # ```
     #
     # @param unit [Symbol] one of {TimeMath.units};
-    # @param from [Time,DateTime] start of sequence;
-    # @param to [Time,DateTime] upper limit of sequence;
+    # @param range [Range] range of time-y values (Time, Date, DateTime);
+    #   note that range with inclusive and exclusive and will produce
+    #   different sequences.
     # @param options [Hash]
     # @option options [Boolean] :expand round sequence ends on creation
-    #   (from is floored and to is ceiled);
-    # @option options [Boolean] :floor sequence will be rounding'ing all
-    #   the intermediate values.
+    #   (`from` is floored and `to` is ceiled);
     #
     def initialize(unit, range, options = {})
       @unit = Units.get(unit)
@@ -103,6 +110,8 @@ module TimeMath
         op == other.op
     end
 
+    # Whether sequence was created from exclude-end range (and, therefore,
+    # will exclude `to` when converted to array).
     def exclude_end?
       @exclude_end
     end
@@ -123,6 +132,92 @@ module TimeMath
     def expand
       dup.expand!
     end
+
+    # @method floor!(unit, span = 1)
+    #   Adds {Units::Base#floor} to list of operations to apply to sequence items.
+    #
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param span [Numeric] how many units to floor to.
+    #   @return [self]
+    #
+    # @method floor(unit, span = 1)
+    #   Non-destructive version of {#floor!}.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param span [Numeric] how many units to floor to.
+    #   @return [Sequence]
+    #
+    # @method ceil!(unit, span = 1)
+    #   Adds {Units::Base#ceil} to list of operations to apply to sequence items.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param span [Numeric] how many units to ceil to.
+    #   @return [self]
+    #
+    # @method ceil(unit, span = 1)
+    #   Non-destructive version of {#ceil!}.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param span [Numeric] how many units to ceil to.
+    #   @return [Sequence]
+    #
+    # @method round!(unit, span = 1)
+    #   Adds {Units::Base#round} to list of operations to apply to sequence items.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param span [Numeric] how many units to round to.
+    #   @return [self]
+    #
+    # @method round(unit, span = 1)
+    #   Non-destructive version of {#round!}.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param span [Numeric] how many units to round to.
+    #   @return [Sequence]
+    #
+    # @method next!(unit, span = 1)
+    #   Adds {Units::Base#next} to list of operations to apply to sequence items.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param span [Numeric] how many units to ceil to.
+    #   @return [self]
+    #
+    # @method next(unit, span = 1)
+    #   Non-destructive version of {#next!}.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param span [Numeric] how many units to ceil to.
+    #   @return [Sequence]
+    #
+    # @method prev!(unit, span = 1)
+    #   Adds {Units::Base#prev} to list of operations to apply to sequence items.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param span [Numeric] how many units to floor to.
+    #   @return [self]
+    #
+    # @method prev(unit, span = 1)
+    #   Non-destructive version of {#prev!}.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param span [Numeric] how many units to floor to.
+    #   @return [Sequence]
+    #
+    # @method advance!(unit, amount = 1)
+    #   Adds {Units::Base#advance} to list of operations to apply to sequence items.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param amount [Numeric] how many units to advance.
+    #   @return [self]
+    #
+    # @method advance(unit, amount = 1)
+    #   Non-destructive version of {#advance!}.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param amount [Numeric] how many units to advance.
+    #   @return [Sequence]
+    #
+    # @method decrease!(unit, amount = 1)
+    #   Adds {Units::Base#decrease} to list of operations to apply to sequence items.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param amount [Numeric] how many units to decrease.
+    #   @return [self]
+    #
+    # @method decrease(unit, amount = 1)
+    #   Non-destructive version of {#decrease!}.
+    #   @param unit [Symbol] One of {TimeMath.units}
+    #   @param amount [Numeric] how many units to decrease.
+    #   @return [Sequence]
+    #
 
     Op::OPERATIONS.each do |operation|
       define_method "#{operation}!" do |*arg|
