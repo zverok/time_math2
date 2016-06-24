@@ -14,6 +14,8 @@ matrix:
     - rvm: rbx-2
 install:
   - bundle install --retry=3
+before_script:
+  - export TZ=Europe/Kiev
 script:
   - bundle exec rspec
   - bundle exec rubocop
