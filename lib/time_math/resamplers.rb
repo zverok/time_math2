@@ -50,6 +50,7 @@ module TimeMath
     end
   end
 
+  # @private
   class HashResampler < Resampler
     def initialize(unit, hash)
       super(unit)

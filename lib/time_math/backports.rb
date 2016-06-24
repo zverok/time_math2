@@ -1,3 +1,4 @@
+# @private
 class Array
   if RUBY_VERSION < '2.0'
     def to_h

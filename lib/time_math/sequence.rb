@@ -82,6 +82,7 @@ module TimeMath
       @op = Op.new
     end
 
+    # @private
     def initialize_copy(other)
       @unit = other.unit
       @from, @to, @exclude_end = other.from, other.to, other.exclude_end?
@@ -90,6 +91,11 @@ module TimeMath
 
     attr_reader :from, :to, :unit, :op
 
+    # Compares two sequences, considering their start, end, unit and
+    # operations.
+    #
+    # @param other [Sequence]
+    # @return [Boolean]
     def ==(other) # rubocop:disable Metrics/AbcSize
       self.class == other.class && unit == other.unit &&
         from == other.from && to == other.to &&
@@ -103,7 +109,7 @@ module TimeMath
 
     # Expand sequence ends to nearest round unit.
     #
-    # @return self
+    # @return [self]
     def expand!
       @from = unit.floor(from)
       @to = unit.ceil(to)

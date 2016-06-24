@@ -8,6 +8,13 @@ module TimeMath
     # TimeMath.day.advance(tm, 5) # advances tm by 5 days
     # ```
     #
+    # See also {TimeMath::Op} for performing multiple operations in
+    # concise & DRY manner, like this:
+    #
+    # ```ruby
+    # TimeMath().advance(:day, 5).floor(:hour).advance(:min, 20).call(tm)
+    # ```
+    #
     class Base
       # Creates unit of time. Typically you don't need it, as it is
       # easier to do `TimeMath.day` or `TimeMath[:day]` to obtain it.
@@ -22,9 +29,25 @@ module TimeMath
       # Rounds `tm` down to nearest unit (this means, `TimeMath.day.floor(tm)`
       # will return beginning of `tm`-s day, and so on).
       #
+      # An optional second argument allows you to floor to arbitrary
+      # number of units, like to "each 3-hour" mark:
+      #
+      # ```ruby
+      # TimeMath.hour.floor(Time.parse('14:00'), 3)
+      # # => 2016-06-23 12:00:00 +0300
+      #
+      # # works well with float/rational spans
+      # TimeMath.hour.floor(Time.parse('14:15'), 1/2r)
+      # # => 2016-06-23 14:00:00 +0300
+      # TimeMath.hour.floor(Time.parse('14:45'), 1/2r)
+      # # => 2016-06-23 14:30:00 +0300
+      # ```
+      #
       # @param tm [Time,DateTime] time value to floor.
-      # @return [Time,DateTime] floored time value; class and timezone info
-      #   of origin would be preserved.
+      # @param span [Numeric] how many units to floor to. For units
+      #   less than week supports float/rational values.
+      # @return [Time,Date,DateTime] floored time value; class and timezone
+      #   info of origin would be preserved.
       def floor(tm, span = 1)
         int_floor = advance(floor_1(tm), (tm.send(name) / span.to_f).floor * span - tm.send(name))
         float_fix(tm, int_floor, span % 1)
@@ -32,8 +55,12 @@ module TimeMath
 
       # Rounds `tm` up to nearest unit (this means, `TimeMath.day.ceil(tm)`
       # will return beginning of day next after `tm`, and so on).
+      # An optional second argument allows to ceil to arbitrary
+      # amount of units (see {#floor} for more detailed explanation).
       #
       # @param tm [Time,DateTime] time value to ceil.
+      # @param span [Numeric] how many units to ceil to. For units
+      #   less than week supports float/rational values.
       # @return [Time,DateTime] ceiled time value; class and timezone info
       #   of origin would be preserved.
       def ceil(tm, span = 1)
@@ -45,8 +72,12 @@ module TimeMath
       # Rounds `tm` up or down to nearest unit (this means, `TimeMath.day.round(tm)`
       # will return beginning of `tm` day if `tm` is before noon, and
       # day next after `tm` if it is after, and so on).
+      # An optional second argument allows to round to arbitrary
+      # amount of units (see {#floor} for more detailed explanation).
       #
       # @param tm [Time,DateTime] time value to round.
+      # @param span [Numeric] how many units to round to. For units
+      #   less than week supports float/rational values.
       # @return [Time,DateTime] rounded time value; class and timezone info
       #   of origin would be preserved.
       def round(tm, span = 1)
@@ -58,8 +89,12 @@ module TimeMath
       # Like {#floor}, but always return value lower than `tm` (e.g. if
       # `tm` is exactly midnight, then `TimeMath.day.prev(tm)` will return
       # _previous midnight_).
+      # An optional second argument allows to floor to arbitrary
+      # amount of units (see {#floor} for more detailed explanation).
       #
       # @param tm [Time,DateTime] time value to calculate prev on.
+      # @param span [Numeric] how many units to floor to. For units
+      #   less than week supports float/rational values.
       # @return [Time,DateTime] prev time value; class and timezone info
       #   of origin would be preserved.
       def prev(tm, span = 1)
@@ -70,8 +105,12 @@ module TimeMath
       # Like {#ceil}, but always return value greater than `tm` (e.g. if
       # `tm` is exactly midnight, then `TimeMath.day.next(tm)` will return
       # _next midnight_).
+      # An optional second argument allows to ceil to arbitrary
+      # amount of units (see {#floor} for more detailed explanation).
       #
       # @param tm [Time,DateTime] time value to calculate next on.
+      # @param span [Numeric] how many units to ceil to. For units
+      #   less than week supports float/rational values.
       # @return [Time,DateTime] next time value; class and timezone info
       #   of origin would be preserved.
       def next(tm, span = 1)
@@ -82,6 +121,8 @@ module TimeMath
       # Checks if `tm` is exactly rounded to unit.
       #
       # @param tm [Time,DateTime] time value to check.
+      # @param span [Numeric] how many units to check round at. For units
+      #   less than week supports float/rational values.
       # @return [Boolean] whether `tm` is exactly round to unit.
       def round?(tm, span = 1)
         floor(tm, span) == tm
@@ -90,7 +131,8 @@ module TimeMath
       # Advances `tm` by given amount of unit.
       #
       # @param tm [Time,DateTime] time value to advance;
-      # @param amount [Integer] how many units forward to go.
+      # @param amount [Numeric] how many units forward to go. For units
+      #   less than week supports float/rational values.
       #
       # @return [Time,DateTime] advanced time value; class and timezone info
       #   of origin would be preserved.
@@ -102,7 +144,8 @@ module TimeMath
       # Decreases `tm` by given amount of unit.
       #
       # @param tm [Time,DateTime] time value to decrease;
-      # @param amount [Integer] how many units forward to go.
+      # @param amount [Integer] how many units forward to go. For units
+      #   less than week supports float/rational values.
       #
       # @return [Time,DateTime] decrease time value; class and timezone info
       #   of origin would be preserved.
@@ -196,6 +239,59 @@ module TimeMath
         TimeMath::Sequence.new(name, range, options)
       end
 
+      # Converts input timestamps list to regular list of timestamps
+      # over current unit.
+      #
+      # Like this:
+      #
+      # ```ruby
+      # times = [Time.parse('2016-05-01'), Time.parse('2016-05-03'), Time.parse('2016-05-08')]
+      # TimeMath.day.resample(times)
+      # # =>  => [2016-05-01 00:00:00 +0300, 2016-05-02 00:00:00 +0300, 2016-05-03 00:00:00 +0300, 2016-05-04 00:00:00 +0300, 2016-05-05 00:00:00 +0300, 2016-05-06 00:00:00 +0300, 2016-05-07 00:00:00 +0300, 2016-05-08 00:00:00 +0300]
+      # ```
+      #
+      # The best way about resampling it also works for hashes with time
+      # keys. Like this:
+      #
+      # ```ruby
+      # h = {Date.parse('Wed, 01 Jun 2016')=>1, Date.parse('Tue, 07 Jun 2016')=>3, Date.parse('Thu, 09 Jun 2016')=>1}
+      # # => {#<Date: 2016-06-01>=>1, #<Date: 2016-06-07>=>3, #<Date: 2016-06-09>=>1}
+      #
+      # pp TimeMath.day.resample(h)
+      # # {#<Date: 2016-06-01>=>[1],
+      # #  #<Date: 2016-06-02>=>[],
+      # #  #<Date: 2016-06-03>=>[],
+      # #  #<Date: 2016-06-04>=>[],
+      # #  #<Date: 2016-06-05>=>[],
+      # #  #<Date: 2016-06-06>=>[],
+      # #  #<Date: 2016-06-07>=>[3],
+      # #  #<Date: 2016-06-08>=>[],
+      # #  #<Date: 2016-06-09>=>[1]}
+      #
+      # # The default resample just groups all related values in arrays
+      # # You can pass block or symbol, to have the values you need:
+      # pp TimeMath.day.resample(h,&:first)
+      # # {#<Date: 2016-06-01>=>1,
+      # #  #<Date: 2016-06-02>=>nil,
+      # #  #<Date: 2016-06-03>=>nil,
+      # #  #<Date: 2016-06-04>=>nil,
+      # #  #<Date: 2016-06-05>=>nil,
+      # #  #<Date: 2016-06-06>=>nil,
+      # #  #<Date: 2016-06-07>=>3,
+      # #  #<Date: 2016-06-08>=>nil,
+      # #  #<Date: 2016-06-09>=>1}
+      # ```
+      #
+      # @param array_or_hash array of time-y values (Time/Date/DateTime)
+      #   or hash with time-y keys.
+      # @param symbol in case of first param being a hash -- method to
+      #   call on key arrays while grouping.
+      # @param block in  case of first param being a hash -- block to
+      #   call on key arrays while grouping.
+      #
+      # @return array or hash spread regular by unit; if first param was
+      #   hash, keys corresponding to each period are grouped into arrays;
+      #   this array could be further processed with block/symbol provided.
       def resample(array_or_hash, symbol = nil, &block)
         Resampler.call(name, array_or_hash, symbol, &block)
       end

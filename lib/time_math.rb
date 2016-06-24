@@ -16,6 +16,8 @@ require 'time'
 # time unit, which incapsulates most of the functionality. Refer to
 # {Units::Base} to see what you can get of it.
 #
+# See also `TimeMath()` method in global namespace, it is lot of fun!
+#
 module TimeMath
   require_relative './time_math/backports'
   require_relative './time_math/units'
@@ -99,6 +101,38 @@ module TimeMath
   end
 end
 
+# This method helps to create time arithmetics sequence as a value object.
+# Some examples:
+#
+# ```ruby
+# # 10 am at first weekday? Easy!
+# TimeMath(Time.now).floor(:week).advance(:hour, 10).call
+# # => 2016-06-20 10:00:00 +0300
+#
+# # For several time values? Nothing easier!
+# TimeMath(Time.local(2016,1,1), Time.local(2016,2,1), Time.local(2016,3,1)).floor(:week).advance(:hour, 10).call
+# # => [2015-12-28 10:00:00 +0200, 2016-02-01 10:00:00 +0200, 2016-02-29 10:00:00 +0200]
+#
+# # Or, the most fun, you can create complicated operation and call it
+# # later:
+# op = TimeMath().floor(:week).advance(:hour, 10)
+# # => #<TimeMath::Op floor(:week).advance(:hour, 10)>
+# op.call(Time.now)
+# # => 2016-06-20 10:00:00 +0300
+#
+# # or even as a lambda:
+# times = [Time.local(2016,1,1), Time.local(2016,2,1), Time.local(2016,3,1)]
+# times.map(&op)
+# # => [2015-12-28 10:00:00 +0200, 2016-02-01 10:00:00 +0200, 2016-02-29 10:00:00 +0200]
+# ```
+#
+# See also {TimeMath::Op} for list of operations available, but basically
+# they are all same you can call on {TimeMath::Unit}, just pass unit symbol
+# as a first argument.
+#
+# @param arguments time-y value, or list of them, or nothing
+#
+# @return [TimeMath::Op]
 def TimeMath(*arguments) # rubocop:disable Style/MethodName
   TimeMath::Op.new(*arguments)
 end
