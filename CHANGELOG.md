@@ -2,6 +2,7 @@
 
 # 0.0.5 (2016-06-25)
 
+* Add support for `Date`;
 * Add optional second argument to rounding functions (`floor`, `ceil` and
   so on), for "floor to 3-hour mark";
 * Allow this argument, as well as in `advance`/`decrease`, to be non-integer;
