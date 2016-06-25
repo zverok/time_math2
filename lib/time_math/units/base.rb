@@ -328,7 +328,8 @@ module TimeMath
         components = EMPTY_VALUES.zip(components).map { |d, c| c || d }
         case origin
         when Time
-          Time.mktime(*components.reverse, nil, nil, nil, origin.zone)
+          res = Time.mktime(*components.reverse, nil, nil, nil, origin.zone)
+          fix_no_zone(res, origin, *components)
         when DateTime
           DateTime.new(*components, origin.zone)
         when Date
@@ -360,6 +361,16 @@ module TimeMath
         else
           float_floored = advance(floored, float_span_part)
           float_floored > tm ? floored : float_floored
+        end
+      end
+
+      def fix_no_zone(tm, origin, *components)
+        if origin.zone != 'UTC' && tm.zone == 'UTC'
+          # Fixes things like this one: https://github.com/jruby/jruby/issues/3978
+          # ...by falling back to use of UTC offset instead of timezone abbr
+          Time.new(*components, origin.utc_offset)
+        else
+          tm
         end
       end
     end

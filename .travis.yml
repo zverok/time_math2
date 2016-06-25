@@ -12,6 +12,7 @@ matrix:
   # Doesn't play well with Rubocop
   allow_failures:
     - rvm: rbx-2
+    - jruby-19mode
 install:
   - bundle install --retry=3
 before_script:
