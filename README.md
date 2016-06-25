@@ -11,6 +11,25 @@ arithmetics easier. It provides you with simple, easy-to-remember API, without
 any monkey-patching of core Ruby classes, so it can be used alongside
 Rails or without it, for any purpose.
 
+## Table Of Contents
+
+* [Features](#features)
+* [Naming](#naming)
+* [Reasons](#reasons)
+* [Installation](#installation)
+* [Usage](#usage)
+    - [Full list of simple arithmetic methods](#full-list-of-simple-arithmetic-methods)
+    - [Set of operations as a value object](#set-of-operations-as-a-value-object)
+    - [Time sequence abstraction](#time-sequence-abstraction)
+    - [Measuring time periods](#measuring-time-periods)
+    - [Resampling](#resampling)
+* [Notes on timezones](#notes-on-timezones)
+* [Compatibility notes](#compatibility-notes)
+* [Alternatives](#alternatives)
+* [Links](#links)
+* [Author](#author)
+* [License](#license)
+
 ## Features
 
 * No monkey-patching of core classes (now **strict**; previously existing opt-in
@@ -19,13 +38,14 @@ Rails or without it, for any purpose.
 * Accurately preserves timezone info;
 * Simple arithmetics: floor/ceil/round to any time unit (second, hour, year
   or whatnot), advance/decrease by any unit;
-* Chainable operations, including construction of "set of operations"
-  value object (like "10:20 at next month first day"), clean and powerful;
-* Easy generation of time sequences (like "each day from _this_ to _that_
-  date");
+* Chainable [operations](#set-of-operations-as-a-value-object), including
+  construction of "set of operations" value object (like "10:20 at next
+  month first day"), clean and powerful;
+* Easy generation of [time sequences](#time-sequence-abstraction)
+  (like "each day from _this_ to _that_ date");
 * Measuring of time distances between two timestamps in any units;
-* Powerful and flexible resampling of arbitrary time value arrays into
-  regular sequences.
+* Powerful and flexible [resampling](#resampling) of arbitrary time value
+  arrays/hashes into regular sequences.
 
 ## Naming
 
