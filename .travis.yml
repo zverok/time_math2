@@ -10,9 +10,9 @@ rvm:
   - rbx-2
 matrix:
   # Doesn't play well with Rubocop
+  # ...and have utterly strange ideas about timezone preservation
   allow_failures:
-    - rvm: rbx-2
-    - jruby-19mode
+    - rvm: [rbx-2, jruby-19mode]
 install:
   - bundle install --retry=3
 before_script:
