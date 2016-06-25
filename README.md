@@ -13,21 +13,21 @@ Rails or without it, for any purpose.
 
 ## Features
 
-* No monkey-patching of core classes (opt-in patching of Time and DateTime
-  provided, though);
-* Works with Time and DateTime;
+* No monkey-patching of core classes (now **strict**; previously existing opt-in
+  core ext removed in 0.0.5);
+* Works with Time, Date and DateTime;
 * Accurately preserves timezone info;
 * Simple arithmetics: floor/ceil/round to any time unit (second, hour, year
   or whatnot), advance/decrease by any unit;
-* Simple time span abstraction (like "5 years" object you can store and
-  pass to other methods);
+* Chainable operations, including construction of "set of operations"
+  value object (like "10:20 at next month first day"), clean and powerful;
 * Easy generation of time sequences (like "each day from _this_ to _that_
   date");
 * Measuring of time distances between two timestamps in any units.
 
 ## Naming
 
-`TimeMath` is the better name I know for the task library does, but
+`TimeMath` is the best name I know for the task library does, yet
 it is [already taken](https://rubygems.org/gems/time_math). So, with no
 other thoughts I came with the ugly solution.
 
@@ -96,7 +96,50 @@ TimeMath.day.advance(Time.now, +10) # => 2016-06-07 14:06:57 +0300
 * `<unit>.range(tm, amount)` -- creates range of `tm ... tm + amount <units>`;
 * `<unit>.range_back(tm, amount)` -- creates range of `tm - amount <units> ... tm`.
 
+**Things to note**:
+* rounding methods (`floor`, `ceil` and company) support optional second
+  argument (amount of units to round to, like "each 3 hours": `hour.floor(tm, 3)`;
+* both rounding and advance/decrease methods allow their last argument to
+  be float/rational, so you can `hour.advance(tm, 1/2r)` and this would
+  work as you may expect. Non-integer arguments are only supported for
+  units less than week (because "half of month" have no exact mathematical
+  sense).
+
 See also [Units::Base](http://www.rubydoc.info/gems/time_math2/TimeMath/Units/Base).
+
+### Set of operations as a value object
+
+For example, you want "10 am at next monday". By using atomic time unit
+operations, you'll need the code like:
+
+```ruby
+TimeMath.hour.advance(TimeMath.week.ceil(Time.now), 10)
+```
+...which is not really readable, to say the least. So, `TimeMath` provides
+one top-level method allowing to chain any operations you want:
+
+```ruby
+TimeMath(Time.now).ceil(:week).advance(:hour, 10).call
+```
+
+Much more readable, huh? The best thing about it, that you can prepare
+"operations list" value object, and then use it (or pass to methods, or
+serialize to YAML and deserialize in some Sidekiq task and so on):
+
+```ruby
+op = TimeMath().ceil(:week).advance(:hour, 10)
+# => #<TimeMath::Op ceil(:week).advance(:hour, 10)>
+op.call(Time.now)
+# => 2016-06-27 10:00:00 +0300
+
+# It also can be called on several arguments/array of arguments, or used
+# as a block-ish object:
+op.call(tm1, tm2, tm3)
+op.call(array_of_timestamps)
+array_of_timestamps.map(&op)
+```
+
+See also
 
 ### Time span abstraction
 
