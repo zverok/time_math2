@@ -97,8 +97,9 @@ TimeMath.day.advance(Time.now, +10) # => 2016-06-07 14:06:57 +0300
 * `<unit>.range_back(tm, amount)` -- creates range of `tm - amount <units> ... tm`.
 
 **Things to note**:
+
 * rounding methods (`floor`, `ceil` and company) support optional second
-  argument (amount of units to round to, like "each 3 hours": `hour.floor(tm, 3)`;
+  argument—amount of units to round to, like "each 3 hours": `hour.floor(tm, 3)`;
 * both rounding and advance/decrease methods allow their last argument to
   be float/rational, so you can `hour.advance(tm, 1/2r)` and this would
   work as you may expect. Non-integer arguments are only supported for
@@ -122,8 +123,10 @@ one top-level method allowing to chain any operations you want:
 TimeMath(Time.now).ceil(:week).advance(:hour, 10).call
 ```
 
-Much more readable, huh? The best thing about it, that you can prepare
-"operations list" value object, and then use it (or pass to methods, or
+Much more readable, huh?
+
+The best thing about it, that you can prepare "operations list" value
+object, and then use it (or pass to methods, or
 serialize to YAML and deserialize in some Sidekiq task and so on):
 
 ```ruby
@@ -132,28 +135,16 @@ op = TimeMath().ceil(:week).advance(:hour, 10)
 op.call(Time.now)
 # => 2016-06-27 10:00:00 +0300
 
-# It also can be called on several arguments/array of arguments, or used
-# as a block-ish object:
+# It also can be called on several arguments/array of arguments:
 op.call(tm1, tm2, tm3)
 op.call(array_of_timestamps)
+# ...or even used as a block-ish object:
 array_of_timestamps.map(&op)
 ```
 
-See also
-
-### Time span abstraction
-
-`TimeMath::Span` is a simple abstraction of "N units of time", which you
-can store in variable and then apply to some time value:
-
-```ruby
-span = TimeMath.day.span(5)
-# => #<TimeMath::Span(day): +5>
-span.before(Time.now)
-# => 2016-05-23 17:46:13 +0300
-```
-
-See also [Span YARD docs](http://www.rubydoc.info/gems/time_math2/TimeMath/Span).
+See also [TimeMath()](http://www.rubydoc.info/gems/time_math2/toplevel#TimeMath-instance_method)
+and underlying [TimeMath::Op](http://www.rubydoc.info/gems/time_math2/TimeMath/Op)
+class docs.
 
 ### Time sequence abstraction
 
@@ -165,8 +156,8 @@ to = Time.now
 # => 2016-05-28 17:47:30 +0300
 from = TimeMath.day.floor(to)
 # => 2016-05-28 00:00:00 +0300
-seq = TimeMath.hour.sequence(from, to)
-# => #<TimeMath::Sequence(2016-05-28 00:00:00 +0300 - 2016-05-28 17:47:30 +0300)>
+seq = TimeMath.hour.sequence(from...to)
+# => #<TimeMath::Sequence(:hour, 2016-05-28 00:00:00 +0300...2016-05-28 17:47:30 +0300)>
 p(*seq)
 # 2016-05-28 00:00:00 +0300
 # 2016-05-28 01:00:00 +0300
@@ -179,11 +170,21 @@ p(*seq)
 # ...and so on
 ```
 
+Note that sequence also play well with operation chain described above,
+so you can
+
+```ruby
+seq = TimeMath.day.sequence(Time.parse('2016-05-01')...Time.parse('2016-05-04')).advance(:hour, 10).decrease(:min, 5)
+# => #<TimeMath::Sequence(:day, 2016-05-01 00:00:00 +0300...2016-05-04 00:00:00 +0300).advance(:hour, 10).decrease(:min, 5)>
+seq.to_a
+# => [2016-05-01 09:55:00 +0300, 2016-05-02 09:55:00 +0300, 2016-05-03 09:55:00 +0300]
+```
+
 See also [Sequence YARD docs](http://www.rubydoc.info/gems/time_math2/TimeMath/Sequence).
 
 ### Measuring time periods
 
-Simple measure: just "how many `<unit>`s from date A to date B:
+Simple measure: just "how many `<unit>`s from date A to date B":
 
 ```ruby
 TimeMath.week.measure(Time.parse('2016-05-01'), Time.parse('2016-06-01'))
@@ -224,22 +225,6 @@ TimeMath.measure(birthday, Time.now, upto: :day)
 # => {:days=>12157, :hours=>2, :minutes=>26, :seconds=>55}
 ```
 
-### Optional `Time` and `DateTime` patches
-
-This core classes extension is optional and should be required explicitly.
-TimeMath doesn't change behavior of any existing methods (like `#+`),
-it just adds a couple of new ones:
-
-```ruby
-require 'time_math/core_ext'
-
-Time.now.decrease_by(:day, 10).floor_to(:month)
-Time.now.sequence_to(:month, Time.now.advance_by(:year, 5))
-```
-
-See [CoreExt](http://www.rubydoc.info/gems/time_math2/TimeMath/CoreExt)
-documentation for full lists of methods added.
-
 ### Notes on timezones
 
 TimeMath tries its best to preserve timezones of original values. Currently,
@@ -251,19 +236,18 @@ it means:
   it is preserved by TimeMath (but be careful about jumping around DST,
   offset would not change).
 
-## Got it, what else?
+## Compatibility notes
 
-TimeMath also play well when included into other classes or modules:
+TimeMath is known to work on MRI Ruby >= 1.9.
 
-```ruby
-class MyModel
-  include TimeMath
+On JRuby it works, too, though there could be _slightly_ unexpected results,
+when JRuby fails to create time by timezone name (see [bug](https://github.com/jruby/jruby/issues/3978)).
+TimeMath in this case fallbacks to the same solution that used for `DateTime`,
+and at least preserves utc offset.
 
-  def next_day
-    day.advance # Here!
-  end
-end
-```
+On Rubinius, some of tests fail and I haven't time to investigate it. If
+somebody still uses Rubinius and wants TimeMath to be working properly
+on it, please let me know.
 
 ## Alternatives
 
