@@ -23,7 +23,9 @@ Rails or without it, for any purpose.
   value object (like "10:20 at next month first day"), clean and powerful;
 * Easy generation of time sequences (like "each day from _this_ to _that_
   date");
-* Measuring of time distances between two timestamps in any units.
+* Measuring of time distances between two timestamps in any units;
+* Powerful and flexible resampling of arbitrary time value arrays into
+  regular sequences.
 
 ## Naming
 
@@ -225,7 +227,53 @@ TimeMath.measure(birthday, Time.now, upto: :day)
 # => {:days=>12157, :hours=>2, :minutes=>26, :seconds=>55}
 ```
 
-### Notes on timezones
+### Resampling
+
+**Resampling** is useful for situations when you have some timestamped
+data (with variable holes between values), and wantto make it regular,
+e.g. for charts drawing.
+
+The most simple (and not very useful) resampling just turns array of
+irregular timestamps into regular one:
+
+```ruby
+dates = %w[2016-06-01 2016-06-03 2016-06-06].map(&Date.method(:parse))
+# => [#<Date: 2016-06-01>, #<Date: 2016-06-03>, #<Date: 2016-06-06>]
+TimeMath.day.resample(dates)
+# => [#<Date: 2016-06-01>, #<Date: 2016-06-02>, #<Date: 2016-06-03>, #<Date: 2016-06-04>, #<Date: 2016-06-05>, #<Date: 2016-06-06>]
+TimeMath.week.resample(dates)
+# => [#<Date: 2016-05-30>, #<Date: 2016-06-06>]
+TimeMath.month.resample(dates)
+# => [#<Date: 2016-06-01>]
+```
+
+Much more useful is _hash resampling_: when you have a hash of `{timestamp => value}`
+and...
+
+```ruby
+data = {Date.parse('2016-06-01') => 18, Date.parse('2016-06-03') => 8, Date.parse('2016-06-06') => -4}
+# => {#<Date: 2016-06-01>=>18, #<Date: 2016-06-03>=>8, #<Date: 2016-06-06>=>-4}
+TimeMath.day.resample(data)
+# => {#<Date: 2016-06-01>=>[18], #<Date: 2016-06-02>=>[], #<Date: 2016-06-03>=>[8], #<Date: 2016-06-04>=>[], #<Date: 2016-06-05>=>[], #<Date: 2016-06-06>=>[-4]}
+TimeMath.week.resample(data)
+# => {#<Date: 2016-05-30>=>[18, 8], #<Date: 2016-06-06>=>[-4]}
+TimeMath.month.resample(data)
+# => {#<Date: 2016-06-01>=>[18, 8, -4]}
+```
+
+For values grouping strategy, `resample` accepts symbol and block arguments:
+
+```ruby
+TimeMath.week.resample(data, :first)
+# => {#<Date: 2016-05-30>=>18, #<Date: 2016-06-06>=>-4}
+TimeMath.week.resample(data) { |vals| vals.inject(:+) }
+ => {#<Date: 2016-05-30>=>26, #<Date: 2016-06-06>=>-4}
+```
+
+The functionality currently considered experimental, please notify me
+about your ideas and use cases via [GitHub issues](https://github.com/zverok/time_math2/issues)!
+
+## Notes on timezones
 
 TimeMath tries its best to preserve timezones of original values. Currently,
 it means:
