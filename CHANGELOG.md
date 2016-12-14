@@ -3,7 +3,9 @@
 # 0.0.6 (2016-12-14)
 
 * Fix approach to timezone info preservation (previously, it was clear bug, emerging from
-  false believing of how `Time.mktime` works).
+  false believing of how `Time.mktime` works). Thanks, @wojtha, for pointing to the problem.
+* Add `#each` and `Enumerable` to `Sequence` (no idea why it wasn't done from the very
+  beginning). Again: thanks, @wojtha!
 
 # 0.0.5 (2016-06-25)
 

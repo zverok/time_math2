@@ -230,25 +230,24 @@ module TimeMath
       end
     end
 
-    # Creates an array of time unit starts between from and to. They will
-    # have same granularity as from (e.g. if unit is day and from is
-    # 2016-05-01 13:30, each of return values will be next day at 13:30),
-    # unless sequence is not set to floor values.
-    #
-    # @return [Array<Time or DateTime>]
-    def to_a
-      seq = []
+   # Enumerates time unit between `from` and `to`. They will have same granularity as from
+   # (e.g. if `unit` is day and from is 2016-05-01 13:30, each of return values will be next
+   # day at 13:30), unless sequence is not set to floor values.
+   #
+   # @return [Enumerator<Time, or Date, or DateTime>]
+    def each
+      return to_enum(:each) unless block_given?
 
       iter = from
       while iter < to
-        seq << iter
+        yield(op.call(iter))
 
         iter = unit.advance(iter)
       end
-      seq << to unless exclude_end?
-
-      op.call(seq)
+      yield(op.call(to)) unless exclude_end?
     end
+
+    include Enumerable
 
     # Creates an array of pairs (time unit start, time unit end) between
     # from and to.
