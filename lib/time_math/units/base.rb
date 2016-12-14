@@ -222,13 +222,6 @@ module TimeMath
         [m, advance(from, m)]
       end
 
-      # TODO: not components, just start?..
-      # ...and base it on {#range}
-      def period(*components)
-        from = Time.local(*components)
-        Period.new(from, advance(from))
-      end
-
       # Creates {Sequence} instance for producing all time units between
       # from and too. See {Sequence} class documentation for available
       # options and functionality.

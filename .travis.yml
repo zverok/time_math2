@@ -7,17 +7,15 @@ rvm:
   - "2.2"
   - "2.3.0"
   - jruby-19mode
+  - jruby-9.1.6.0
   - rbx-2
 matrix:
   # Doesn't play well with Rubocop
   # ...and have utterly strange ideas about timezone preservation
   allow_failures:
     - rvm: rbx-2
-    - rvm: jruby-19mode
 install:
   - bundle install --retry=3
-before_script:
-  - export TZ=Europe/Kiev
 script:
   - bundle exec rspec
   - bundle exec rubocop
