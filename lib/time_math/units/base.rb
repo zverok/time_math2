@@ -300,58 +300,16 @@ module TimeMath
         "#<#{self.class}>"
       end
 
-      protected
-
-      # all except :week
-      NATURAL_UNITS = [:year, :month, :day, :hour, :min, :sec].freeze
-      EMPTY_VALUES = [nil, 1, 1, 0, 0, 0].freeze
+      private
 
       def index
-        NATURAL_UNITS.index(name) or
+        Util::NATURAL_UNITS.index(name) or
           raise NotImplementedError, "Can not be used for #{name}"
       end
 
-      def generate(tm, replacements = {})
-        hash_to_tm(tm, tm_to_hash(tm).merge(replacements))
-      end
-
-      def tm_to_hash(tm)
-        Hash[*NATURAL_UNITS.flat_map { |s| [s, tm.send(s)] }]
-      end
-
-      def hash_to_tm(origin, hash)
-        components = NATURAL_UNITS.map { |s| hash[s] || 0 }
-        new_from_components(origin, *components)
-      end
-
-      def new_from_components(origin, *components)
-        components = EMPTY_VALUES.zip(components).map { |d, c| c || d }
-        case origin
-        when Time
-          Time.new(*components, origin.utc_offset)
-        when DateTime
-          DateTime.new(*components, origin.zone)
-        when Date
-          Date.new(*components.first(3))
-        else
-          raise ArgumentError, "Expected Time, Date or DateTime, got #{origin.class}"
-        end
-      end
-
-      def to_components(tm)
-        case tm
-        when Time, DateTime
-          [tm.year, tm.month, tm.day, tm.hour, tm.min, tm.sec]
-        when Date
-          [tm.year, tm.month, tm.day]
-        else
-          raise ArgumentError, "Expected Time, Date or DateTime, got #{tm.class}"
-        end
-      end
-
       def floor_1(tm)
-        components = to_components(tm).first(index + 1)
-        new_from_components(tm, *components)
+        components = Util.tm_to_array(tm).first(index + 1)
+        Util.array_to_tm(tm, *components)
       end
 
       def float_fix(tm, floored, float_span_part)

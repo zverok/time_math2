@@ -17,16 +17,16 @@ module TimeMath
       protected
 
       def _succ(tm)
-        return generate(tm, year: tm.year + 1, month: 1) if tm.month == 12
+        return Util.merge(tm, year: tm.year + 1, month: 1) if tm.month == 12
 
-        t = generate(tm, month: tm.month + 1)
+        t = Util.merge(tm, month: tm.month + 1)
         fix_month(t, t.month + 1)
       end
 
       def _prev(tm)
-        return generate(tm, year: tm.year - 1, month: 12) if tm.month == 1
+        return Util.merge(tm, year: tm.year - 1, month: 12) if tm.month == 1
 
-        t = generate(tm, month: tm.month - 1)
+        t = Util.merge(tm, month: tm.month - 1)
         fix_month(t, t.month - 1)
       end
 
