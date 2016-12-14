@@ -230,11 +230,11 @@ module TimeMath
       end
     end
 
-   # Enumerates time unit between `from` and `to`. They will have same granularity as from
-   # (e.g. if `unit` is day and from is 2016-05-01 13:30, each of return values will be next
-   # day at 13:30), unless sequence is not set to floor values.
-   #
-   # @return [Enumerator<Time, or Date, or DateTime>]
+    # Enumerates time unit between `from` and `to`. They will have same granularity as from
+    # (e.g. if `unit` is day and from is 2016-05-01 13:30, each of return values will be next
+    # day at 13:30), unless sequence is not set to floor values.
+    #
+    # @return [Enumerator<Time, or Date, or DateTime>]
     def each
       return to_enum(:each) unless block_given?
 
