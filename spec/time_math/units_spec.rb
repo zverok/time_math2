@@ -380,6 +380,13 @@ describe TimeMath::Units::Base do
     end
   end
 
+  describe '#period' do
+    let(:unit) { TimeMath.day }
+    subject { unit.period(2016, 5, 1) }
+
+    it { is_expected.to eq TimeMath::Period.new(Time.local(2016, 5, 1), Time.local(2016, 5, 2)) }
+  end
+
   describe '#resample' do
     let(:unit) { TimeMath.day }
 
@@ -446,6 +453,18 @@ describe TimeMath::Units::Base do
 
   # TODO: edge cases:
   # * monthes decr/incr, including leap years
+
+  describe 'Preserve time offset' do
+    let(:tm) { Time.parse('2016-06-01 14:30 +08') }
+    let(:day) { TimeMath.day }
+
+    it 'preserves time offset always' do
+      expect(day.floor(tm)).to eq(Time.parse('2016-06-01 00:00 +08')).and(have_attributes(gmt_offset: 8 * 3600))
+      expect(day.ceil(tm)).to eq(Time.parse('2016-06-02 00:00 +08')).and(have_attributes(gmt_offset: 8 * 3600))
+      expect(day.advance(tm)).to eq(Time.parse('2016-06-02 14:30 +08')).and(have_attributes(gmt_offset: 8 * 3600))
+      expect(day.decrease(tm)).to eq(Time.parse('2016-05-31 14:30 +08')).and(have_attributes(gmt_offset: 8 * 3600))
+    end
+  end
 
   describe 'Edge case: DST' do
     # form with guaranteed DST:

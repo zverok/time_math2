@@ -222,6 +222,13 @@ module TimeMath
         [m, advance(from, m)]
       end
 
+      # TODO: not components, just start?..
+      # ...and base it on {#range}
+      def period(*components)
+        from = Time.local(*components)
+        Period.new(from, advance(from))
+      end
+
       # Creates {Sequence} instance for producing all time units between
       # from and too. See {Sequence} class documentation for available
       # options and functionality.
@@ -328,8 +335,7 @@ module TimeMath
         components = EMPTY_VALUES.zip(components).map { |d, c| c || d }
         case origin
         when Time
-          res = Time.mktime(*components.reverse, nil, nil, nil, origin.zone)
-          fix_no_zone(res, origin, *components)
+          Time.new(*components, origin.utc_offset)
         when DateTime
           DateTime.new(*components, origin.zone)
         when Date
@@ -361,16 +367,6 @@ module TimeMath
         else
           float_floored = advance(floored, float_span_part)
           float_floored > tm ? floored : float_floored
-        end
-      end
-
-      def fix_no_zone(tm, origin, *components)
-        if origin.zone != 'UTC' && tm.zone == 'UTC'
-          # Fixes things like this one: https://github.com/jruby/jruby/issues/3978
-          # ...by falling back to use of UTC offset instead of timezone abbr
-          Time.new(*components, origin.utc_offset)
-        else
-          tm
         end
       end
     end
