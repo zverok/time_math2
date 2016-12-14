@@ -1,5 +1,10 @@
 # TimeMath Changelog
 
+# 0.0.6 (2016-12-14)
+
+* Fix approach to timezone info preservation (previously, it was clear bug, emerging from
+  false believing of how `Time.mktime` works).
+
 # 0.0.5 (2016-06-25)
 
 * Add support for `Date`;
