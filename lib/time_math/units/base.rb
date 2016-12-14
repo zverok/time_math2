@@ -46,8 +46,8 @@ module TimeMath
       # @param tm [Time,Date,DateTime] time value to floor.
       # @param span [Numeric] how many units to floor to. For units
       #   less than week supports float/rational values.
-      # @return [Time,Date,DateTime] floored time value; class and timezone
-      #   info of origin would be preserved.
+      # @return [Time,Date,DateTime] floored time value; class and timezone offset of origin
+      #   would be preserved.
       def floor(tm, span = 1)
         int_floor = advance(floor_1(tm), (tm.send(name) / span.to_f).floor * span - tm.send(name))
         float_fix(tm, int_floor, span % 1)
@@ -61,7 +61,7 @@ module TimeMath
       # @param tm [Time,Date,DateTime] time value to ceil.
       # @param span [Numeric] how many units to ceil to. For units
       #   less than week supports float/rational values.
-      # @return [Time,Date,DateTime] ceiled time value; class and timezone info
+      # @return [Time,Date,DateTime] ceiled time value; class and timezone offset
       #   of origin would be preserved.
       def ceil(tm, span = 1)
         f = floor(tm, span)
@@ -78,7 +78,7 @@ module TimeMath
       # @param tm [Time,Date,DateTime] time value to round.
       # @param span [Numeric] how many units to round to. For units
       #   less than week supports float/rational values.
-      # @return [Time,Date,DateTime] rounded time value; class and timezone info
+      # @return [Time,Date,DateTime] rounded time value; class and timezone offset
       #   of origin would be preserved.
       def round(tm, span = 1)
         f, c = floor(tm, span), ceil(tm, span)
@@ -95,7 +95,7 @@ module TimeMath
       # @param tm [Time,Date,DateTime] time value to calculate prev on.
       # @param span [Numeric] how many units to floor to. For units
       #   less than week supports float/rational values.
-      # @return [Time,Date,DateTime] prev time value; class and timezone info
+      # @return [Time,Date,DateTime] prev time value; class and timezone offset
       #   of origin would be preserved.
       def prev(tm, span = 1)
         f = floor(tm, span)
@@ -111,7 +111,7 @@ module TimeMath
       # @param tm [Time,Date,DateTime] time value to calculate next on.
       # @param span [Numeric] how many units to ceil to. For units
       #   less than week supports float/rational values.
-      # @return [Time,Date,DateTime] next time value; class and timezone info
+      # @return [Time,Date,DateTime] next time value; class and timezone offset
       #   of origin would be preserved.
       def next(tm, span = 1)
         c = ceil(tm, span)
@@ -134,7 +134,7 @@ module TimeMath
       # @param amount [Numeric] how many units forward to go. For units
       #   less than week supports float/rational values.
       #
-      # @return [Time,Date,DateTime] advanced time value; class and timezone info
+      # @return [Time,Date,DateTime] advanced time value; class and timezone offset
       #   of origin would be preserved.
       def advance(tm, amount = 1)
         return decrease(tm, -amount) if amount < 0
@@ -147,7 +147,7 @@ module TimeMath
       # @param amount [Integer] how many units forward to go. For units
       #   less than week supports float/rational values.
       #
-      # @return [Time,Date,DateTime] decrease time value; class and timezone info
+      # @return [Time,Date,DateTime] decrease time value; class and timezone offset
       #   of origin would be preserved.
       def decrease(tm, amount = 1)
         return advance(tm, -amount) if amount < 0

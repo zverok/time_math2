@@ -35,7 +35,7 @@ Rails or without it, for any purpose.
 * No monkey-patching of core classes (now **strict**; previously existing opt-in
   core ext removed in 0.0.5);
 * Works with Time, Date and DateTime;
-* Accurately preserves timezone info;
+* Accurately preserves timezone offset;
 * Simple arithmetics: floor/ceil/round to any time unit (second, hour, year
   or whatnot), advance/decrease by any unit;
 * Chainable [operations](#set-of-operations-as-a-value-object), including
@@ -306,12 +306,7 @@ it means:
 
 ## Compatibility notes
 
-TimeMath is known to work on MRI Ruby >= 1.9.
-
-On JRuby it works, too, though there could be _slightly_ unexpected results,
-when JRuby fails to create time by timezone name (see [bug](https://github.com/jruby/jruby/issues/3978)).
-TimeMath in this case fallbacks to the same solution that used for `DateTime`,
-and at least preserves utc offset.
+TimeMath is known to work on MRI Ruby >= 2.0 and JRuby >= 9.0.0.0.
 
 On Rubinius, some of tests fail and I haven't time to investigate it. If
 somebody still uses Rubinius and wants TimeMath to be working properly
