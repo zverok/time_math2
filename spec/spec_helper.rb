@@ -52,3 +52,9 @@ def limit_units(values, time_class)
     raise ArgumentError, "Can't limit steps for #{values}"
   end
 end
+
+# Ruby prior to 2.2 couldn't parse offsets in time
+def Time.parse(str)
+  dt = DateTime.parse(str)
+  Time.new(dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec + dt.sec_fraction, 3600 * 24 * dt.offset)
+end

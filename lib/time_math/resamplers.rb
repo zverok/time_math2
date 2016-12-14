@@ -62,7 +62,7 @@ module TimeMath
 
       sequence.ranges.map do |r|
         values = @hash.select { |k, _| r.cover?(k) }.map(&:last)
-        values = block.call(values) if block # rubocop:disable Performance/RedundantBlockCall
+        values = block.call(values) if block
         [r.begin, values]
       end.to_h
     end

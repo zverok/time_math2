@@ -11,7 +11,7 @@ module TimeMath
           raise NotImplementedError, 'For now, week only can floor to one'
 
         f = TimeMath.day.floor(tm)
-        extra_days = tm.wday == 0 ? 6 : tm.wday - 1
+        extra_days = tm.wday.zero? ? 6 : tm.wday - 1
         TimeMath.day.decrease(f, extra_days)
       end
 
