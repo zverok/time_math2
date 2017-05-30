@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 module TimeMath
   # @private
   module Measure

@@ -33,7 +33,7 @@ module TimeMath
   # Note that Op also plays well with {Sequence} (see its docs for more).
   class Op
     # @private
-    OPERATIONS = [:floor, :ceil, :round, :next, :prev, :advance, :decrease].freeze
+    OPERATIONS = %i[floor ceil round next prev advance decrease].freeze
 
     attr_reader :operations, :arguments
 

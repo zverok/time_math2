@@ -5,6 +5,9 @@ AllCops:
     - 'spec/*'
     - 'spec/**/*'
     - 'vendor/**/*'
+    - Gemfile
+    - Rakefile
+    - '*.gemspec'
   DisplayCopNames: true
 
 Metrics/LineLength:

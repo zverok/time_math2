@@ -2,7 +2,7 @@ module TimeMath
   # @private
   module Util
     # all except :week
-    NATURAL_UNITS = [:year, :month, :day, :hour, :min, :sec].freeze
+    NATURAL_UNITS = %i[year month day hour min sec].freeze
     EMPTY_VALUES = [nil, 1, 1, 0, 0, 0].freeze
 
     module_function
