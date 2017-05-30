@@ -446,6 +446,13 @@ describe TimeMath::Units::Base do
 
   # TODO: edge cases:
   # * monthes decr/incr, including leap years
+  describe 'edge cases' do
+    specify 'advance over month end' do
+      expect(TimeMath.month.advance(DateTime.new(2017, 5, 29), 9)).to eq DateTime.new(2018, 2, 28)
+      expect(TimeMath.month.advance(Time.new(2017, 5, 29), 10)).to eq Time.new(2018, 3, 29)
+    end
+  end
+
 
   describe 'Preserve time offset' do
     let(:tm) { Time.parse('2016-06-01 14:30 +08') }

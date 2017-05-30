@@ -16,32 +16,15 @@ module TimeMath
 
       protected
 
-      def _succ(tm)
-        return Util.merge(tm, year: tm.year + 1, month: 1) if tm.month == 12
-
-        t = Util.merge(tm, month: tm.month + 1)
-        fix_month(t, t.month + 1)
-      end
-
-      def _prev(tm)
-        return Util.merge(tm, year: tm.year - 1, month: 12) if tm.month == 1
-
-        t = Util.merge(tm, month: tm.month - 1)
-        fix_month(t, t.month - 1)
-      end
-
       def _advance(tm, steps)
-        steps.to_i.times.inject(tm) { |t| _succ(t) }
+        target = tm.month + steps
+        m = (target - 1) % 12 + 1
+        dy = (target - 1) / 12
+        Util.merge(tm, year: tm.year + dy, month: m)
       end
 
       def _decrease(tm, steps)
-        steps.to_i.times.inject(tm) { |t| _prev(t) }
-      end
-
-      # fix for too far advance/insufficient decrease:
-      #  Time.new(2013,2,31) #=> 2013-03-02 00:00:00 +0200
-      def fix_month(t, expected)
-        t.month == expected ? day.decrease(t, t.day) : t
+        _advance(tm, -steps)
       end
     end
   end
