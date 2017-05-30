@@ -1,5 +1,9 @@
 # TimeMath Changelog
 
+# 0.0.7 (2017-05-31)
+
+* Fix month advancing/decreasing. Thanks @dikond for pointing to problem!
+
 # 0.0.6 (2016-12-14)
 
 * Fix approach to timezone info preservation (previously, it was clear bug, emerging from
