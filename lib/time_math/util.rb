@@ -17,7 +17,7 @@ module TimeMath
 
     def array_to_tm(origin, *components)
       components = EMPTY_VALUES.zip(components).map { |d, c| c || d }
-      fix_month(components)
+      fix_month_day(components)
 
       case origin
       when Time
@@ -53,7 +53,7 @@ module TimeMath
 
     DAYS_IN_MONTH = [nil, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31].freeze
 
-    def fix_month(components)
+    def fix_month_day(components)
       return if components[2].nil? || components[1].nil?
       days_in_month =
         if components[1] == 2 && components[0] && Date.gregorian_leap?(components[0])
