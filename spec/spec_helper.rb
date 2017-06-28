@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'simplecov'
 require 'coveralls'
 require 'rspec/its'
@@ -8,7 +9,7 @@ Coveralls.wear!
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(
   [SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter]
+   Coveralls::SimpleCov::Formatter]
 )
 
 SimpleCov.start do
@@ -16,7 +17,7 @@ SimpleCov.start do
   # minimum_coverage_by_file 95 -- coveralls & JRuby doesn't play really well together
 end
 
-$:.unshift 'lib'
+$LOAD_PATH.unshift 'lib'
 require 'time_math'
 
 def load_fixture(name, time_class = nil)
@@ -33,21 +34,21 @@ def load_fixture(name, time_class = nil)
   res
 end
 
-NON_DATE_STEPS = [:hour, :min, :sec]
+NON_DATE_STEPS = %i[hour min sec].freeze
 
 def limit_units(values, time_class)
   return values unless time_class == Date
   case values
   when Array
-    if values.all?{|v| v.is_a?(Symbol) }
+    if values.all? { |v| v.is_a?(Symbol) }
       values - NON_DATE_STEPS
-    elsif values.all?{|v| v.is_a?(Hash) }
-      values.reject{|v| NON_DATE_STEPS.include?(v[:unit]) }
+    elsif values.all? { |v| v.is_a?(Hash) }
+      values.reject { |v| NON_DATE_STEPS.include?(v[:unit]) }
     else
       values
     end
   when Hash
-    values.reject { |k, v| NON_DATE_STEPS.include?(k) }
+    values.reject { |k, _| NON_DATE_STEPS.include?(k) }
   else
     raise ArgumentError, "Can't limit steps for #{values}"
   end

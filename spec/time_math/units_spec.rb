@@ -9,7 +9,7 @@ describe TimeMath::Units::Base do
         context 'default' do
           fixture = load_fixture(:floor, t)
 
-          let(:source){t.parse(fixture[:source])}
+          let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
             it "should round down to #{step}" do
@@ -21,7 +21,7 @@ describe TimeMath::Units::Base do
         context '#floor(3)' do
           fixture = load_fixture(:floor_3, t)
 
-          let(:source){t.parse(fixture[:source])}
+          let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
             it "should round down to #{step}" do
@@ -33,7 +33,7 @@ describe TimeMath::Units::Base do
         context '#floor(1/2)' do
           fixture = load_fixture(:floor_half, t)
 
-          let(:source){t.parse(fixture[:source])}
+          let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
             it "should round down to #{step}" do
@@ -43,9 +43,9 @@ describe TimeMath::Units::Base do
 
           specify do
             unless t == Date
-              expect(TimeMath.day.floor(t.parse('2016-06-22 11:14'), Rational(1,2)))
+              expect(TimeMath.day.floor(t.parse('2016-06-22 11:14'), Rational(1, 2)))
                 .to eq t.parse('2016-06-22 00:00')
-              expect(TimeMath.day.floor(t.parse('2016-06-22 12:00'), Rational(1,2)))
+              expect(TimeMath.day.floor(t.parse('2016-06-22 12:00'), Rational(1, 2)))
                 .to eq t.parse('2016-06-22 12:00')
             end
           end
@@ -56,7 +56,7 @@ describe TimeMath::Units::Base do
         context 'default' do
           fixture = load_fixture(:ceil, t)
 
-          let(:source){t.parse(fixture[:source])}
+          let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
             it "should round up to #{step}" do
@@ -69,7 +69,7 @@ describe TimeMath::Units::Base do
         context '#ceil(3)' do
           fixture = load_fixture(:ceil_3, t)
 
-          let(:source){t.parse(fixture[:source])}
+          let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
             it "should round up to #{step}" do
@@ -80,7 +80,7 @@ describe TimeMath::Units::Base do
 
         context '#ceil(1/2)' do
           specify do
-            expect(TimeMath.day.ceil(t.parse('2016-06-22 11:14'), Rational(1,2)))
+            expect(TimeMath.day.ceil(t.parse('2016-06-22 11:14'), Rational(1, 2)))
               .to eq t.parse('2016-06-22 12:00')
           end
         end
@@ -88,11 +88,11 @@ describe TimeMath::Units::Base do
 
       describe '#round' do
         context 'default' do
-          let(:ceiled){t.parse('2015-03-01 12:32')}
-          let(:floored){t.parse('2015-03-01 12:22')}
-          let(:edge){t.parse('2015-03-01 12:30')}
+          let(:ceiled) { t.parse('2015-03-01 12:32') }
+          let(:floored) { t.parse('2015-03-01 12:22') }
+          let(:edge) { t.parse('2015-03-01 12:30') }
 
-          let(:unit){u(:hour)}
+          let(:unit) { u(:hour) }
 
           it 'should smart round to ceil or floor' do
             expect(unit.round(ceiled)).to eq unit.ceil(ceiled)
@@ -102,11 +102,11 @@ describe TimeMath::Units::Base do
         end
 
         context '#round(3)' do
-          let(:ceiled){t.parse('2015-03-01 14:32')}
-          let(:floored){t.parse('2015-03-01 12:22')}
-          let(:edge){t.parse('2015-03-01 13:30')}
+          let(:ceiled) { t.parse('2015-03-01 14:32') }
+          let(:floored) { t.parse('2015-03-01 12:22') }
+          let(:edge) { t.parse('2015-03-01 13:30') }
 
-          let(:unit){u(:hour)}
+          let(:unit) { u(:hour) }
 
           it 'should smart round to ceil or floor' do
             expect(unit.round(ceiled, 3)).to eq unit.ceil(ceiled, 3)
@@ -117,10 +117,10 @@ describe TimeMath::Units::Base do
       end
 
       describe '#prev' do
-        let(:floored){t.parse('2015-03-05')}
-        let(:decreased){t.parse('2015-03-01')}
+        let(:floored) { t.parse('2015-03-05') }
+        let(:decreased) { t.parse('2015-03-01') }
 
-        let(:unit){u(:month)}
+        let(:unit) { u(:month) }
 
         it 'smartly calculates previous round' do
           expect(unit.prev(floored)).to eq unit.floor(floored)
@@ -129,10 +129,10 @@ describe TimeMath::Units::Base do
       end
 
       describe '#next' do
-        let(:ceiled){t.parse('2015-03-05')}
-        let(:advanced){t.parse('2015-03-01')}
+        let(:ceiled) { t.parse('2015-03-05') }
+        let(:advanced) { t.parse('2015-03-01') }
 
-        let(:unit){u(:month)}
+        let(:unit) { u(:month) }
 
         it 'smartly calculates next round' do
           expect(unit.next(ceiled)).to eq unit.ceil(ceiled)
@@ -143,7 +143,7 @@ describe TimeMath::Units::Base do
       describe '#advance' do
         context 'one step' do
           fixture = load_fixture(:advance, t)
-          let(:source){t.parse(fixture[:source])}
+          let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
             it "should advance one #{step} exactly" do
@@ -153,29 +153,30 @@ describe TimeMath::Units::Base do
         end
 
         context 'several steps' do
-          let(:tm){t.parse('2015-03-27 11:40:20')}
+          let(:tm) { t.parse('2015-03-27 11:40:20') }
 
-          limit_units([:sec, :min, :hour, :day, :month, :year], t).each do |step|
+          limit_units(%i[sec min hour day month year], t).each do |step|
             [3, 100, 1000].each do |amount|
               context "when advanced #{amount} #{step}s" do
-                let(:unit){u(step)}
-                subject{unit.advance(tm, amount)}
-                let(:correct){amount.times.inject(tm){|tt| unit.advance(tt)}}
+                let(:unit) { u(step) }
+                let(:correct) { amount.times.inject(tm) { |tt| unit.advance(tt) } }
 
-                it{should == correct}
+                subject { unit.advance(tm, amount) }
+
+                it { is_expected.to eq correct }
               end
             end
           end
         end
 
         context 'negative advance' do
-          let(:tm){t.parse('2015-03-27 11:40:20')}
+          let(:tm) { t.parse('2015-03-27 11:40:20') }
 
-          limit_units([:sec, :min, :hour, :day, :month, :year], t).each do |step|
+          limit_units(%i[sec min hour day month year], t).each do |step|
             context "when step=#{step}" do
-              let(:unit){u(step)}
+              let(:unit) { u(step) }
 
-              it "should treat negative advance as decrease" do
+              it 'should treat negative advance as decrease' do
                 expect(unit.advance(tm, -13)).to eq(unit.decrease(tm, 13))
               end
             end
@@ -183,13 +184,13 @@ describe TimeMath::Units::Base do
         end
 
         context 'zero advance' do
-          let(:tm){t.parse('2015-03-27 11:40:20')}
+          let(:tm) { t.parse('2015-03-27 11:40:20') }
 
-          [:sec, :min, :hour, :day, :month, :year].each do |step|
+          %i[sec min hour day month year].each do |step|
             context "when step=#{step}" do
-              let(:unit){u(step)}
+              let(:unit) { u(step) }
 
-              it "should do nothing on zero advance" do
+              it 'should do nothing on zero advance' do
                 expect(unit.advance(tm, 0)).to eq tm
               end
             end
@@ -213,8 +214,8 @@ describe TimeMath::Units::Base do
             expect(u(:month).advance(tm, r)).to eq tm
             expect(u(:year).advance(tm, r)).to eq tm
 
-            expect(u(:month).advance(tm, 1+r)).to eq u(:month).advance(tm, 1)
-            expect(u(:year).advance(tm, 1+r)).to eq u(:year).advance(tm, 1)
+            expect(u(:month).advance(tm, 1 + r)).to eq u(:month).advance(tm, 1)
+            expect(u(:year).advance(tm, 1 + r)).to eq u(:year).advance(tm, 1)
           end
         end
       end
@@ -222,7 +223,7 @@ describe TimeMath::Units::Base do
       describe '#decrease' do
         context 'one step' do
           fixture = load_fixture(:decrease, t)
-          let(:source){t.parse(fixture[:source])}
+          let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
             it "should decrease one #{step} exactly" do
@@ -232,29 +233,30 @@ describe TimeMath::Units::Base do
         end
 
         context 'several steps' do
-          let(:tm){t.parse('2015-03-27 11:40:20')}
+          let(:tm) { t.parse('2015-03-27 11:40:20') }
 
-          limit_units([:sec, :min, :hour, :day, :month, :year], t).each do |step|
+          limit_units(%i[sec min hour day month year], t).each do |step|
             [3, 100, 1000].each do |amount|
               context "when decreased #{amount} #{step}s" do
-                let(:unit){u(step)}
-                subject{unit.decrease(tm, amount)}
-                let(:correct){amount.times.inject(tm){|tt| unit.decrease(tt)}}
+                let(:unit) { u(step) }
+                let(:correct) { amount.times.inject(tm) { |tt| unit.decrease(tt) } }
 
-                it{is_expected.to eq correct}
+                subject { unit.decrease(tm, amount) }
+
+                it { is_expected.to eq correct }
               end
             end
           end
         end
 
         context 'negative decrease' do
-          let(:tm){t.parse('2015-03-27 11:40:20')}
+          let(:tm) { t.parse('2015-03-27 11:40:20') }
 
-          limit_units([:sec, :min, :hour, :day, :month, :year], t).each do |step|
+          limit_units(%i[sec min hour day month year], t).each do |step|
             context "when step=#{step}" do
-              let(:unit){u(step)}
+              let(:unit) { u(step) }
 
-              it "should treat negative decrease as advance" do
+              it 'should treat negative decrease as advance' do
                 expect(unit.decrease(tm, -13)).to eq(unit.advance(tm, 13))
               end
             end
@@ -262,13 +264,13 @@ describe TimeMath::Units::Base do
         end
 
         context 'zero decrease' do
-          let(:tm){t.parse('2015-03-27 11:40:20')}
+          let(:tm) { t.parse('2015-03-27 11:40:20') }
 
-          [:sec, :min, :hour, :day, :month, :year].each do |step|
+          %i[sec min hour day month year].each do |step|
             context "when step=#{step}" do
-              let(:unit){u(step)}
+              let(:unit) { u(step) }
 
-              it "should do nothing on zero decrease" do
+              it 'should do nothing on zero decrease' do
                 expect(unit.decrease(tm, 0)).to eq tm
               end
             end
@@ -277,54 +279,54 @@ describe TimeMath::Units::Base do
       end
 
       describe '#round?' do
-        let(:fixture){load_fixture(:round, t)}
+        let(:fixture) { load_fixture(:round, t) }
 
         it 'should determine, if tm is round to step' do
           fixture.each do |step, vals|
-            expect( u(step).round?(t.parse(vals[:true])) ).to be_truthy
+            expect(u(step).round?(t.parse(vals[:true]))).to be_truthy
 
             next if step == :day && t == Date # always round, you know :)
 
-            expect( u(step).round?(t.parse(vals[:false])) ).to be_falsy
+            expect(u(step).round?(t.parse(vals[:false]))).to be_falsy
           end
         end
       end
 
       describe '#range' do
-        let(:from){Time.now}
+        let(:from) { Time.now }
 
         limit_units(TimeMath::Units.names, t).each do |step|
           context "with step=#{step}" do
-            let(:unit){u(step)}
+            let(:unit) { u(step) }
 
             context 'when single step' do
-              subject{unit.range(from)}
-              it{should == (from...unit.advance(from))}
+              subject { unit.range(from) }
+              it { is_expected.to eq(from...unit.advance(from)) }
             end
 
             context 'when several steps' do
-              subject{unit.range(from, 5)}
-              it{should == (from...unit.advance(from, 5))}
+              subject { unit.range(from, 5) }
+              it { is_expected.to eq(from...unit.advance(from, 5)) }
             end
           end
         end
       end
 
       describe '#range_back' do
-        let(:from){Time.now}
+        let(:from) { Time.now }
 
         limit_units(TimeMath::Units.names, t).each do |step|
           context "with step=#{step}" do
-            let(:unit){u(step)}
+            let(:unit) { u(step) }
 
             context 'when single step' do
-              subject{unit.range_back(from)}
-              it{should == (unit.decrease(from)...from)}
+              subject { unit.range_back(from) }
+              it { is_expected.to eq(unit.decrease(from)...from) }
             end
 
             context 'when several steps' do
-              subject{unit.range_back(from, 5)}
-              it{should == (unit.decrease(from, 5)...from)}
+              subject { unit.range_back(from, 5) }
+              it { is_expected.to eq(unit.decrease(from, 5)...from) }
             end
           end
         end
@@ -335,10 +337,11 @@ describe TimeMath::Units::Base do
 
         fixture.each do |data|
           context data[:unit] do
-            let(:unit){u(data[:unit])}
-            let(:from){t.parse(data[:from])}
-            let(:to){t.parse(data[:to])}
-            subject{unit.measure(from, to)}
+            let(:unit) { u(data[:unit]) }
+            let(:from) { t.parse(data[:from]) }
+            let(:to) { t.parse(data[:to]) }
+
+            subject { unit.measure(from, to) }
 
             it { is_expected.to eq data[:val] }
           end
@@ -350,9 +353,9 @@ describe TimeMath::Units::Base do
 
         fixture.each do |data|
           context data[:unit] do
-            let(:unit){u(data[:unit])}
-            let(:from){t.parse(data[:from])}
-            let(:to){t.parse(data[:to])}
+            let(:unit) { u(data[:unit]) }
+            let(:from) { t.parse(data[:from]) }
+            let(:to) { t.parse(data[:to]) }
 
             it 'should measure integer steps between from and to and return reminder' do
               measure, rem = unit.measure_rem(from, to)
@@ -385,6 +388,7 @@ describe TimeMath::Units::Base do
 
     context 'array of time' do
       let(:data) { [Time.parse('2016-06-01'), Time.parse('2016-06-03'), Time.parse('2016-06-05')] }
+
       subject { unit.resample(data) }
 
       it { is_expected.to eq([
@@ -393,7 +397,8 @@ describe TimeMath::Units::Base do
         Time.parse('2016-06-03'),
         Time.parse('2016-06-04'),
         Time.parse('2016-06-05')
-      ])}
+      ])
+      }
     end
 
     context 'hash with time keys' do
@@ -410,7 +415,8 @@ describe TimeMath::Units::Base do
           Time.parse('2016-06-03') => [2],
           Time.parse('2016-06-04') => [],
           Time.parse('2016-06-05') => [3]
-        )}
+        )
+        }
       end
 
       context 'block' do
@@ -422,7 +428,8 @@ describe TimeMath::Units::Base do
           Time.parse('2016-06-03') => 2,
           Time.parse('2016-06-04') => nil,
           Time.parse('2016-06-05') => 3
-        )}
+        )
+        }
       end
 
       context 'symbol' do
@@ -434,12 +441,14 @@ describe TimeMath::Units::Base do
           Time.parse('2016-06-03') => 2,
           Time.parse('2016-06-04') => nil,
           Time.parse('2016-06-05') => 3
-        )}
+        )
+        }
       end
     end
 
     context 'wrong arguments' do
-      let(:data) { [1,2,3] }
+      let(:data) { [1, 2, 3] }
+
       it { expect { unit.resample(data) }.to raise_error(ArgumentError) }
     end
   end
@@ -452,7 +461,6 @@ describe TimeMath::Units::Base do
       expect(TimeMath.month.advance(Time.new(2017, 5, 29), 10)).to eq Time.new(2018, 3, 29)
     end
   end
-
 
   describe 'Preserve time offset' do
     let(:tm) { Time.parse('2016-06-01 14:30 +08') }
@@ -468,6 +476,7 @@ describe TimeMath::Units::Base do
 
   context 'graceful fail' do
     let(:unit) { u(:day) }
+
     it { expect { unit.advance('2016-05-01') }.to raise_error ArgumentError, /got String/ }
   end
 end

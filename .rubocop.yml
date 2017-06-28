@@ -1,9 +1,10 @@
+inherit_from: .rubocop_todo.yml
+require: rubocop-rspec
+
 AllCops:
   Include:
     - 'lib/**/*'
   Exclude:
-    - 'spec/*'
-    - 'spec/**/*'
     - 'vendor/**/*'
     - Gemfile
     - Rakefile
@@ -40,3 +41,9 @@ Style/ParallelAssignment:
 
 Style/BlockDelimiters:
   Enabled: false
+
+RSpec/LeadingSubject:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
