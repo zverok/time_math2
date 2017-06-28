@@ -103,7 +103,7 @@ module TimeMath
     #
     # @param other [Sequence]
     # @return [Boolean]
-    def ==(other)
+    def ==(other) # rubocop:disable Metrics/AbcSize
       self.class == other.class && unit == other.unit &&
         from == other.from && to == other.to &&
         exclude_end? == other.exclude_end? &&

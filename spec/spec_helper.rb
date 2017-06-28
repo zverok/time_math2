@@ -20,7 +20,7 @@ end
 $LOAD_PATH.unshift 'lib'
 require 'time_math'
 
-def load_fixture(name, time_class = nil)
+def load_fixture(name, time_class = nil) # rubocop:disable Metrics/AbcSize
   res = YAML.load(File.read("spec/fixtures/#{name}.yml"))
   return res if time_class != Date
 

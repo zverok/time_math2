@@ -10,6 +10,7 @@ describe TimeMath::Sequence do
       describe 'creation' do
         context 'exclude end' do
           subject(:sequence) { described_class.new(:month, from...to, options) }
+
           its(:from) { is_expected.to eq from }
           its(:to) { is_expected.to eq to }
           its(:exclude_end?) { is_expected.to be_truthy }
@@ -17,6 +18,7 @@ describe TimeMath::Sequence do
 
         context 'include end' do
           subject(:sequence) { described_class.new(:month, from..to, options) }
+
           its(:from) { is_expected.to eq from }
           its(:to) { is_expected.to eq to }
           its(:exclude_end?) { is_expected.to be_falsy }
@@ -27,12 +29,13 @@ describe TimeMath::Sequence do
         its(:inspect) { is_expected.to eq "#<TimeMath::Sequence(:month, #{from}...#{to})>" }
         context 'include end' do
           subject(:sequence) { described_class.new(:month, from..to, options) }
+
           its(:inspect) { is_expected.to eq "#<TimeMath::Sequence(:month, #{from}..#{to})>" }
         end
       end
 
       describe '#==' do
-        it 'should work' do
+        it 'works' do
           expect(sequence).to eq described_class.new(:month, from...to)
           expect(sequence).not_to eq described_class.new(:day, from...to)
           expect(sequence).not_to eq described_class.new(:month, from...to + 1)
@@ -142,6 +145,7 @@ describe TimeMath::Sequence do
 
         describe '#ranges' do
           subject { sequence.ranges }
+
           let(:expected) {
             fixture[:sequence].map { |b, e| (t.parse(b)...t.parse(e)) }
           }

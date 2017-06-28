@@ -29,27 +29,29 @@ describe TimeMath::HashResampler do
     context 'one in group' do
       let(:unit) { :day }
 
-      it { is_expected.to eq(
-        Date.parse('Wed, 01 Jun 2016') => [1],
-        Date.parse('Wed, 02 Jun 2016') => [],
-        Date.parse('Wed, 03 Jun 2016') => [],
-        Date.parse('Wed, 04 Jun 2016') => [],
-        Date.parse('Wed, 05 Jun 2016') => [],
-        Date.parse('Wed, 06 Jun 2016') => [],
-        Date.parse('Tue, 07 Jun 2016') => [3],
-        Date.parse('Wed, 08 Jun 2016') => [],
-        Date.parse('Thu, 09 Jun 2016') => [1]
-      )
+      it {
+        is_expected.to eq(
+          Date.parse('Wed, 01 Jun 2016') => [1],
+          Date.parse('Wed, 02 Jun 2016') => [],
+          Date.parse('Wed, 03 Jun 2016') => [],
+          Date.parse('Wed, 04 Jun 2016') => [],
+          Date.parse('Wed, 05 Jun 2016') => [],
+          Date.parse('Wed, 06 Jun 2016') => [],
+          Date.parse('Tue, 07 Jun 2016') => [3],
+          Date.parse('Wed, 08 Jun 2016') => [],
+          Date.parse('Thu, 09 Jun 2016') => [1]
+        )
       }
     end
 
     context 'several in group' do
       let(:unit) { :week }
 
-      it { is_expected.to eq(
-        Date.parse('Wed, 30 May 2016') => [1],
-        Date.parse('Wed, 06 Jun 2016') => [3, 1]
-      )
+      it {
+        is_expected.to eq(
+          Date.parse('Wed, 30 May 2016') => [1],
+          Date.parse('Wed, 06 Jun 2016') => [3, 1]
+        )
       }
     end
   end
@@ -60,27 +62,29 @@ describe TimeMath::HashResampler do
     context 'one in group' do
       let(:unit) { :day }
 
-      it { is_expected.to eq(
-        Date.parse('Wed, 01 Jun 2016') => 1,
-        Date.parse('Wed, 02 Jun 2016') => nil,
-        Date.parse('Wed, 03 Jun 2016') => nil,
-        Date.parse('Wed, 04 Jun 2016') => nil,
-        Date.parse('Wed, 05 Jun 2016') => nil,
-        Date.parse('Wed, 06 Jun 2016') => nil,
-        Date.parse('Tue, 07 Jun 2016') => 3,
-        Date.parse('Wed, 08 Jun 2016') => nil,
-        Date.parse('Thu, 09 Jun 2016') => 1
-      )
+      it {
+        is_expected.to eq(
+          Date.parse('Wed, 01 Jun 2016') => 1,
+          Date.parse('Wed, 02 Jun 2016') => nil,
+          Date.parse('Wed, 03 Jun 2016') => nil,
+          Date.parse('Wed, 04 Jun 2016') => nil,
+          Date.parse('Wed, 05 Jun 2016') => nil,
+          Date.parse('Wed, 06 Jun 2016') => nil,
+          Date.parse('Tue, 07 Jun 2016') => 3,
+          Date.parse('Wed, 08 Jun 2016') => nil,
+          Date.parse('Thu, 09 Jun 2016') => 1
+        )
       }
     end
 
     context 'several in group' do
       let(:unit) { :week }
 
-      it { is_expected.to eq(
-        Date.parse('Wed, 30 May 2016') => 1,
-        Date.parse('Wed, 06 Jun 2016') => 4
-      )
+      it {
+        is_expected.to eq(
+          Date.parse('Wed, 30 May 2016') => 1,
+          Date.parse('Wed, 06 Jun 2016') => 4
+        )
       }
     end
   end
@@ -91,27 +95,29 @@ describe TimeMath::HashResampler do
     context 'one in group' do
       let(:unit) { :day }
 
-      it { is_expected.to eq(
-        Date.parse('Wed, 01 Jun 2016') => 1,
-        Date.parse('Wed, 02 Jun 2016') => nil,
-        Date.parse('Wed, 03 Jun 2016') => nil,
-        Date.parse('Wed, 04 Jun 2016') => nil,
-        Date.parse('Wed, 05 Jun 2016') => nil,
-        Date.parse('Wed, 06 Jun 2016') => nil,
-        Date.parse('Tue, 07 Jun 2016') => 3,
-        Date.parse('Wed, 08 Jun 2016') => nil,
-        Date.parse('Thu, 09 Jun 2016') => 1
-      )
+      it {
+        is_expected.to eq(
+          Date.parse('Wed, 01 Jun 2016') => 1,
+          Date.parse('Wed, 02 Jun 2016') => nil,
+          Date.parse('Wed, 03 Jun 2016') => nil,
+          Date.parse('Wed, 04 Jun 2016') => nil,
+          Date.parse('Wed, 05 Jun 2016') => nil,
+          Date.parse('Wed, 06 Jun 2016') => nil,
+          Date.parse('Tue, 07 Jun 2016') => 3,
+          Date.parse('Wed, 08 Jun 2016') => nil,
+          Date.parse('Thu, 09 Jun 2016') => 1
+        )
       }
     end
 
     context 'several in group' do
       let(:unit) { :week }
 
-      it { is_expected.to eq(
-        Date.parse('Wed, 30 May 2016') => 1,
-        Date.parse('Wed, 06 Jun 2016') => 3
-      )
+      it {
+        is_expected.to eq(
+          Date.parse('Wed, 30 May 2016') => 1,
+          Date.parse('Wed, 06 Jun 2016') => 3
+        )
       }
     end
   end

@@ -17,6 +17,8 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Max: 12
+  Exclude:
+    - 'spec/**/*'
 
 Metrics/ClassLength:
   Max: 120
@@ -47,3 +49,35 @@ RSpec/LeadingSubject:
 
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 10
+
+RSpec/EmptyExampleGroup:
+  Enabled: false
+
+RSpec/MultipleDescribes:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Max: 5
+
+# RSpec
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+Security/YAMLLoad:
+  Exclude:
+    - 'spec/**/*'

@@ -12,7 +12,7 @@ describe TimeMath::Units::Base do
           let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
-            it "should round down to #{step}" do
+            it "rounds down to #{step}" do
               expect(u(step).floor(source)).to eq t.parse(val)
             end
           end
@@ -24,7 +24,7 @@ describe TimeMath::Units::Base do
           let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
-            it "should round down to #{step}" do
+            it "rounds down to #{step}" do
               expect(u(step).floor(source, 3)).to eq t.parse(val)
             end
           end
@@ -36,7 +36,7 @@ describe TimeMath::Units::Base do
           let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
-            it "should round down to #{step}" do
+            it "rounds down to #{step}" do
               expect(u(step).floor(source, Rational(1, 2))).to eq t.parse(val)
             end
           end
@@ -59,7 +59,7 @@ describe TimeMath::Units::Base do
           let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
-            it "should round up to #{step}" do
+            it "rounds up to #{step}" do
               next if step == :day && t == Date
               expect(u(step).ceil(source)).to eq t.parse(val)
             end
@@ -72,7 +72,7 @@ describe TimeMath::Units::Base do
           let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
-            it "should round up to #{step}" do
+            it "rounds up to #{step}" do
               expect(u(step).ceil(source, 3)).to eq t.parse(val)
             end
           end
@@ -94,7 +94,7 @@ describe TimeMath::Units::Base do
 
           let(:unit) { u(:hour) }
 
-          it 'should smart round to ceil or floor' do
+          it 'smartly rounds to ceil or floor' do
             expect(unit.round(ceiled)).to eq unit.ceil(ceiled)
             expect(unit.round(floored)).to eq unit.floor(floored)
             expect(unit.round(edge)).to eq unit.ceil(edge)
@@ -108,7 +108,7 @@ describe TimeMath::Units::Base do
 
           let(:unit) { u(:hour) }
 
-          it 'should smart round to ceil or floor' do
+          it 'smartly rounds to ceil or floor' do
             expect(unit.round(ceiled, 3)).to eq unit.ceil(ceiled, 3)
             expect(unit.round(floored, 3)).to eq unit.floor(floored, 3)
             expect(unit.round(edge, 3)).to eq unit.ceil(edge, 3)
@@ -146,7 +146,7 @@ describe TimeMath::Units::Base do
           let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
-            it "should advance one #{step} exactly" do
+            it "advances one #{step} exactly" do
               expect(u(step).advance(source)).to eq t.parse(val)
             end
           end
@@ -176,7 +176,7 @@ describe TimeMath::Units::Base do
             context "when step=#{step}" do
               let(:unit) { u(step) }
 
-              it 'should treat negative advance as decrease' do
+              it 'treats negative advance as decrease' do
                 expect(unit.advance(tm, -13)).to eq(unit.decrease(tm, 13))
               end
             end
@@ -190,7 +190,7 @@ describe TimeMath::Units::Base do
             context "when step=#{step}" do
               let(:unit) { u(step) }
 
-              it 'should do nothing on zero advance' do
+              it 'does nothing on zero advance' do
                 expect(unit.advance(tm, 0)).to eq tm
               end
             end
@@ -226,7 +226,7 @@ describe TimeMath::Units::Base do
           let(:source) { t.parse(fixture[:source]) }
 
           fixture[:targets].each do |step, val|
-            it "should decrease one #{step} exactly" do
+            it "decreases one #{step} exactly" do
               expect(u(step).decrease(source)).to eq t.parse(val)
             end
           end
@@ -256,7 +256,7 @@ describe TimeMath::Units::Base do
             context "when step=#{step}" do
               let(:unit) { u(step) }
 
-              it 'should treat negative decrease as advance' do
+              it 'treats negative decrease as advance' do
                 expect(unit.decrease(tm, -13)).to eq(unit.advance(tm, 13))
               end
             end
@@ -270,7 +270,7 @@ describe TimeMath::Units::Base do
             context "when step=#{step}" do
               let(:unit) { u(step) }
 
-              it 'should do nothing on zero decrease' do
+              it 'does nothing on zero decrease' do
                 expect(unit.decrease(tm, 0)).to eq tm
               end
             end
@@ -281,7 +281,7 @@ describe TimeMath::Units::Base do
       describe '#round?' do
         let(:fixture) { load_fixture(:round, t) }
 
-        it 'should determine, if tm is round to step' do
+        it 'determines if tm is round to step' do
           fixture.each do |step, vals|
             expect(u(step).round?(t.parse(vals[:true]))).to be_truthy
 
@@ -301,11 +301,13 @@ describe TimeMath::Units::Base do
 
             context 'when single step' do
               subject { unit.range(from) }
+
               it { is_expected.to eq(from...unit.advance(from)) }
             end
 
             context 'when several steps' do
               subject { unit.range(from, 5) }
+
               it { is_expected.to eq(from...unit.advance(from, 5)) }
             end
           end
@@ -321,11 +323,13 @@ describe TimeMath::Units::Base do
 
             context 'when single step' do
               subject { unit.range_back(from) }
+
               it { is_expected.to eq(unit.decrease(from)...from) }
             end
 
             context 'when several steps' do
               subject { unit.range_back(from, 5) }
+
               it { is_expected.to eq(unit.decrease(from, 5)...from) }
             end
           end
@@ -357,7 +361,7 @@ describe TimeMath::Units::Base do
             let(:from) { t.parse(data[:from]) }
             let(:to) { t.parse(data[:to]) }
 
-            it 'should measure integer steps between from and to and return reminder' do
+            it 'measures integer steps between from and to and return reminder' do
               measure, rem = unit.measure_rem(from, to)
 
               expected_rem = unit.advance(from, measure)
@@ -376,6 +380,7 @@ describe TimeMath::Units::Base do
         limit_units(TimeMath.units, t).each do |unit|
           context "with #{unit}" do
             subject { u(unit).sequence(from...to) }
+
             it { is_expected.to eq TimeMath::Sequence.new(unit, from...to) }
           end
         end
@@ -391,57 +396,62 @@ describe TimeMath::Units::Base do
 
       subject { unit.resample(data) }
 
-      it { is_expected.to eq([
-        Time.parse('2016-06-01'),
-        Time.parse('2016-06-02'),
-        Time.parse('2016-06-03'),
-        Time.parse('2016-06-04'),
-        Time.parse('2016-06-05')
-      ])
+      it {
+        is_expected.to eq([
+                            Time.parse('2016-06-01'),
+                            Time.parse('2016-06-02'),
+                            Time.parse('2016-06-03'),
+                            Time.parse('2016-06-04'),
+                            Time.parse('2016-06-05')
+                          ])
       }
     end
 
     context 'hash with time keys' do
-      let(:data) { {
-        Time.parse('2016-06-01') => 1, Time.parse('2016-06-03') => 2, Time.parse('2016-06-05') => 3
-      } }
+      let(:data) {
+        {
+          Time.parse('2016-06-01') => 1, Time.parse('2016-06-03') => 2, Time.parse('2016-06-05') => 3
+        } }
 
       context 'no block' do
         subject { unit.resample(data) }
 
-        it { is_expected.to eq(
-          Time.parse('2016-06-01') => [1],
-          Time.parse('2016-06-02') => [],
-          Time.parse('2016-06-03') => [2],
-          Time.parse('2016-06-04') => [],
-          Time.parse('2016-06-05') => [3]
-        )
+        it {
+          is_expected.to eq(
+            Time.parse('2016-06-01') => [1],
+            Time.parse('2016-06-02') => [],
+            Time.parse('2016-06-03') => [2],
+            Time.parse('2016-06-04') => [],
+            Time.parse('2016-06-05') => [3]
+          )
         }
       end
 
       context 'block' do
         subject { unit.resample(data, &:first) }
 
-        it { is_expected.to eq(
-          Time.parse('2016-06-01') => 1,
-          Time.parse('2016-06-02') => nil,
-          Time.parse('2016-06-03') => 2,
-          Time.parse('2016-06-04') => nil,
-          Time.parse('2016-06-05') => 3
-        )
+        it {
+          is_expected.to eq(
+            Time.parse('2016-06-01') => 1,
+            Time.parse('2016-06-02') => nil,
+            Time.parse('2016-06-03') => 2,
+            Time.parse('2016-06-04') => nil,
+            Time.parse('2016-06-05') => 3
+          )
         }
       end
 
       context 'symbol' do
         subject { unit.resample(data, :first) }
 
-        it { is_expected.to eq(
-          Time.parse('2016-06-01') => 1,
-          Time.parse('2016-06-02') => nil,
-          Time.parse('2016-06-03') => 2,
-          Time.parse('2016-06-04') => nil,
-          Time.parse('2016-06-05') => 3
-        )
+        it {
+          is_expected.to eq(
+            Time.parse('2016-06-01') => 1,
+            Time.parse('2016-06-02') => nil,
+            Time.parse('2016-06-03') => 2,
+            Time.parse('2016-06-04') => nil,
+            Time.parse('2016-06-05') => 3
+          )
         }
       end
     end
