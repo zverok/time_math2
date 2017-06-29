@@ -6,11 +6,11 @@ module TimeMath
         sz * MULTIPLIERS[index..-1].inject(:*)
       end
 
-      def measure(from, to)
+      protected
+
+      def _measure(from, to)
         ((to.to_time - from.to_time) / to_seconds).to_i
       end
-
-      protected
 
       def _advance(tm, steps)
         _shift(tm, to_seconds(steps))
