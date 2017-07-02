@@ -1,5 +1,12 @@
 # TimeMath Changelog
 
+# 0.0.8 (2017-06-02)
+
+* Fix `Units::Base#measure` to correctly measure negative distances (e.g. from > to, thanks @kenn for
+  pointing it);
+* Cleanup the same method to work correctly with sub-second precisions and different Time-y types.
+* Drop Ruby 2.0 support, finally.
+
 # 0.0.7 (2017-05-31)
 
 * Fix month advancing/decreasing. Thanks @dikond for pointing to problem!
