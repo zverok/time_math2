@@ -195,9 +195,9 @@ module TimeMath
       #
       # @return [Integer] how many full units are inside the period.
       # :nocov:
-      def measure(from, to) # rubocop:disable Lint/UnusedMethodArgument
-        raise NotImplementedError,
-              '#measure should be implemented in subclasses'
+      def measure(from, to)
+        from, to = from.to_time, to.to_time unless from.class == to.class
+        from <= to ? _measure(from, to) : -_measure(to, from)
       end
       # :nocov:
 

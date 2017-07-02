@@ -8,3 +8,4 @@ coverage
 .coveralls.yml
 .yardoc
 doc
+tmp

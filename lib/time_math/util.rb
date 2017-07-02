@@ -1,8 +1,8 @@
 module TimeMath
   # @private
   module Util
-    # all except :week
-    NATURAL_UNITS = %i[year month day hour min sec].freeze
+    COMMON_UNITS = %i[year month day hour min sec].freeze
+    NATURAL_UNITS = [*COMMON_UNITS, :subsec].freeze
     EMPTY_VALUES = [nil, 1, 1, 0, 0, 0].freeze
 
     module_function
@@ -43,11 +43,12 @@ module TimeMath
     end
 
     def tm_to_hash(tm)
-      Hash[*NATURAL_UNITS.flat_map { |s| [s, tm.send(s)] }]
+      NATURAL_UNITS.map { |s| [s, extract_component(tm, s)] }.to_h
     end
 
     def hash_to_tm(origin, hash)
-      components = NATURAL_UNITS.map { |s| hash[s] || 0 }
+      components = NATURAL_UNITS[0..-2].map { |s| hash[s] || 0 }
+      components[-1] += (hash[:subsec] || hash[:sec_fraction] || 0)
       array_to_tm(origin, *components)
     end
 
@@ -62,6 +63,19 @@ module TimeMath
           DAYS_IN_MONTH[components[1]]
         end
       components[2] = [components[2], days_in_month].min
+    end
+
+    private
+
+    module_function
+
+    def extract_component(tm, component)
+      case component
+      when :subsec, :sec_fraction
+        tm.is_a?(Time) ? tm.subsec : tm.send(:sec_fraction)
+      when *COMMON_UNITS
+        tm.send(component)
+      end
     end
   end
 end

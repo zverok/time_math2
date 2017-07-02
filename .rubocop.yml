@@ -1,9 +1,10 @@
+inherit_from: .rubocop_todo.yml
+require: rubocop-rspec
+
 AllCops:
   Include:
     - 'lib/**/*'
   Exclude:
-    - 'spec/*'
-    - 'spec/**/*'
     - 'vendor/**/*'
     - Gemfile
     - Rakefile
@@ -16,6 +17,8 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Max: 12
+  Exclude:
+    - 'spec/**/*'
 
 Metrics/ClassLength:
   Max: 120
@@ -40,3 +43,41 @@ Style/ParallelAssignment:
 
 Style/BlockDelimiters:
   Enabled: false
+
+RSpec/LeadingSubject:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 10
+
+RSpec/EmptyExampleGroup:
+  Enabled: false
+
+RSpec/MultipleDescribes:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Max: 5
+
+# RSpec
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+Security/YAMLLoad:
+  Exclude:
+    - 'spec/**/*'
