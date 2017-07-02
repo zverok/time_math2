@@ -43,7 +43,7 @@ module TimeMath
     end
 
     def tm_to_hash(tm)
-      Hash[*NATURAL_UNITS.flat_map { |s| [s, extract_component(tm, s)] }]
+      NATURAL_UNITS.map { |s| [s, extract_component(tm, s)] }.to_h
     end
 
     def hash_to_tm(origin, hash)
