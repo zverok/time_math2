@@ -488,6 +488,16 @@ describe TimeMath::Units::Base do
     end
   end
 
+  describe 'type compatibility' do
+    let(:t) { Time.parse('2017-05-01 17:30') }
+    let(:d) { Date.parse('2017-06-15') }
+    let(:dt) { DateTime.parse('2017-03-10 15:40') }
+
+    it { expect(TimeMath.month.measure(t, d)).to eq 1 }
+    it { expect(TimeMath.month.measure(t, dt)).to eq(-1) }
+    it { expect(TimeMath.month.measure(d, dt)).to eq(-3) }
+  end
+
   describe 'Preserve time offset' do
     let(:tm) { Time.parse('2016-06-01 14:30 +08') }
     let(:day) { TimeMath.day }
