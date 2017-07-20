@@ -2,76 +2,38 @@ describe TimeMath::Sequence do
   [Time, Date, DateTime].each do |t|
     describe "with #{t}" do
       let(:from) { t.parse('2014-03-10') }
+      let(:floor_from) { TimeMath.month.floor(from) }
       let(:to) { t.parse('2014-11-10') }
-      let(:options) { {} }
+      let(:floor_to) { TimeMath.month.floor(to) }
+      let(:ceil_to) { TimeMath.month.ceil(to) }
 
-      subject(:sequence) { described_class.new(:month, from...to, options) }
+      subject(:sequence) { described_class.new(:month, from...to) }
 
       describe 'creation' do
         context 'exclude end' do
-          subject(:sequence) { described_class.new(:month, from...to, options) }
-
-          its(:from) { is_expected.to eq from }
-          its(:to) { is_expected.to eq to }
-          its(:exclude_end?) { is_expected.to be_truthy }
+          its(:from) { is_expected.to eq floor_from }
+          its(:to) { is_expected.to eq floor_to }
         end
 
         context 'include end' do
-          subject(:sequence) { described_class.new(:month, from..to, options) }
+          subject(:sequence) { described_class.new(:month, from..to) }
 
-          its(:from) { is_expected.to eq from }
-          its(:to) { is_expected.to eq to }
-          its(:exclude_end?) { is_expected.to be_falsy }
+          its(:from) { is_expected.to eq floor_from }
+          its(:to) { is_expected.to eq ceil_to }
         end
       end
 
       describe '#inspect' do
-        its(:inspect) { is_expected.to eq "#<TimeMath::Sequence(:month, #{from}...#{to})>" }
-        context 'include end' do
-          subject(:sequence) { described_class.new(:month, from..to, options) }
-
-          its(:inspect) { is_expected.to eq "#<TimeMath::Sequence(:month, #{from}..#{to})>" }
-        end
+        its(:inspect) { is_expected.to eq "#<TimeMath::Sequence month (#{floor_from} - #{floor_to})>" }
       end
 
       describe '#==' do
         it 'works' do
           expect(sequence).to eq described_class.new(:month, from...to)
           expect(sequence).not_to eq described_class.new(:day, from...to)
-          expect(sequence).not_to eq described_class.new(:month, from...to + 1)
-          expect(sequence).not_to eq described_class.new(:month, from..to)
+          expect(sequence).not_to eq described_class.new(:month, from...TimeMath.month.advance(to))
           expect(sequence.advance(:min)).not_to eq sequence
         end
-      end
-
-      describe '#expand!' do
-        before { sequence.expand! }
-
-        its(:from) { is_expected.to eq TimeMath.month.floor(from) }
-        its(:to) { is_expected.to eq TimeMath.month.ceil(to) }
-      end
-
-      describe '#expand' do
-        let(:expanded) { sequence.expand }
-
-        describe 'expanded' do
-          subject { expanded }
-
-          its(:from) { is_expected.to eq TimeMath.month.floor(from) }
-          its(:to) { is_expected.to eq TimeMath.month.ceil(to) }
-        end
-
-        describe 'original' do
-          its(:from) { is_expected.to eq from }
-          its(:to) { is_expected.to eq to }
-        end
-      end
-
-      describe 'creating expanded' do
-        let(:options) { {expand: true} }
-
-        its(:from) { is_expected.to eq TimeMath.month.floor(from) }
-        its(:to) { is_expected.to eq TimeMath.month.ceil(to) }
       end
 
       describe 'operations' do
@@ -80,7 +42,7 @@ describe TimeMath::Sequence do
         it { is_expected.to be_a described_class }
         its(:methods) { is_expected.to include(*TimeMath::Op::OPERATIONS) }
         its(:op) { is_expected.to eq TimeMath::Op.new.advance(:hour, 2).decrease(:sec, 3).floor(:min) }
-        its(:inspect) { is_expected.to eq "#<TimeMath::Sequence(:month, #{from}...#{to}).advance(:hour, 2).decrease(:sec, 3).floor(:min)>" }
+        its(:inspect) { is_expected.to eq "#<TimeMath::Sequence month (#{floor_from} - #{floor_to}).advance(:hour, 2).decrease(:sec, 3).floor(:min)>" }
 
         context 'bang' do
           subject!(:ceiled) { seq.ceil!(:hour) }
@@ -101,7 +63,7 @@ describe TimeMath::Sequence do
         let(:from) { t.parse(fixture[:from]) }
         let(:to) { t.parse(fixture[:to]) }
 
-        let(:sequence) { described_class.new(fixture[:step], from...to, options) }
+        let(:sequence) { described_class.new(fixture[:step], from...to) }
 
         let(:expected) { fixture[:sequence].map(&t.method(:parse)) }
 
@@ -110,7 +72,7 @@ describe TimeMath::Sequence do
         it { is_expected.to eq expected }
 
         context 'when include end' do
-          let(:sequence) { described_class.new(fixture[:step], from..to, options) }
+          let(:sequence) { described_class.new(fixture[:step], from..to) }
           let(:expected) { fixture[:sequence_include_end].map(&t.method(:parse)) }
 
           it { is_expected.to eq expected }
@@ -119,7 +81,7 @@ describe TimeMath::Sequence do
         context 'with operations' do
           let(:sequence) {
             described_class
-              .new(fixture[:step], from...to, options)
+              .new(fixture[:step], from...to)
               .advance(:hour, 2).decrease(:sec, 3).floor(:min)
           }
           let(:op) { TimeMath().advance(:hour, 2).decrease(:sec, 3).floor(:min) }
