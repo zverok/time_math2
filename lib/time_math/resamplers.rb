@@ -45,10 +45,6 @@ module TimeMath
 
     private
 
-    def sequence
-      @sequence ||= @unit.sequence(timestamps.min...timestamps.max)
-    end
-
     def timestamps
       @array
     end

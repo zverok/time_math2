@@ -4,8 +4,8 @@ describe TimeMath::Sequence do
       let(:from) { t.parse('2014-03-10') }
       let(:floor_from) { TimeMath.month.floor(from) }
       let(:to) { t.parse('2014-11-10') }
-      let(:floor_to) { TimeMath.month.floor(to) }
-      let(:ceil_to) { TimeMath.month.ceil(to) }
+      let(:floor_to) { TimeMath.month.decrease(TimeMath.month.floor(to)) }
+      let(:ceil_to) { TimeMath.month.floor(to) }
 
       subject(:sequence) { described_class.new(:month, from...to) }
 

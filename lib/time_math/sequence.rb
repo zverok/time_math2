@@ -9,22 +9,22 @@ module TimeMath
   # from = Time.parse('2016-05-01 13:30')
   # to = Time.parse('2016-05-04 18:20')
   # seq = TimeMath.day.sequence(from...to)
-  # # => #<TimeMath::Sequence day (2016-05-01 00:00:00 +0300-2016 - 05-04 00:00:00 +0300)>
+  # # => #<TimeMath::Sequence day (2016-05-01 00:00:00 +0300-2016 - 2016-05-04 00:00:00 +0300)>
   # ```
   #
   # Now, you can use it:
   #
   # ```ruby
   # seq.to_a
-  # # => [2016-05-01 00:00:00 +0300, 2016-05-02 00:00:00 +0300, 2016-05-03 00:00:00 +0300, 2016-05-04 00:00:00 +0300]
+  # # => [2016-05-01 00:00:00 +0300, 2016-05-02 00:00:00 +0300, 2016-05-03 00:00:00 +0300]
   # ```
   # -- it's an "each day start between from and to".
   #
-  # Depending of including/excluding of range, you will, or will not receive next period:
+  # Depending of including/excluding of range, you will, or will not receive period that includes `to`:
   #
   # ```ruby
   # TimeMath.day.sequence(from..to).to_a
-  # # => [2016-05-01 00:00:00 +0300, 2016-05-02 00:00:00 +0300, 2016-05-03 00:00:00 +0300, 2016-05-04 00:00:00 +0300, 2016-05-05 00:00:00 +0300]
+  # # => [2016-05-01 00:00:00 +0300, 2016-05-02 00:00:00 +0300, 2016-05-03 00:00:00 +0300, 2016-05-04 00:00:00 +0300]
   # ```
   #
   # Besides each period beginning, you can also request pairs of begin/end
@@ -37,21 +37,21 @@ module TimeMath
   # # => [2016-05-01 00:00:00 +0300...2016-05-02 00:00:00 +0300, 2016-05-02 00:00:00 +0300...2016-05-03 00:00:00 +0300, 2016-05-03 00:00:00 +0300...2016-05-04 00:00:00 +0300]
   # ```
   #
-  # It is pretty convenient for filtering data from databases or APIs,
-  # TimeMath creates list of filtering ranges in a blink.
+  # It is pretty convenient for filtering data from databases or APIs: TimeMath creates list of
+  # filtering ranges in a blink.
   #
   # Sequence also supports any item-updating operations in the same fashion
   # {Op} does:
   #
   # ```ruby
   # seq = TimeMath.day.sequence(from...to).advance(:hour, 5).decrease(:min, 20)
-  # # => #<TimeMath::Sequence day (2016-05-01 00:00:00 +0300 - 2016-05-04 00:00:00 +0300).advance(:hour, 5).decrease(:min, 20)>
+  # # => #<TimeMath::Sequence day (2016-05-01 00:00:00 +0300 - 2016-05-03 00:00:00 +0300).advance(:hour, 5).decrease(:min, 20)>
   # seq.to_a
-  # # => [2016-05-01 04:40:00 +0300, 2016-05-02 04:40:00 +0300, 2016-05-03 04:40:00 +0300, 2016-05-04 04:40:00 +0300]
+  # # => [2016-05-01 04:40:00 +0300, 2016-05-02 04:40:00 +0300, 2016-05-03 04:40:00 +0300]
   # ```
   #
   class Sequence
-    # Creates a sequence. Typically, it is easier to to it with {Units::Base#sequence},
+    # Creates a sequence. Typically, it is easier to do it with {Units::Base#sequence},
     # like this:
     #
     # ```ruby
@@ -210,7 +210,7 @@ module TimeMath
     # @return [Array<Array>]
     def pairs
       seq = to_a
-      seq[0..-2].zip(seq[1..-1])
+      seq.zip([*seq[1..-1], unit.advance(to)])
     end
 
     # Creates an array of Ranges (time unit start...time unit end) between
@@ -237,7 +237,8 @@ module TimeMath
       valid_time_range?(range) or
         raise ArgumentError, "Range of time-y values expected, #{range} got"
 
-      [unit.floor(range.begin), range.exclude_end? ? unit.floor(range.end) : unit.next(range.end)]
+      range_end = unit.floor(range.end)
+      [unit.floor(range.begin), range.exclude_end? ? unit.decrease(range_end) : range_end]
     end
   end
 end
