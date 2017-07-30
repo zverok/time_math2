@@ -1,5 +1,10 @@
 # TimeMath Changelog
 
+# 0.1.0 (2017-07-30)
+
+* Update sequences logic to be, well... More logical (Thanks @kenn again for meaningful discussion!);
+* Various code cleanups.
+
 # 0.0.8 (2017-06-02)
 
 * Fix `Units::Base#measure` to correctly measure negative distances (e.g. from > to, thanks @kenn for
