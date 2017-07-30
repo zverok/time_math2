@@ -223,20 +223,13 @@ module TimeMath
       end
 
       # Creates {Sequence} instance for producing all time units between
-      # from and too. See {Sequence} class documentation for available
-      # options and functionality.
+      # from and too. See {Sequence} class documentation for detailed functionality description.
       #
-      # @param from [Time,Date,DateTime] start of sequence;
-      # @param to [Time,Date,DateTime] upper limit of sequence;
-      # @param options [Hash]
-      # @option options [Boolean] :expand round sequence ends on creation
-      #   (from is floored and to is ceiled);
-      # @option options [Boolean] :floor sequence will be rounding'ing all
-      #   the intermediate values.
+      # @param range [Range<Time,Date,DateTime>] start and end of sequence.
       #
       # @return [Sequence]
-      def sequence(range, options = {})
-        TimeMath::Sequence.new(name, range, options)
+      def sequence(range)
+        TimeMath::Sequence.new(name, range)
       end
 
       # Converts input timestamps list to regular list of timestamps
