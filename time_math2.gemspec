@@ -31,9 +31,9 @@ Gem::Specification.new do |s|
   end
   s.require_paths = ["lib"]
 
-  s.add_development_dependency 'rubocop', '>= 0.30'
+  s.add_development_dependency 'rubocop', '>= 0.50'
   s.add_development_dependency 'rspec', '>= 3'
-  s.add_development_dependency 'rubocop-rspec'
+  s.add_development_dependency 'rubocop-rspec', '>= 1.17.1'
   s.add_development_dependency 'rspec-its', '~> 1'
   s.add_development_dependency 'simplecov', '~> 0.9'
   s.add_development_dependency 'rake'

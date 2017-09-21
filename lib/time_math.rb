@@ -127,7 +127,7 @@ end
 # ```
 #
 # See also {TimeMath::Op} for list of operations available, but basically
-# they are all same you can call on {TimeMath::Unit}, just pass unit symbol
+# they are all same you can call on {TimeMath::Units::Base}, just pass unit symbol
 # as a first argument.
 #
 # @param arguments time-y value, or list of them, or nothing

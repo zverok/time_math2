@@ -65,10 +65,6 @@ module TimeMath
       components[2] = [components[2], days_in_month].min
     end
 
-    private
-
-    module_function
-
     def extract_component(tm, component)
       case component
       when :subsec, :sec_fraction

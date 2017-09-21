@@ -283,11 +283,11 @@ describe TimeMath::Units::Base do
 
         it 'determines if tm is round to step' do
           fixture.each do |step, vals|
-            expect(u(step).round?(t.parse(vals[:true]))).to be_truthy
+            expect(u(step)).to be_round(t.parse(vals[:true]))
 
             next if step == :day && t == Date # always round, you know :)
 
-            expect(u(step).round?(t.parse(vals[:false]))).to be_falsy
+            expect(u(step)).not_to be_round(t.parse(vals[:false]))
           end
         end
       end

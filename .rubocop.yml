@@ -65,6 +65,9 @@ RSpec/MultipleDescribes:
 RSpec/MultipleExpectations:
   Max: 5
 
+Lint/BooleanSymbol:
+  Enabled: false
+
 # RSpec
 Metrics/PerceivedComplexity:
   Exclude:

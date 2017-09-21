@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'simplecov'
 require 'coveralls'
 require 'rspec/its'
