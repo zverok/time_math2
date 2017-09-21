@@ -73,7 +73,7 @@ $ gem install time_math2
 or add to your Gemfile
 
 ```ruby
-gem 'time_math2'
+gem 'time_math2', require: 'time_math'
 ```
 
 and `bundle install` it.
