@@ -5,7 +5,8 @@ rvm:
   - "2.4.0"
   - "2.5.0"
   - "2.6.0"
-  - jruby-9.1.6.0
+  # Honestly, I don't know what I am doing, JRuby breaks on Travis different way each time...
+  - jruby-9.2.5.0
 install:
   - bundle install --retry=3
 script:
