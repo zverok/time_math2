@@ -8,10 +8,10 @@ module TimeMath
     module_function
 
     def timey?(val)
-      [Time, DateTime, Date].any? { |cls| val.is_a?(cls) }
+      [Time, DateTime, Date].include?(val.class)
     end
 
-    def merge(tm, attrs = {})
+    def merge(tm, **attrs)
       hash_to_tm(tm, tm_to_hash(tm).merge(attrs))
     end
 

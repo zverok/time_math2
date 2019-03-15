@@ -9,7 +9,7 @@ module TimeMath
       protected
 
       def _measure(from, to)
-        ((to.to_time - from.to_time) / to_seconds).to_i
+        to.to_time.-(from.to_time)./(to_seconds).to_i
       end
 
       def _advance(tm, steps)

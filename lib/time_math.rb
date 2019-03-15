@@ -19,7 +19,6 @@ require 'time'
 # See also `TimeMath()` method in global namespace, it is lot of fun!
 #
 module TimeMath
-  require_relative './time_math/backports'
   require_relative './time_math/units'
   require_relative './time_math/op'
   require_relative './time_math/sequence'
@@ -133,6 +132,6 @@ end
 # @param arguments time-y value, or list of them, or nothing
 #
 # @return [TimeMath::Op]
-def TimeMath(*arguments) # rubocop:disable Style/MethodName
+def TimeMath(*arguments) # rubocop:disable Naming/MethodName
   TimeMath::Op.new(*arguments)
 end
