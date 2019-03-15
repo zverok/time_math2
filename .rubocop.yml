@@ -50,6 +50,12 @@ RSpec/LeadingSubject:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Naming/UncommunicativeMethodParamName:
+  AllowedNames:
+    - tm
+    - to
+    - sz
+
 RSpec/ExampleLength:
   Enabled: false
 

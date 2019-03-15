@@ -138,6 +138,7 @@ module TimeMath
       #   of origin would be preserved.
       def advance(tm, amount = 1)
         return decrease(tm, -amount) if amount < 0
+
         _advance(tm, amount)
       end
 
@@ -151,6 +152,7 @@ module TimeMath
       #   of origin would be preserved.
       def decrease(tm, amount = 1)
         return advance(tm, -amount) if amount < 0
+
         _decrease(tm, amount)
       end
 

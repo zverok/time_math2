@@ -197,6 +197,7 @@ module TimeMath
 
     def inspect_args
       return ' ' if @arguments.empty?
+
       '(' + [*@arguments].map(&:inspect).join(', ') + ').'
     end
 

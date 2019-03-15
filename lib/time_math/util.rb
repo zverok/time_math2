@@ -56,6 +56,7 @@ module TimeMath
 
     def fix_month_day(components)
       return if components[2].nil? || components[1].nil?
+
       days_in_month =
         if components[1] == 2 && components[0] && Date.gregorian_leap?(components[0])
           29
@@ -68,9 +69,20 @@ module TimeMath
     def extract_component(tm, component)
       case component
       when :subsec, :sec_fraction
-        tm.is_a?(Time) ? tm.subsec : tm.send(:sec_fraction)
+        subsec(tm)
       when *COMMON_UNITS
         tm.send(component)
+      end
+    end
+
+    def subsec(tm)
+      case tm
+      when Time
+        tm.subsec
+      when Date
+        0
+      when DateTime
+        tm.send(:sec_fraction)
       end
     end
   end

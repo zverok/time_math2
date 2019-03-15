@@ -31,6 +31,7 @@ module TimeMath
   class ArrayResampler < Resampler
     def self.try(unit, array)
       return nil unless array.is_a?(Array) && array.all?(&Util.method(:timey?))
+
       new(unit, array)
     end
 
@@ -54,6 +55,7 @@ module TimeMath
   class HashResampler < Resampler
     def self.try(unit, hash)
       return nil unless hash.is_a?(Hash) && hash.keys.all?(&Util.method(:timey?))
+
       new(unit, hash)
     end
 
