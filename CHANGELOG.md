@@ -1,5 +1,9 @@
 # TimeMath Changelog
 
+# 0.1.1 (2019-03-15)
+
+* Ruby 2.6 compatibility.
+
 # 0.1.0 (2017-07-30)
 
 * Update sequences logic to be, well... More logical (Thanks @kenn again for meaningful discussion!);
