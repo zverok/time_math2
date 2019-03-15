@@ -2,7 +2,7 @@
 
 # 0.1.1 (2019-03-15)
 
-* Ruby 2.6 compatibility.
+* Ruby 2.6 compatibility, thanks @flash-gordon.
 
 # 0.1.0 (2017-07-30)
 
