@@ -6,7 +6,11 @@
 [![Build Status](https://travis-ci.org/zverok/time_math2.svg?branch=master)](https://travis-ci.org/zverok/time_math2)
 [![Coverage Status](https://coveralls.io/repos/zverok/time_math2/badge.svg?branch=master)](https://coveralls.io/r/zverok/time_math2?branch=master)
 
-**TimeMath2** is a small, no-dependencies library attempting to make time
+> **[TimeCalc](https://github.com/zverok/time_calc) is the next iteration of ideas for the time-arithmetics library, with nicer API and better support for modern Ruby (for example, Ruby 2.6 real timezones). It would be evolved and supported instead of TimeMath. This gem should be considered discontinued.**
+
+---
+
+**TimeMath2** ~is~ was a small, no-dependencies library attempting to make time
 arithmetics easier. It provides you with simple, easy-to-remember API, without
 any monkey-patching of core Ruby classes, so it can be used alongside
 Rails or without it, for any purpose.
